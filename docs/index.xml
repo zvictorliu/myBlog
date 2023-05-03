@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hello on Operating System</title>
+    <link>https://zvictorliu.github.io/myBlog/</link>
+    <description>Recent content in hello on Operating System</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 19 Apr 2023 21:49:43 +0800</lastBuildDate><atom:link href="https://zvictorliu.github.io/myBlog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>几种调度算法</title>
+      <link>https://zvictorliu.github.io/myBlog/chapter04/schedule_alg/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/chapter04/schedule_alg/</guid>
+      <description>先到先得#时间轮转#多级反馈#</description>
+    </item>
+    
+    <item>
+      <title>操作系统的历史</title>
+      <link>https://zvictorliu.github.io/myBlog/chapter01/history-of-os-development/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/chapter01/history-of-os-development/</guid>
+      <description>hello</description>
+    </item>
+    
+    <item>
+      <title>前置基础</title>
+      <link>https://zvictorliu.github.io/myBlog/chapter01/pre/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/chapter01/pre/</guid>
+      <description>这部分与操作系统本身并没有多大关系</description>
+    </item>
+    
+    <item>
+      <title>并发和互斥</title>
+      <link>https://zvictorliu.github.io/myBlog/chapter04/signal/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/chapter04/signal/</guid>
+      <description>何为并发？
+何为互斥？</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://zvictorliu.github.io/myBlog/chapter02/process_concept/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/chapter02/process_concept/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,6 @@
+baseURL = 'https://zvictorliu.github.io/myBlog/'
+languageCode = 'en-us'
+title = 'Operating System'
+theme = 'book'
+[params]
+BookMenuBundle = '/menu'
