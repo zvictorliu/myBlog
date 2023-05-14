@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="有些进程是完全独立的，自成一派，而有些则是协作进程，会受到其它进程的影响，比如：共享资源可能会被其它进程所修改
+进程通信 (InterProcess Communication, IPC) 机制就是用于进程间交互的一套规则
+进程通信有两种基本的形式：
+共享内存，好比网盘传输 消息传递，好比文件传输助手 共享内存系统#一个共享区域应该这样产生：一个进程（生产者）创建共享内存段，这段空间被加到另一个进程（消费者）的地址空间内
+有两个注意的问题：
+操作系统一般会限制进程只访问自己的地址空间 即使是共享的，也不能同时写，有可能发生冲 在生产-消费关系里面，消费者可以在生产者写的同时，读取已经写过的区域 这段缓冲区可以是无界的，生产者可以一直生产放进无底洞，也可以是有界的，仓库满了生产者就必须要等消费者取走以腾出位置（假设知道读写状态）
+消息传递系统#两个进程之间能够互相发送和接收消息
+要认识到通信需要存在一种“电话线”，将二者连接起来，这和广播不同，进程通信的电话线叫做链路
+一般来说发送消息需要指明对象，可是如果对方改电话号码了呢？要知道进程的标识符是可以被改变的
+有一种间接通信方案，那就是“基站”，一般是邮箱或端口，这个和共享内存的区别在于基站并非是地址空间的一部分
+基站的问题是无法限制在两个进程之间，还可以有第三个第四个，那么就要有所选择谁能收到消息
+注意这两个名词的含义
+同步：阻塞模式 发送时有人接收才能完成 持续等待知道有消息来 异步：非阻塞 发出去就完事，对方收没收到不管 读取一个消息，可能是有效的也可能是空 如果生产者和消费者是同步的，那么两者之间就建立了交会 rendezvous
+再说这个基站，它应是一个缓存区
+几种操作系统的IPC实例#POSIX系统 API Mach操作系统 Windows系统 与之类似的客户机/服务器的通信#套接字：网络 远程过程调用（RPC） 管道 ">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="进程通信" />
+<meta property="og:description" content="有些进程是完全独立的，自成一派，而有些则是协作进程，会受到其它进程的影响，比如：共享资源可能会被其它进程所修改
+进程通信 (InterProcess Communication, IPC) 机制就是用于进程间交互的一套规则
+进程通信有两种基本的形式：
+共享内存，好比网盘传输 消息传递，好比文件传输助手 共享内存系统#一个共享区域应该这样产生：一个进程（生产者）创建共享内存段，这段空间被加到另一个进程（消费者）的地址空间内
+有两个注意的问题：
+操作系统一般会限制进程只访问自己的地址空间 即使是共享的，也不能同时写，有可能发生冲 在生产-消费关系里面，消费者可以在生产者写的同时，读取已经写过的区域 这段缓冲区可以是无界的，生产者可以一直生产放进无底洞，也可以是有界的，仓库满了生产者就必须要等消费者取走以腾出位置（假设知道读写状态）
+消息传递系统#两个进程之间能够互相发送和接收消息
+要认识到通信需要存在一种“电话线”，将二者连接起来，这和广播不同，进程通信的电话线叫做链路
+一般来说发送消息需要指明对象，可是如果对方改电话号码了呢？要知道进程的标识符是可以被改变的
+有一种间接通信方案，那就是“基站”，一般是邮箱或端口，这个和共享内存的区别在于基站并非是地址空间的一部分
+基站的问题是无法限制在两个进程之间，还可以有第三个第四个，那么就要有所选择谁能收到消息
+注意这两个名词的含义
+同步：阻塞模式 发送时有人接收才能完成 持续等待知道有消息来 异步：非阻塞 发出去就完事，对方收没收到不管 读取一个消息，可能是有效的也可能是空 如果生产者和消费者是同步的，那么两者之间就建立了交会 rendezvous
+再说这个基站，它应是一个缓存区
+几种操作系统的IPC实例#POSIX系统 API Mach操作系统 Windows系统 与之类似的客户机/服务器的通信#套接字：网络 远程过程调用（RPC） 管道 " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://zvictorliu.github.io/myBlog/chapter02/ipc/" /><meta property="article:section" content="chapter02" />
+
+
+<title>进程通信 | Operating System</title>
+<link rel="manifest" href="/myBlog/manifest.json">
+<link rel="icon" href="/myBlog/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/myBlog/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/myBlog/flexsearch.min.js"></script>
+  <script defer src="/myBlog/en.search.min.9d20f1f983ebc82627e0f85efc631cc6b201279cfbcafa2ba6e5e74decb2b0f7.js" integrity="sha256-nSDx&#43;YPryCYn4Phe/GMcxrIBJ5z7yvorpuXnTeyysPc=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/myBlog/"><span>Operating System</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li><a href="/myBlog/chapter01/">绪论</a>
+<ul>
+<li><a href="/myBlog/chapter01/history-of-os-development/">操作系统历史发展</a></li>
+<li><a href="/myBlog/chapter01/pre/">前置知识</a></li>
+<li><a href="/myBlog/chapter01/blind/">扫盲</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter02/">进程</a>
+<ul>
+<li><a href="/myBlog/chapter02/process_concept/">进程概念</a></li>
+<li><a href="/myBlog/chapter02/ipc/"class=active>进程通信</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter05/">进程同步</a>
+<ul>
+<li><a href="/myBlog/chapter05/syn/">背景</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter06/">多线程编程</a>
+<ul>
+<li><a href="/myBlog/chapter06/pthreads/">线程库</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter07/">内存分配</a>
+<ul>
+<li><a href="/myBlog/chapter07/pre/">基本原理和要求</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/myBlog/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>进程通信</strong>
+
+  <label for="toc-control">
+    
+    <img src="/myBlog/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents"></nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><p>有些进程是完全独立的，自成一派，而有些则是<code>协作进程</code>，会受到其它进程的影响，比如：共享资源可能会被其它进程所修改</p>
+<p><code>进程通信 (InterProcess Communication, IPC)</code> 机制就是用于进程间交互的一套规则</p>
+<p>进程通信有两种基本的形式：</p>
+<ul>
+<li>共享内存，好比网盘传输</li>
+<li>消息传递，好比文件传输助手</li>
+</ul>
+<h1 id="共享内存系统">
+  共享内存系统
+  <a class="anchor" href="#%e5%85%b1%e4%ba%ab%e5%86%85%e5%ad%98%e7%b3%bb%e7%bb%9f">#</a>
+</h1>
+<p>一个共享区域应该这样产生：一个进程（生产者）创建共享内存段，这段空间被加到另一个进程（消费者）的地址空间内</p>
+<p>有两个注意的问题：</p>
+<ul>
+<li>操作系统一般会限制进程只访问自己的地址空间</li>
+<li>即使是共享的，也不能同时写，有可能发生冲
+<ul>
+<li>在生产-消费关系里面，消费者可以在生产者写的同时，读取已经写过的区域</li>
+</ul>
+</li>
+</ul>
+<p>这段缓冲区可以是无界的，生产者可以一直生产放进无底洞，也可以是有界的，仓库满了生产者就必须要等消费者取走以腾出位置（假设知道读写状态）</p>
+<h1 id="消息传递系统">
+  消息传递系统
+  <a class="anchor" href="#%e6%b6%88%e6%81%af%e4%bc%a0%e9%80%92%e7%b3%bb%e7%bb%9f">#</a>
+</h1>
+<p>两个进程之间能够互相发送和接收消息</p>
+<p>要认识到通信需要存在一种“电话线”，将二者连接起来，这和广播不同，进程通信的电话线叫做<code>链路</code></p>
+<p>一般来说发送消息需要指明对象，可是如果对方改电话号码了呢？要知道进程的标识符是可以被改变的</p>
+<p>有一种间接通信方案，那就是“基站”，一般是<code>邮箱</code>或<code>端口</code>，这个和共享内存的区别在于基站并非是地址空间的一部分</p>
+<p>基站的问题是无法限制在两个进程之间，还可以有第三个第四个，那么就要有所选择谁能收到消息</p>
+<p>注意这两个名词的含义</p>
+<ul>
+<li>同步：阻塞模式
+<ul>
+<li>发送时有人接收才能完成</li>
+<li>持续等待知道有消息来</li>
+</ul>
+</li>
+<li>异步：非阻塞
+<ul>
+<li>发出去就完事，对方收没收到不管</li>
+<li>读取一个消息，可能是有效的也可能是空</li>
+</ul>
+</li>
+</ul>
+<p>如果生产者和消费者是同步的，那么两者之间就建立了<code>交会 rendezvous</code></p>
+<p>再说这个基站，它应是一个缓存区</p>
+<h1 id="几种操作系统的ipc实例">
+  几种操作系统的IPC实例
+  <a class="anchor" href="#%e5%87%a0%e7%a7%8d%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e7%9a%84ipc%e5%ae%9e%e4%be%8b">#</a>
+</h1>
+<ul>
+<li>POSIX系统 API</li>
+<li>Mach操作系统</li>
+<li>Windows系统</li>
+</ul>
+<h1 id="与之类似的客户机服务器的通信">
+  与之类似的客户机/服务器的通信
+  <a class="anchor" href="#%e4%b8%8e%e4%b9%8b%e7%b1%bb%e4%bc%bc%e7%9a%84%e5%ae%a2%e6%88%b7%e6%9c%ba%e6%9c%8d%e5%8a%a1%e5%99%a8%e7%9a%84%e9%80%9a%e4%bf%a1">#</a>
+</h1>
+<ul>
+<li>套接字：网络</li>
+<li>远程过程调用（RPC）</li>
+<li>管道</li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents"></nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

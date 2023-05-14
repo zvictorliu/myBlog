@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>多线程编程 on Operating System</title>
+    <link>https://zvictorliu.github.io/myBlog/chapter06/</link>
+    <description>Recent content in 多线程编程 on Operating System</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://zvictorliu.github.io/myBlog/chapter06/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>线程库Pthreads</title>
+      <link>https://zvictorliu.github.io/myBlog/chapter06/pthreads/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/chapter06/pthreads/</guid>
+      <description>本节主要介绍 Pthreads
+首先 pthreads 虽说是API库，但是只是一种规范，实现方式仍然取决于操作系统的设计方式
+但是我们在使用时，当成一般的库也没啥问题
+主要需要学会几个接口的使用就行
+数据类型：pthread_t，pthread_attr_t
+phread_join()函数</description>
+    </item>
+    
+  </channel>
+</rss>

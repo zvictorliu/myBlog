@@ -22,7 +22,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://zvictorliu.github.io/myBlog/chapter01/history-of-os-development/</guid>
-      <description>hello</description>
+      <description>先欠着</description>
     </item>
     
     <item>
@@ -31,7 +31,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://zvictorliu.github.io/myBlog/chapter01/pre/</guid>
-      <description>这部分与操作系统本身并没有多大关系</description>
+      <description>这部分与操作系统这个课本身并没有多大关系，但是又或许需要它以便于理解，先欠着</description>
     </item>
     
     <item>
@@ -45,12 +45,114 @@
     </item>
     
     <item>
+      <title>扫盲</title>
+      <link>https://zvictorliu.github.io/myBlog/chapter01/blind/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/chapter01/blind/</guid>
+      <description>这里介绍一下常见的一些概念却很少有深入解释的
+Linux和Unix#简单来说UNIX就是没有图形界面的那种，比较老
+Linux是基于其设计思想的，因此经常会说”在Linux/Unix系统中&amp;quot;，就是说它们在理念上很多是相似的，只是实现方式有些不同
+x86, win32, win64#POSIX#POSIX（Portable Operating System Interface，可移植操作系统接口）是一种接口标准，是IEEE指定的操作系统规范，它规定了操作系统中应该提供哪些基本功能和接口，以及如何使用这些功能和接口
+相当于一种法律法规吧！</description>
+    </item>
+    
+    <item>
       <title></title>
       <link>https://zvictorliu.github.io/myBlog/chapter02/process_concept/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://zvictorliu.github.io/myBlog/chapter02/process_concept/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>临界区问题</title>
+      <link>https://zvictorliu.github.io/myBlog/chapter05/syn/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/chapter05/syn/</guid>
+      <description>hello</description>
+    </item>
+    
+    <item>
+      <title>基本分页存储管理</title>
+      <link>https://zvictorliu.github.io/myBlog/chapter07/basic_page/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/chapter07/basic_page/</guid>
+      <description>1
+所谓分页是指：把内存空间分为一个个很小的块（等分），进程也这样切割，然后以块为单位逐个申请空间（这样就可以不连续了）
+这样只有除不尽的那部分占了整个块会有内部碎片，但本来块已经够小了，这个就更小了</description>
+    </item>
+    
+    <item>
+      <title>基本原理和要求</title>
+      <link>https://zvictorliu.github.io/myBlog/chapter07/pre/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/chapter07/pre/</guid>
+      <description>1
+这些内容初看还挺杂乱，不知道主线是什么，这些或许是为后面的内容做一个铺垫
+程序的链接
+装入方式
+逻辑地址和物理地址
+内存映像的具体内容
+内存保护的方法
+内存共享，主要讲可重入代码(纯代码) 这个概念</description>
+    </item>
+    
+    <item>
+      <title>线程库Pthreads</title>
+      <link>https://zvictorliu.github.io/myBlog/chapter06/pthreads/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/chapter06/pthreads/</guid>
+      <description>本节主要介绍 Pthreads
+首先 pthreads 虽说是API库，但是只是一种规范，实现方式仍然取决于操作系统的设计方式
+但是我们在使用时，当成一般的库也没啥问题
+主要需要学会几个接口的使用就行
+数据类型：pthread_t，pthread_attr_t
+phread_join()函数</description>
+    </item>
+    
+    <item>
+      <title>进程通信</title>
+      <link>https://zvictorliu.github.io/myBlog/chapter02/ipc/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/chapter02/ipc/</guid>
+      <description>有些进程是完全独立的，自成一派，而有些则是协作进程，会受到其它进程的影响，比如：共享资源可能会被其它进程所修改
+进程通信 (InterProcess Communication, IPC) 机制就是用于进程间交互的一套规则
+进程通信有两种基本的形式：
+共享内存，好比网盘传输 消息传递，好比文件传输助手 共享内存系统#一个共享区域应该这样产生：一个进程（生产者）创建共享内存段，这段空间被加到另一个进程（消费者）的地址空间内
+有两个注意的问题：
+操作系统一般会限制进程只访问自己的地址空间 即使是共享的，也不能同时写，有可能发生冲 在生产-消费关系里面，消费者可以在生产者写的同时，读取已经写过的区域 这段缓冲区可以是无界的，生产者可以一直生产放进无底洞，也可以是有界的，仓库满了生产者就必须要等消费者取走以腾出位置（假设知道读写状态）
+消息传递系统#两个进程之间能够互相发送和接收消息
+要认识到通信需要存在一种“电话线”，将二者连接起来，这和广播不同，进程通信的电话线叫做链路
+一般来说发送消息需要指明对象，可是如果对方改电话号码了呢？要知道进程的标识符是可以被改变的
+有一种间接通信方案，那就是“基站”，一般是邮箱或端口，这个和共享内存的区别在于基站并非是地址空间的一部分
+基站的问题是无法限制在两个进程之间，还可以有第三个第四个，那么就要有所选择谁能收到消息
+注意这两个名词的含义
+同步：阻塞模式 发送时有人接收才能完成 持续等待知道有消息来 异步：非阻塞 发出去就完事，对方收没收到不管 读取一个消息，可能是有效的也可能是空 如果生产者和消费者是同步的，那么两者之间就建立了交会 rendezvous
+再说这个基站，它应是一个缓存区
+几种操作系统的IPC实例#POSIX系统 API Mach操作系统 Windows系统 与之类似的客户机/服务器的通信#套接字：网络 远程过程调用（RPC） 管道 </description>
+    </item>
+    
+    <item>
+      <title>连续分配管理方式</title>
+      <link>https://zvictorliu.github.io/myBlog/chapter07/continue/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/chapter07/continue/</guid>
+      <description>就是给用户程序分配一段连续的空间（即一个程序的东西是放在一处的）来存，具体来说有三种方式
+单一连续分配 固定分区分配 动态分区分配 单一连续分配#这个就是很基础很早期的，只能单一程序的时候，除了低地址的操作系统区，用户区全给一个程序，是一个不是多个
+固定分区分配#在单一的基础上，把用户区分成几个段，每段给一个程序
+然后要考虑的问题是：
+怎么分？是均分还是不均分，对应的问题：引出内部碎片概念
+怎么排？设置了一个叫分区说明表的记录册
+动态分区分配#这里王道有说这个规划过程：刚开始一个个接着装，当放不下时，就要把前面空闲的进程给替换掉
+这里有外部碎片的概念：替换掉前面之后，分区和分区之间就可能有一段空白了（这里的分区就是程序所需的大小，这段空白在分区外面所以叫外部，而前面是在固定分区内放一个不那么大的程序，是在分区内部）</description>
     </item>
     
   </channel>

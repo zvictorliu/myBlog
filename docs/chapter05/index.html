@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="进程间既要能够进行共享一些资源，还要保证有序进行，这一章主要是将具体实现的问题及解决方案
+区分：
+并发执行：单核 并行执行：多核 需要对进程通信有一定概念才能理解
+举例说明并发执行的问题#其实并不一定是同时写入同一个位置才算有问题，这种已经是大错了，还有一种可能是
+设置一个计数器counter，生产者写入一个则&#43;&#43;，消费者读取一个则&ndash;；乍一看感觉没什么问题，但其实，如果具体看&#43;&#43;和&ndash;，其实它的计算方式是
+将counter的值取到寄存器内 寄存器的值加1 将寄存器的值放回counter 而如果并发执行，那么就会不正常了：
+生产者将 counter 取出放入寄存器并加1 在放回之前，消费者取出，减一并放回 生产者放回 这样其实就只有&#43;1的效果，而实际应该是0的
+临界区问题#将一个进程分4段：请求，临界，退出，剩余
+将修改公共资源的代码放入临界区，限制进程不能并行执行临界区的代码
+具体实现这一点需要解决三个问题
+互斥，怎么禁止其它进程执行临界区 进步，一个进程执行完临界区，要让别的进程能够跟上 有限等待，一个进程不能一直等别人而憋死自己，因此在发出请求之后，要限制总共临界区进入次数 ">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="进程同步" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://zvictorliu.github.io/myBlog/chapter05/" />
+<title>进程同步 | Operating System</title>
+<link rel="manifest" href="/myBlog/manifest.json">
+<link rel="icon" href="/myBlog/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/myBlog/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/myBlog/flexsearch.min.js"></script>
+  <script defer src="/myBlog/en.search.min.9d20f1f983ebc82627e0f85efc631cc6b201279cfbcafa2ba6e5e74decb2b0f7.js" integrity="sha256-nSDx&#43;YPryCYn4Phe/GMcxrIBJ5z7yvorpuXnTeyysPc=" crossorigin="anonymous"></script>
+<link rel="alternate" type="application/rss+xml" href="https://zvictorliu.github.io/myBlog/chapter05/index.xml" title="Operating System" />
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/myBlog/"><span>Operating System</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li><a href="/myBlog/chapter01/">绪论</a>
+<ul>
+<li><a href="/myBlog/chapter01/history-of-os-development/">操作系统历史发展</a></li>
+<li><a href="/myBlog/chapter01/pre/">前置知识</a></li>
+<li><a href="/myBlog/chapter01/blind/">扫盲</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter02/">进程</a>
+<ul>
+<li><a href="/myBlog/chapter02/process_concept/">进程概念</a></li>
+<li><a href="/myBlog/chapter02/ipc/">进程通信</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter05/"class=active>进程同步</a>
+<ul>
+<li><a href="/myBlog/chapter05/syn/">背景</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter06/">多线程编程</a>
+<ul>
+<li><a href="/myBlog/chapter06/pthreads/">线程库</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter07/">内存分配</a>
+<ul>
+<li><a href="/myBlog/chapter07/pre/">基本原理和要求</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/myBlog/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>进程同步</strong>
+
+  <label for="toc-control">
+    
+    <img src="/myBlog/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#举例说明并发执行的问题">举例说明并发执行的问题</a></li>
+    <li><a href="#临界区问题">临界区问题</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><p>进程间既要能够进行共享一些资源，还要保证有序进行，这一章主要是将具体实现的问题及解决方案</p>
+<p>区分：</p>
+<ul>
+<li>并发执行：单核</li>
+<li>并行执行：多核</li>
+</ul>
+<p>需要对进程通信有一定概念才能理解</p>
+<h2 id="举例说明并发执行的问题">
+  举例说明并发执行的问题
+  <a class="anchor" href="#%e4%b8%be%e4%be%8b%e8%af%b4%e6%98%8e%e5%b9%b6%e5%8f%91%e6%89%a7%e8%a1%8c%e7%9a%84%e9%97%ae%e9%a2%98">#</a>
+</h2>
+<p>其实并不一定是同时写入同一个位置才算有问题，这种已经是大错了，还有一种可能是</p>
+<p>设置一个计数器counter，生产者写入一个则++，消费者读取一个则&ndash;；乍一看感觉没什么问题，但其实，如果具体看++和&ndash;，其实它的计算方式是</p>
+<ul>
+<li>将counter的值取到寄存器内</li>
+<li>寄存器的值加1</li>
+<li>将寄存器的值放回counter</li>
+</ul>
+<p>而如果并发执行，那么就会不正常了：</p>
+<ul>
+<li>生产者将 counter 取出放入寄存器并加1</li>
+<li>在放回之前，消费者取出，减一并放回</li>
+<li>生产者放回</li>
+</ul>
+<p>这样其实就只有+1的效果，而实际应该是0的</p>
+<h2 id="临界区问题">
+  临界区问题
+  <a class="anchor" href="#%e4%b8%b4%e7%95%8c%e5%8c%ba%e9%97%ae%e9%a2%98">#</a>
+</h2>
+<p>将一个进程分4段：请求，临界，退出，剩余</p>
+<p>将修改公共资源的代码放入临界区，限制进程不能并行执行临界区的代码</p>
+<p>具体实现这一点需要解决三个问题</p>
+<ul>
+<li>互斥，怎么禁止其它进程执行临界区</li>
+<li>进步，一个进程执行完临界区，要让别的进程能够跟上</li>
+<li>有限等待，一个进程不能一直等别人而憋死自己，因此在发出请求之后，要限制总共临界区进入次数</li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#举例说明并发执行的问题">举例说明并发执行的问题</a></li>
+    <li><a href="#临界区问题">临界区问题</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

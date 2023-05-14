@@ -3,20 +3,30 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="先到先得#时间轮转#多级反馈#">
+<meta name="description" content="本章主要介绍如何进行多线程编程，结合作业的Pthreads
+设定上#一个进程可以有多个线程，每个线程有各自独立的寄存器和堆栈空间，而代码、数据和文件是共享的
+需要知道线程要分两种类型：
+用户线程 内核线程 不是所有线程都一样，用户线程可以脱离内核支持，而内核线程不行，这里讨论的是一个多线程的进程的执行，是用户线程
+它们都需要
+需要将其映射到内核线程上
+多线程模型#用户线程和内核线程之间的关系主要有三种：
+多对一模型
+一对一模型
+多对多模型
+理解好多对一模型，后面就好理解了
+多线程问题#">
 <meta name="theme-color" content="#FFFFFF">
-<meta name="color-scheme" content="light dark"><meta property="og:title" content="几种调度算法" />
-<meta property="og:description" content="先到先得#时间轮转#多级反馈#" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://zvictorliu.github.io/myBlog/chapter04/schedule_alg/" /><meta property="article:section" content="chapter04" />
-
-
-<title>几种调度算法 | Operating System</title>
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="多线程编程" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://zvictorliu.github.io/myBlog/chapter06/" />
+<title>多线程编程 | Operating System</title>
 <link rel="manifest" href="/myBlog/manifest.json">
 <link rel="icon" href="/myBlog/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/myBlog/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/myBlog/flexsearch.min.js"></script>
   <script defer src="/myBlog/en.search.min.9d20f1f983ebc82627e0f85efc631cc6b201279cfbcafa2ba6e5e74decb2b0f7.js" integrity="sha256-nSDx&#43;YPryCYn4Phe/GMcxrIBJ5z7yvorpuXnTeyysPc=" crossorigin="anonymous"></script>
+<link rel="alternate" type="application/rss+xml" href="https://zvictorliu.github.io/myBlog/chapter06/index.xml" title="Operating System" />
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -73,7 +83,7 @@ https://github.com/alex-shpak/hugo-book
 <li><a href="/myBlog/chapter05/syn/">背景</a></li>
 </ul>
 </li>
-<li><a href="/myBlog/chapter06/">多线程编程</a>
+<li><a href="/myBlog/chapter06/"class=active>多线程编程</a>
 <ul>
 <li><a href="/myBlog/chapter06/pthreads/">线程库</a></li>
 </ul>
@@ -114,7 +124,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/myBlog/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>几种调度算法</strong>
+  <strong>多线程编程</strong>
 
   <label for="toc-control">
     
@@ -128,7 +138,13 @@ https://github.com/alex-shpak/hugo-book
   <aside class="hidden clearfix">
     
   
-<nav id="TableOfContents"></nav>
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#设定上">设定上</a></li>
+    <li><a href="#多线程模型">多线程模型</a></li>
+    <li><a href="#多线程问题">多线程问题</a></li>
+  </ul>
+</nav>
 
 
 
@@ -139,18 +155,41 @@ https://github.com/alex-shpak/hugo-book
 
       
       
-  <article class="markdown"><h1 id="先到先得">
-  先到先得
-  <a class="anchor" href="#%e5%85%88%e5%88%b0%e5%85%88%e5%be%97">#</a>
-</h1>
-<h1 id="时间轮转">
-  时间轮转
-  <a class="anchor" href="#%e6%97%b6%e9%97%b4%e8%bd%ae%e8%bd%ac">#</a>
-</h1>
-<h1 id="多级反馈">
-  多级反馈
-  <a class="anchor" href="#%e5%a4%9a%e7%ba%a7%e5%8f%8d%e9%a6%88">#</a>
-</h1>
+  <article class="markdown"><p>本章主要介绍如何进行多线程编程，结合作业的<code>Pthreads</code></p>
+<h2 id="设定上">
+  设定上
+  <a class="anchor" href="#%e8%ae%be%e5%ae%9a%e4%b8%8a">#</a>
+</h2>
+<p>一个进程可以有多个线程，每个线程有各自独立的寄存器和堆栈空间，而代码、数据和文件是共享的</p>
+<p>需要知道线程要分两种类型：</p>
+<ul>
+<li>用户线程</li>
+<li>内核线程</li>
+</ul>
+<p>不是所有线程都一样，用户线程可以脱离内核支持，而内核线程不行，这里讨论的是一个多线程的进程的执行，是用户线程</p>
+<p>它们都需要</p>
+<p><strong>需要将其映射到内核线程上</strong></p>
+<h2 id="多线程模型">
+  多线程模型
+  <a class="anchor" href="#%e5%a4%9a%e7%ba%bf%e7%a8%8b%e6%a8%a1%e5%9e%8b">#</a>
+</h2>
+<p>用户线程和内核线程之间的关系主要有三种：</p>
+<ul>
+<li>
+<p>多对一模型</p>
+</li>
+<li>
+<p>一对一模型</p>
+</li>
+<li>
+<p>多对多模型</p>
+</li>
+</ul>
+<p>理解好多对一模型，后面就好理解了</p>
+<h2 id="多线程问题">
+  多线程问题
+  <a class="anchor" href="#%e5%a4%9a%e7%ba%bf%e7%a8%8b%e9%97%ae%e9%a2%98">#</a>
+</h2>
 </article>
  
       
@@ -190,7 +229,13 @@ https://github.com/alex-shpak/hugo-book
       <div class="book-toc-content">
         
   
-<nav id="TableOfContents"></nav>
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#设定上">设定上</a></li>
+    <li><a href="#多线程模型">多线程模型</a></li>
+    <li><a href="#多线程问题">多线程问题</a></li>
+  </ul>
+</nav>
 
 
  

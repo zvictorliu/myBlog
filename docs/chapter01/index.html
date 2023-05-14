@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="操作系统十分复杂，一时很难理清楚它到底算什么">
+<meta name="description" content="一个计算机从结构上讲，最底下的是硬件资源，CPU是控制中心
+CPU负责执行指令，在操作系统设计中将CPU的运行模式通过硬件的方式分为两种：用户态和内核态，使得只有内核态才能使用底层资源
+操作系统中这部分使用硬件资源的以及一些核心功能叫做内核，在内核之外才是提供的一些接口，运行在用户态（比如自带软件）
+而用户程序要依靠操作系统提供的接口来完成自己的功能
+用户程序也能用CPU，只是不能用CPU干坏事，需要依托于操作系统内核来做">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="对操作系统的认识" />
 <meta property="og:description" content="" />
@@ -56,13 +60,30 @@ https://github.com/alex-shpak/hugo-book
   <ul>
 <li><a href="/myBlog/chapter01/"class=active>绪论</a>
 <ul>
-<li><a href="/myBlog/chapter01/history-of-os-development/">操作系统概念</a></li>
+<li><a href="/myBlog/chapter01/history-of-os-development/">操作系统历史发展</a></li>
 <li><a href="/myBlog/chapter01/pre/">前置知识</a></li>
+<li><a href="/myBlog/chapter01/blind/">扫盲</a></li>
 </ul>
 </li>
 <li><a href="/myBlog/chapter02/">进程</a>
 <ul>
 <li><a href="/myBlog/chapter02/process_concept/">进程概念</a></li>
+<li><a href="/myBlog/chapter02/ipc/">进程通信</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter05/">进程同步</a>
+<ul>
+<li><a href="/myBlog/chapter05/syn/">背景</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter06/">多线程编程</a>
+<ul>
+<li><a href="/myBlog/chapter06/pthreads/">线程库</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter07/">内存分配</a>
+<ul>
+<li><a href="/myBlog/chapter07/pre/">基本原理和要求</a></li>
 </ul>
 </li>
 </ul>
@@ -121,7 +142,12 @@ https://github.com/alex-shpak/hugo-book
 
       
       
-  <article class="markdown"><p>操作系统十分复杂，一时很难理清楚它到底算什么</p>
+  <article class="markdown"><p>一个计算机从结构上讲，最底下的是硬件资源，CPU是控制中心</p>
+<p>CPU负责执行指令，在操作系统设计中将CPU的运行模式通过硬件的方式分为两种：用户态和内核态，使得只有内核态才能使用底层资源</p>
+<p>操作系统中这部分使用硬件资源的以及一些核心功能叫做内核，在内核之外才是提供的一些接口，运行在用户态（比如自带软件）</p>
+<p>而用户程序要依靠操作系统提供的接口来完成自己的功能</p>
+<img src="https://pic3.zhimg.com/80/v2-506586ddee155b7c553e3d5cf660209e_720w.webp" alt="img" style="zoom:70%;" />
+<p>用户程序也能用CPU，只是不能用CPU干坏事，需要依托于操作系统内核来做</p>
 </article>
  
       

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>内存管理 on Operating System</title>
+    <link>https://zvictorliu.github.io/myBlog/chapter07/</link>
+    <description>Recent content in 内存管理 on Operating System</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://zvictorliu.github.io/myBlog/chapter07/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>基本分页存储管理</title>
+      <link>https://zvictorliu.github.io/myBlog/chapter07/basic_page/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/chapter07/basic_page/</guid>
+      <description>1
+所谓分页是指：把内存空间分为一个个很小的块（等分），进程也这样切割，然后以块为单位逐个申请空间（这样就可以不连续了）
+这样只有除不尽的那部分占了整个块会有内部碎片，但本来块已经够小了，这个就更小了</description>
+    </item>
+    
+    <item>
+      <title>基本原理和要求</title>
+      <link>https://zvictorliu.github.io/myBlog/chapter07/pre/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/chapter07/pre/</guid>
+      <description>1
+这些内容初看还挺杂乱，不知道主线是什么，这些或许是为后面的内容做一个铺垫
+程序的链接
+装入方式
+逻辑地址和物理地址
+内存映像的具体内容
+内存保护的方法
+内存共享，主要讲可重入代码(纯代码) 这个概念</description>
+    </item>
+    
+    <item>
+      <title>连续分配管理方式</title>
+      <link>https://zvictorliu.github.io/myBlog/chapter07/continue/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/chapter07/continue/</guid>
+      <description>就是给用户程序分配一段连续的空间（即一个程序的东西是放在一处的）来存，具体来说有三种方式
+单一连续分配 固定分区分配 动态分区分配 单一连续分配#这个就是很基础很早期的，只能单一程序的时候，除了低地址的操作系统区，用户区全给一个程序，是一个不是多个
+固定分区分配#在单一的基础上，把用户区分成几个段，每段给一个程序
+然后要考虑的问题是：
+怎么分？是均分还是不均分，对应的问题：引出内部碎片概念
+怎么排？设置了一个叫分区说明表的记录册
+动态分区分配#这里王道有说这个规划过程：刚开始一个个接着装，当放不下时，就要把前面空闲的进程给替换掉
+这里有外部碎片的概念：替换掉前面之后，分区和分区之间就可能有一段空白了（这里的分区就是程序所需的大小，这段空白在分区外面所以叫外部，而前面是在固定分区内放一个不那么大的程序，是在分区内部）</description>
+    </item>
+    
+  </channel>
+</rss>
