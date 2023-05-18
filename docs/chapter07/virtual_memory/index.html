@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="先知道一下局部性原理
+虚拟存储器的思想是：
+作业只先把当前需要的那部分程序和数据装入内存，当运行到没有的时，再次装入 将暂时不用的部分换出去，需要时再换进来 在逻辑上容量得到扩充（不是很理解这部分） 为实现虚拟存储器，有三种方式：
+请求分页（最主要）、请求分段、请求段页 和前面的基本xxx相比，这属于”请求“，这个是特点
+只学请求分页
+1 请求分页管理方式#能实现调入所需页面、置换暂时不需要的页面
+需要的硬件支持：
+页表 缺页中断：想来真tm合理 地址变换 1.1 页表#多增加了几个字段的原因：
+为实现请求，需要知道页面当前在不在内存中，同时还需要知道在外存中的位置 有点忘了基本分页为什么不需要外存地址了，，，，， 内存不够需要置换时，需要有依据决定哪些是可以换出去的，此外，如果页面没有被修改过的话就不需要再将其写一遍到外存，因此还有一个记录是否被修改的 所以，多出来了四个字段：
+1.2 缺页中断#页面不在内存，就产生中断，为的是请求操作系统来把需要的页调入内存
+在等待操作系统完成时，将该进程阻塞，完成后再唤醒放入就绪队列
+如果没有空闲块就需要进行淘汰换出了
+这种中断的特点是：
+是内部异常，在指令执行期间产生和处理
+类似于”找不到文件“的异常 一条指令可能有多次缺页中断
+1.3 地址变换#程序请求访问一页，需要经过地址变换得到在内存中的物理地址，这个过程其实经历了许许多多if else的判断
+基本分页方式都认为页就在内存当中，所以不会有请求调入和页面置换这两个步骤
+会先检索快表（这个忘了）
+2 页面置换算法#很简单就是如何选择哪个该换出去的算法，有四种
+最佳置换OPT 先进先出FIFO 最近最久未使用LRU 时钟 2.1 OPT#2.2 FIFO#2.3 LRU#2.4 Clock#简单型和改进型
+3 页面分配策略#页框是内存的”页“，这节研究给特定的进程分配多少页框，很类似于内存的划分了
+太少了，虽然能放的进程多了，但每个进程缺页的概率很高（即使有局部性原理）
+太多了，由于局部性原理可能根本不需要很多，缺页率不会降低太多
+这部分感觉不是重点，但是也可能考，，，所以，，唉">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="虚拟内存" />
+<meta property="og:description" content="先知道一下局部性原理
+虚拟存储器的思想是：
+作业只先把当前需要的那部分程序和数据装入内存，当运行到没有的时，再次装入 将暂时不用的部分换出去，需要时再换进来 在逻辑上容量得到扩充（不是很理解这部分） 为实现虚拟存储器，有三种方式：
+请求分页（最主要）、请求分段、请求段页 和前面的基本xxx相比，这属于”请求“，这个是特点
+只学请求分页
+1 请求分页管理方式#能实现调入所需页面、置换暂时不需要的页面
+需要的硬件支持：
+页表 缺页中断：想来真tm合理 地址变换 1.1 页表#多增加了几个字段的原因：
+为实现请求，需要知道页面当前在不在内存中，同时还需要知道在外存中的位置 有点忘了基本分页为什么不需要外存地址了，，，，， 内存不够需要置换时，需要有依据决定哪些是可以换出去的，此外，如果页面没有被修改过的话就不需要再将其写一遍到外存，因此还有一个记录是否被修改的 所以，多出来了四个字段：
+1.2 缺页中断#页面不在内存，就产生中断，为的是请求操作系统来把需要的页调入内存
+在等待操作系统完成时，将该进程阻塞，完成后再唤醒放入就绪队列
+如果没有空闲块就需要进行淘汰换出了
+这种中断的特点是：
+是内部异常，在指令执行期间产生和处理
+类似于”找不到文件“的异常 一条指令可能有多次缺页中断
+1.3 地址变换#程序请求访问一页，需要经过地址变换得到在内存中的物理地址，这个过程其实经历了许许多多if else的判断
+基本分页方式都认为页就在内存当中，所以不会有请求调入和页面置换这两个步骤
+会先检索快表（这个忘了）
+2 页面置换算法#很简单就是如何选择哪个该换出去的算法，有四种
+最佳置换OPT 先进先出FIFO 最近最久未使用LRU 时钟 2.1 OPT#2.2 FIFO#2.3 LRU#2.4 Clock#简单型和改进型
+3 页面分配策略#页框是内存的”页“，这节研究给特定的进程分配多少页框，很类似于内存的划分了
+太少了，虽然能放的进程多了，但每个进程缺页的概率很高（即使有局部性原理）
+太多了，由于局部性原理可能根本不需要很多，缺页率不会降低太多
+这部分感觉不是重点，但是也可能考，，，所以，，唉" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://zvictorliu.github.io/myBlog/chapter07/virtual_memory/" /><meta property="article:section" content="chapter07" />
+
+
+<title>虚拟内存 | Operating System</title>
+<link rel="manifest" href="/myBlog/manifest.json">
+<link rel="icon" href="/myBlog/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/myBlog/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/myBlog/flexsearch.min.js"></script>
+  <script defer src="/myBlog/en.search.min.9d20f1f983ebc82627e0f85efc631cc6b201279cfbcafa2ba6e5e74decb2b0f7.js" integrity="sha256-nSDx&#43;YPryCYn4Phe/GMcxrIBJ5z7yvorpuXnTeyysPc=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/myBlog/"><span>Operating System</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li><a href="/myBlog/chapter01/">绪论</a>
+<ul>
+<li><a href="/myBlog/chapter01/history-of-os-development/">操作系统历史发展</a></li>
+<li><a href="/myBlog/chapter01/pre/">前置知识</a></li>
+<li><a href="/myBlog/chapter01/blind/">扫盲</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter02/">进程</a>
+<ul>
+<li><a href="/myBlog/chapter02/process_concept/">进程概念</a></li>
+<li><a href="/myBlog/chapter02/ipc/">进程通信</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter05/">进程同步</a>
+<ul>
+<li><a href="/myBlog/chapter05/syn/">背景</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter06/">多线程编程</a>
+<ul>
+<li><a href="/myBlog/chapter06/pthreads/">线程库</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter07/">内存分配</a>
+<ul>
+<li><a href="/myBlog/chapter07/pre/">基本原理和要求</a></li>
+<li><a href="/myBlog/chapter07/virtual_memory/"class=active>虚拟内存</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/file_management/">文件管理</a>
+<ul>
+<li><a href="/myBlog/file_management/%E6%96%87%E4%BB%B6/">文件</a></li>
+<li><a href="/myBlog/file_management/%E7%9B%AE%E5%BD%95/">目录</a></li>
+<li><a href="/myBlog/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">文件系统</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/io_management/">IO管理</a>
+<ul>
+<li><a href="/myBlog/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/">IO管理基础</a></li>
+<li><a href="/myBlog/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/">设备独立性软件</a></li>
+<li><a href="/myBlog/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/">磁盘和固态硬盘</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/myBlog/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>虚拟内存</strong>
+
+  <label for="toc-control">
+    
+    <img src="/myBlog/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-请求分页管理方式">1 请求分页管理方式</a>
+      <ul>
+        <li><a href="#11-页表">1.1 页表</a></li>
+        <li><a href="#12-缺页中断">1.2 缺页中断</a></li>
+        <li><a href="#13-地址变换">1.3 地址变换</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-页面置换算法">2 页面置换算法</a>
+      <ul>
+        <li><a href="#21-opt">2.1 OPT</a></li>
+        <li><a href="#22-fifo">2.2 FIFO</a></li>
+        <li><a href="#23-lru">2.3 LRU</a></li>
+        <li><a href="#24-clock">2.4 Clock</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-页面分配策略">3 页面分配策略</a>
+      <ul>
+        <li><a href="#31-分配策略">3.1 分配策略</a></li>
+        <li><a href="#32-调入算法">3.2 调入算法</a></li>
+        <li><a href="#33-调入时机">3.3 调入时机</a></li>
+        <li><a href="#34-在哪里调怎么调">3.4 在哪里调，怎么调</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><p>先知道一下<em>局部性原理</em></p>
+<p>虚拟存储器的思想是：</p>
+<ul>
+<li>作业只先把当前需要的那部分程序和数据装入内存，当运行到没有的时，再次装入</li>
+<li>将暂时不用的部分换出去，需要时再换进来</li>
+<li>在逻辑上容量得到扩充（不是很理解这部分）</li>
+</ul>
+<p>为实现虚拟存储器，有三种方式：</p>
+<ul>
+<li>请求分页（最主要）、请求分段、请求段页</li>
+</ul>
+<p>和前面的基本xxx相比，这属于”请求“，这个是特点</p>
+<p>只学请求分页</p>
+<h2 id="1-请求分页管理方式">
+  1 请求分页管理方式
+  <a class="anchor" href="#1-%e8%af%b7%e6%b1%82%e5%88%86%e9%a1%b5%e7%ae%a1%e7%90%86%e6%96%b9%e5%bc%8f">#</a>
+</h2>
+<p>能实现调入所需页面、置换暂时不需要的页面</p>
+<p>需要的硬件支持：</p>
+<ul>
+<li>页表</li>
+<li>缺页中断：想来真tm合理</li>
+<li>地址变换</li>
+</ul>
+<h3 id="11-页表">
+  1.1 页表
+  <a class="anchor" href="#11-%e9%a1%b5%e8%a1%a8">#</a>
+</h3>
+<p>多增加了几个字段的原因：</p>
+<ul>
+<li>为实现请求，需要知道页面当前在不在内存中，同时还需要知道在外存中的位置
+<ul>
+<li>有点忘了基本分页为什么不需要外存地址了，，，，，</li>
+</ul>
+</li>
+<li>内存不够需要置换时，需要有依据决定哪些是可以换出去的，此外，如果页面没有被修改过的话就不需要再将其写一遍到外存，因此还有一个记录是否被修改的</li>
+</ul>
+<p>所以，多出来了四个字段：</p>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230515200636970.png" alt="image-20230515200636970" style="zoom:70%;" />
+<h3 id="12-缺页中断">
+  1.2 缺页中断
+  <a class="anchor" href="#12-%e7%bc%ba%e9%a1%b5%e4%b8%ad%e6%96%ad">#</a>
+</h3>
+<p>页面不在内存，就产生中断，为的是请求操作系统来把需要的页调入内存</p>
+<p>在等待操作系统完成时，将该进程阻塞，完成后再唤醒放入就绪队列</p>
+<p>如果没有空闲块就需要进行淘汰换出了</p>
+<p>这种中断的特点是：</p>
+<ul>
+<li>
+<p>是内部异常，在指令执行期间产生和处理</p>
+<ul>
+<li>类似于”找不到文件“的异常</li>
+</ul>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230515201414793.png" alt="image-20230515201414793" style="zoom:60%;" />
+</li>
+<li>
+<p>一条指令可能有多次缺页中断</p>
+</li>
+</ul>
+<h3 id="13-地址变换">
+  1.3 地址变换
+  <a class="anchor" href="#13-%e5%9c%b0%e5%9d%80%e5%8f%98%e6%8d%a2">#</a>
+</h3>
+<p>程序请求访问一页，需要经过地址变换得到在内存中的物理地址，这个过程其实经历了许许多多if else的判断</p>
+<p>基本分页方式都认为页就在内存当中，所以不会有请求调入和页面置换这两个步骤</p>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230515203822605.png" alt="image-20230515203822605" style="zoom:80%;" />
+<p>会先检索快表（这个忘了）</p>
+<h2 id="2-页面置换算法">
+  2 页面置换算法
+  <a class="anchor" href="#2-%e9%a1%b5%e9%9d%a2%e7%bd%ae%e6%8d%a2%e7%ae%97%e6%b3%95">#</a>
+</h2>
+<p>很简单就是如何选择哪个该换出去的算法，有四种</p>
+<ul>
+<li>最佳置换OPT</li>
+<li>先进先出FIFO</li>
+<li>最近最久未使用LRU</li>
+<li>时钟</li>
+</ul>
+<h3 id="21-opt">
+  2.1 OPT
+  <a class="anchor" href="#21-opt">#</a>
+</h3>
+<h3 id="22-fifo">
+  2.2 FIFO
+  <a class="anchor" href="#22-fifo">#</a>
+</h3>
+<h3 id="23-lru">
+  2.3 LRU
+  <a class="anchor" href="#23-lru">#</a>
+</h3>
+<h3 id="24-clock">
+  2.4 Clock
+  <a class="anchor" href="#24-clock">#</a>
+</h3>
+<p>简单型和改进型</p>
+<h2 id="3-页面分配策略">
+  3 页面分配策略
+  <a class="anchor" href="#3-%e9%a1%b5%e9%9d%a2%e5%88%86%e9%85%8d%e7%ad%96%e7%95%a5">#</a>
+</h2>
+<p>页框是内存的”页“，这节研究给特定的进程分配多少页框，很类似于内存的划分了</p>
+<ul>
+<li>
+<p>太少了，虽然能放的进程多了，但每个进程缺页的概率很高（即使有局部性原理）</p>
+</li>
+<li>
+<p>太多了，由于局部性原理可能根本不需要很多，缺页率不会降低太多</p>
+</li>
+</ul>
+<blockquote>
+<p>这部分感觉不是重点，但是也可能考，，，所以，，唉</p>
+<p>现在先粗略看一遍就行了</p>
+</blockquote>
+<h3 id="31-分配策略">
+  3.1 分配策略
+  <a class="anchor" href="#31-%e5%88%86%e9%85%8d%e7%ad%96%e7%95%a5">#</a>
+</h3>
+<p>对于请求分配的系统来说，根据内存分配的策略和置换的策略，有三种：</p>
+<ul>
+<li>固定分配+局部置换</li>
+<li>可变分配+全局置换</li>
+<li>可变分配+局部置换</li>
+</ul>
+<p>固定分配：分配的页框数目固定不变</p>
+<p>可变分配：可以根据情况增减</p>
+<p>局部置换：如果缺页，只能从分配的页框中取出页来置换（这不废话？）</p>
+<p>全局置换：从一个空闲物理块队列中取出</p>
+<h3 id="32-调入算法">
+  3.2 调入算法
+  <a class="anchor" href="#32-%e8%b0%83%e5%85%a5%e7%ae%97%e6%b3%95">#</a>
+</h3>
+<h3 id="33-调入时机">
+  3.3 调入时机
+  <a class="anchor" href="#33-%e8%b0%83%e5%85%a5%e6%97%b6%e6%9c%ba">#</a>
+</h3>
+<h3 id="34-在哪里调怎么调">
+  3.4 在哪里调，怎么调
+  <a class="anchor" href="#34-%e5%9c%a8%e5%93%aa%e9%87%8c%e8%b0%83%e6%80%8e%e4%b9%88%e8%b0%83">#</a>
+</h3>
+<p><code>抖动现象</code>: 刚换入马上就换出，刚换出很快就要换入，太过频繁，是一种很不高效的情况</p>
+<p><code>工作集</code>: 某段时间间隔内进程需要访问的页面集合，根据局部性原理，代表了接下来可能会频繁访问的页面集合</p>
+<p><code>内存映射文件</code></p>
+<p><code>虚拟存储器性能影响因素</code></p>
+<p><code>地址翻译 </code>涉及计组的内容</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-请求分页管理方式">1 请求分页管理方式</a>
+      <ul>
+        <li><a href="#11-页表">1.1 页表</a></li>
+        <li><a href="#12-缺页中断">1.2 缺页中断</a></li>
+        <li><a href="#13-地址变换">1.3 地址变换</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-页面置换算法">2 页面置换算法</a>
+      <ul>
+        <li><a href="#21-opt">2.1 OPT</a></li>
+        <li><a href="#22-fifo">2.2 FIFO</a></li>
+        <li><a href="#23-lru">2.3 LRU</a></li>
+        <li><a href="#24-clock">2.4 Clock</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-页面分配策略">3 页面分配策略</a>
+      <ul>
+        <li><a href="#31-分配策略">3.1 分配策略</a></li>
+        <li><a href="#32-调入算法">3.2 调入算法</a></li>
+        <li><a href="#33-调入时机">3.3 调入时机</a></li>
+        <li><a href="#34-在哪里调怎么调">3.4 在哪里调，怎么调</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

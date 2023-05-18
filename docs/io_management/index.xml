@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>输入输出管理 on Operating System</title>
+    <link>https://zvictorliu.github.io/myBlog/io_management/</link>
+    <description>Recent content in 输入输出管理 on Operating System</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://zvictorliu.github.io/myBlog/io_management/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>IO管理基础</title>
+      <link>https://zvictorliu.github.io/myBlog/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/</guid>
+      <description>IO管理基础#1 IO设备#IO设备根据信息交换的单位可分为：
+块设备：以数据块为单位，比如磁盘，可寻址 字符设备：以字符串为单位，比如键盘，不可寻址 1.1 IO接口#设备控制器，即是IO接口，它既要能和CPU通信，还要和设备通信，并能按照CPU指令控制设备
+有与CPU的接口，也有与设备的接口
+IO逻辑能够对CPU发出的控制何地址信息译码，从而进行控制
+所以，其功能包括了：
+接收何识别CPU命令、数据交换、标识和报告设备状态、地址识别、数据缓冲、差错控制
+1.2 IO端口#指的其实是寄存器，也就是IO接口中可以被CPU直接访问的那部分寄存器，包括：
+数据寄存器：数据缓冲用 状态寄存器：记录状态，知道是否准备好 控制寄存器：命令 编址方式（很微机原理）
+独立编址 统一编址（内存映射） 2 IO控制方式#设备和内存之间的输入输出控制方式
+2.1 程序直接控制#即轮询方式，CPU读取外部设备的每一个字
+CPU都需要不断检查外设状态，直到被放入设备管理器的寄存器中，更改了外设状态
+2.2 中断驱动#数据读入后，通过控制线发起中断信号，CPU请求之后再将数据放到总线上传给CPU
+比轮询好，但每个字也需要用一次CPU
+2.3 DMA#在内存和设备之间建立一条之间的通路，以数据块为单位传输，直接送入内存，只有在开始和结束时才需要CPU
+有专门的DMA控制器：
+CR: 命令/状态寄存器
+MAR: 内存地址寄存器，输出时是内存中的源地址，输入时是内存中的目标地址
+DR: 数据寄存器
+DC: 数据计数器
+CPU接收到设备发出的DMA请求，给DMA控制器发一条命令启动后继续做自己的事，DMA自己进行传输（一个块，多个字），传输完成后再发起中断
+3 IO软件层次#IO软件，分层结构
+设备独立性软件屏蔽了设备的差异
+4 应用程序的IO接口#字符设备接口
+块设备接口
+网络设备接口
+阻塞/非阻塞IO</description>
+    </item>
+    
+    <item>
+      <title>磁盘和固态硬盘</title>
+      <link>https://zvictorliu.github.io/myBlog/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/</guid>
+      <description>磁盘和固态硬盘#磁盘，磁盘管理方式，调度算法
+固态硬盘简介</description>
+    </item>
+    
+    <item>
+      <title>设备独立性软件</title>
+      <link>https://zvictorliu.github.io/myBlog/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/</guid>
+      <description>设备独立性软件#执行所有设备公有操作的软件
+1 高速缓存与缓冲区#高速缓存逻辑上属于磁盘，其实物理上是在内存中的盘块
+缓冲区可以很好接近速度不匹配的问题，减少对CPU中断频率，也能接近基本数据单元大小不一致的问题
+单缓冲 双缓冲 循环缓冲 缓冲池 2 设备分配与回收#怎么把设备分给不同进程
+独占 分时共享 虚拟设备 有专门的数据结构
+3 SPOOLing技术#用户进程请求打印输出，但这时打印机被占用
+假脱机管理进程会在磁盘缓冲区为该进程分配一个空闲盘块，将要输出的数据放入其中
+并申请一张用户请求打印表，记录打印要求，放入队列
+这样用户进程不会阻塞，打印机空闲后会打印
+这样每个进程都会觉得自己是独占了这个设备（只是有延时）
+4 设备驱动程序接口#</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="文件#要明确文件不只是数据项（虽然其它信息本质也是数据）
+文件除了数据，还会记录与文件相关的信息，叫做文件元数据，其实就是文件属性的意思
+包括名称、类型、位置、大小、创建时间等信息
+1 文件控制块FCB#一个FCB是一种数据结构，保存了用于控制文件所需的各种信息，它是用来管理的，不是文件本身（图里面的文件数据块不知道是啥）
+按照一定顺序，各个FCB放在文件目录中，一个FCB和一个文件名对应
+查找文件的基本流程是：将磁盘分多个盘块，每个盘块有多个FCB，查找时把第一个盘块中的目录调入内存和文件名比较，没找到就换下一个盘块
+如果盘块中目录项太少就会访问磁盘很多次，所以不好把整个FCB都存入盘块中
+由于查找文件时只需要文件名比对，所以将文件的描述信息剥离开，形成一个索引节点
+每个目录项只包含文件名和指向索引节点的指针，这样一个目录项就会小很多，一个盘块也能容纳更多目录项
+存放在磁盘上的索引节点 当文件被打开时将它复制到内存中并增加一些信息，成为内存索引节点（这里的命名是根据存放的位置）
+2 文件打开与关闭#基本操作包括：
+创建 写 读 重新定位 删除 截断 文件需要显示地被打开，显示调用之后放入内存，之后就找的快
+调用open，先根据提供的文件路径找到目录文件 在目录文件中找到和文件名一致的目录项 检查操作权限是否具备 将该目录项（索引）复制到内存中一个记录当前已打开文件的表中（因为往往不只打开一个文件） 之后，再次对文件发出操作请求时，可在内存中的表内找到文件信息
+具体来说，应该是两个表，一个是每个进程的打开表，一个是记录所有进程的打开表（系统表）
+如果一个进程打开前面一个进程已经打开的文件，就只需要把指针指向这个系统表
+而关闭，则通过一个记录文件关联的进程个数的计数器，计数值为0则代表均已声明了关闭，于是操作系统才算真正关闭它
+打开文件表的索引不一定是文件名，不同操作系统有不同的设置
+打开表应该在索引节点基础之上包含：
+文件指针：这个并不是指向文件物理位置的指针，而是记录上次读写的位置 文件打开计数 文件磁盘位置 访问权限 这些都是和进程关系起来的
+3 文件保护#谈一谈那个权限的信息了
+其实也不光是防着越权，还有记录访问方式的，这个在编程时很有体会，r w wb 这些就是表示是给什么操作，说好是只读的不能写（这个只读不是文件本身锁死了只读，是进程申请打开时就说的只读，如果后面写的话就是违规的）
+口令保护 加密保护：真的是对文件进行了加密，通过密码解密 访问控制 4 文件物理结构##别忘了磁盘也是分块的
+连续分配：每个文件占连续的块
+链接分配：指针连接走到底便是完整的文件
+隐式链接 显示链接 索引分配
+FAT占内存，所以将该文件所对应盘块编号放在一起，目录查找到它就行了
+混合索引分配
+5 文件逻辑结构#呈现给用户的结构">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="文件" />
+<meta property="og:description" content="文件#要明确文件不只是数据项（虽然其它信息本质也是数据）
+文件除了数据，还会记录与文件相关的信息，叫做文件元数据，其实就是文件属性的意思
+包括名称、类型、位置、大小、创建时间等信息
+1 文件控制块FCB#一个FCB是一种数据结构，保存了用于控制文件所需的各种信息，它是用来管理的，不是文件本身（图里面的文件数据块不知道是啥）
+按照一定顺序，各个FCB放在文件目录中，一个FCB和一个文件名对应
+查找文件的基本流程是：将磁盘分多个盘块，每个盘块有多个FCB，查找时把第一个盘块中的目录调入内存和文件名比较，没找到就换下一个盘块
+如果盘块中目录项太少就会访问磁盘很多次，所以不好把整个FCB都存入盘块中
+由于查找文件时只需要文件名比对，所以将文件的描述信息剥离开，形成一个索引节点
+每个目录项只包含文件名和指向索引节点的指针，这样一个目录项就会小很多，一个盘块也能容纳更多目录项
+存放在磁盘上的索引节点 当文件被打开时将它复制到内存中并增加一些信息，成为内存索引节点（这里的命名是根据存放的位置）
+2 文件打开与关闭#基本操作包括：
+创建 写 读 重新定位 删除 截断 文件需要显示地被打开，显示调用之后放入内存，之后就找的快
+调用open，先根据提供的文件路径找到目录文件 在目录文件中找到和文件名一致的目录项 检查操作权限是否具备 将该目录项（索引）复制到内存中一个记录当前已打开文件的表中（因为往往不只打开一个文件） 之后，再次对文件发出操作请求时，可在内存中的表内找到文件信息
+具体来说，应该是两个表，一个是每个进程的打开表，一个是记录所有进程的打开表（系统表）
+如果一个进程打开前面一个进程已经打开的文件，就只需要把指针指向这个系统表
+而关闭，则通过一个记录文件关联的进程个数的计数器，计数值为0则代表均已声明了关闭，于是操作系统才算真正关闭它
+打开文件表的索引不一定是文件名，不同操作系统有不同的设置
+打开表应该在索引节点基础之上包含：
+文件指针：这个并不是指向文件物理位置的指针，而是记录上次读写的位置 文件打开计数 文件磁盘位置 访问权限 这些都是和进程关系起来的
+3 文件保护#谈一谈那个权限的信息了
+其实也不光是防着越权，还有记录访问方式的，这个在编程时很有体会，r w wb 这些就是表示是给什么操作，说好是只读的不能写（这个只读不是文件本身锁死了只读，是进程申请打开时就说的只读，如果后面写的话就是违规的）
+口令保护 加密保护：真的是对文件进行了加密，通过密码解密 访问控制 4 文件物理结构##别忘了磁盘也是分块的
+连续分配：每个文件占连续的块
+链接分配：指针连接走到底便是完整的文件
+隐式链接 显示链接 索引分配
+FAT占内存，所以将该文件所对应盘块编号放在一起，目录查找到它就行了
+混合索引分配
+5 文件逻辑结构#呈现给用户的结构" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://zvictorliu.github.io/myBlog/file_management/%E6%96%87%E4%BB%B6/" /><meta property="article:section" content="file_management" />
+
+
+<title>文件 | Operating System</title>
+<link rel="manifest" href="/myBlog/manifest.json">
+<link rel="icon" href="/myBlog/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/myBlog/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/myBlog/flexsearch.min.js"></script>
+  <script defer src="/myBlog/en.search.min.9d20f1f983ebc82627e0f85efc631cc6b201279cfbcafa2ba6e5e74decb2b0f7.js" integrity="sha256-nSDx&#43;YPryCYn4Phe/GMcxrIBJ5z7yvorpuXnTeyysPc=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/myBlog/"><span>Operating System</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li><a href="/myBlog/chapter01/">绪论</a>
+<ul>
+<li><a href="/myBlog/chapter01/history-of-os-development/">操作系统历史发展</a></li>
+<li><a href="/myBlog/chapter01/pre/">前置知识</a></li>
+<li><a href="/myBlog/chapter01/blind/">扫盲</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter02/">进程</a>
+<ul>
+<li><a href="/myBlog/chapter02/process_concept/">进程概念</a></li>
+<li><a href="/myBlog/chapter02/ipc/">进程通信</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter05/">进程同步</a>
+<ul>
+<li><a href="/myBlog/chapter05/syn/">背景</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter06/">多线程编程</a>
+<ul>
+<li><a href="/myBlog/chapter06/pthreads/">线程库</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter07/">内存分配</a>
+<ul>
+<li><a href="/myBlog/chapter07/pre/">基本原理和要求</a></li>
+<li><a href="/myBlog/chapter07/virtual_memory/">虚拟内存</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/file_management/">文件管理</a>
+<ul>
+<li><a href="/myBlog/file_management/%E6%96%87%E4%BB%B6/"class=active>文件</a></li>
+<li><a href="/myBlog/file_management/%E7%9B%AE%E5%BD%95/">目录</a></li>
+<li><a href="/myBlog/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">文件系统</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/io_management/">IO管理</a>
+<ul>
+<li><a href="/myBlog/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/">IO管理基础</a></li>
+<li><a href="/myBlog/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/">设备独立性软件</a></li>
+<li><a href="/myBlog/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/">磁盘和固态硬盘</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/myBlog/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>文件</strong>
+
+  <label for="toc-control">
+    
+    <img src="/myBlog/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-文件控制块fcb">1 文件控制块FCB</a></li>
+    <li><a href="#2-文件打开与关闭">2 文件打开与关闭</a></li>
+    <li><a href="#3-文件保护">3 文件保护</a></li>
+    <li><a href="#4-文件物理结构">4 文件物理结构</a>
+      <ul>
+        <li><a href="#heading"></a></li>
+      </ul>
+    </li>
+    <li><a href="#5-文件逻辑结构">5 文件逻辑结构</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="文件">
+  文件
+  <a class="anchor" href="#%e6%96%87%e4%bb%b6">#</a>
+</h1>
+<p>要明确文件不只是数据项（虽然其它信息本质也是数据）</p>
+<p>文件除了数据，还会记录与文件相关的信息，叫做<em>文件元数据</em>，其实就是文件属性的意思</p>
+<p>包括名称、类型、位置、大小、创建时间等信息</p>
+<h2 id="1-文件控制块fcb">
+  1 文件控制块FCB
+  <a class="anchor" href="#1-%e6%96%87%e4%bb%b6%e6%8e%a7%e5%88%b6%e5%9d%97fcb">#</a>
+</h2>
+<p>一个FCB是一种数据结构，保存了用于控制文件所需的各种信息，它是用来管理的，不是文件本身（图里面的文件数据块不知道是啥）</p>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230516200147466.png" alt="image-20230516200147466" style="zoom:67%;" />
+<p>按照一定顺序，各个FCB放在文件目录中，一个FCB和一个文件名对应</p>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230516200119232.png" alt="image-20230516200119232" style="zoom:67%;" />
+<p>查找文件的基本流程是：将磁盘分多个盘块，每个盘块有多个FCB，查找时把第一个盘块中的目录调入内存和文件名比较，没找到就换下一个盘块</p>
+<p>如果盘块中目录项太少就会访问磁盘很多次，所以不好把整个FCB都存入盘块中</p>
+<p>由于查找文件时只需要文件名比对，所以将文件的描述信息剥离开，形成一个<em>索引节点</em></p>
+<p>每个目录项只包含文件名和指向索引节点的指针，这样一个目录项就会小很多，一个盘块也能容纳更多目录项</p>
+<p>存放在磁盘上的索引节点 当文件被打开时将它复制到内存中并增加一些信息，成为内存索引节点（这里的命名是根据存放的位置）</p>
+<h2 id="2-文件打开与关闭">
+  2 文件打开与关闭
+  <a class="anchor" href="#2-%e6%96%87%e4%bb%b6%e6%89%93%e5%bc%80%e4%b8%8e%e5%85%b3%e9%97%ad">#</a>
+</h2>
+<p>基本操作包括：</p>
+<ul>
+<li>创建</li>
+<li>写</li>
+<li>读</li>
+<li>重新定位</li>
+<li>删除</li>
+<li>截断</li>
+</ul>
+<p>文件需要显示地被打开，显示调用之后放入内存，之后就找的快</p>
+<ul>
+<li>调用open，先根据提供的文件路径找到目录文件</li>
+<li>在目录文件中找到和文件名一致的目录项</li>
+<li>检查操作权限是否具备</li>
+<li>将该目录项（索引）复制到内存中一个记录当前已打开文件的表中（因为往往不只打开一个文件）</li>
+</ul>
+<p>之后，再次对文件发出操作请求时，可在内存中的表内找到文件信息</p>
+<p>具体来说，应该是两个表，一个是每个进程的打开表，一个是记录所有进程的打开表（系统表）</p>
+<p>如果一个进程打开前面一个进程已经打开的文件，就只需要把指针指向这个系统表</p>
+<p>而关闭，则通过一个记录文件关联的进程个数的计数器，计数值为0则代表均已声明了关闭，于是操作系统才算真正关闭它</p>
+<p>打开文件表的索引不一定是文件名，不同操作系统有不同的设置</p>
+<p>打开表应该在索引节点基础之上包含：</p>
+<ul>
+<li>文件指针：这个并不是指向文件物理位置的指针，而是记录上次读写的位置</li>
+<li>文件打开计数</li>
+<li>文件磁盘位置</li>
+<li>访问权限</li>
+</ul>
+<p>这些都是和进程关系起来的</p>
+<h2 id="3-文件保护">
+  3 文件保护
+  <a class="anchor" href="#3-%e6%96%87%e4%bb%b6%e4%bf%9d%e6%8a%a4">#</a>
+</h2>
+<p>谈一谈那个权限的信息了</p>
+<p>其实也不光是防着越权，还有记录访问方式的，这个在编程时很有体会，r w wb 这些就是表示是给什么操作，说好是只读的不能写（这个只读不是文件本身锁死了只读，是进程申请打开时就说的只读，如果后面写的话就是违规的）</p>
+<ul>
+<li>口令保护</li>
+<li>加密保护：真的是对文件进行了加密，通过密码解密</li>
+<li>访问控制</li>
+</ul>
+<h2 id="4-文件物理结构">
+  4 文件物理结构
+  <a class="anchor" href="#4-%e6%96%87%e4%bb%b6%e7%89%a9%e7%90%86%e7%bb%93%e6%9e%84">#</a>
+</h2>
+<h3 id="heading">
+  
+  <a class="anchor" href="#heading">#</a>
+</h3>
+<p>别忘了磁盘也是分块的</p>
+<ul>
+<li>
+<p>连续分配：每个文件占连续的块</p>
+</li>
+<li>
+<p>链接分配：指针连接走到底便是完整的文件</p>
+<ul>
+<li>隐式链接</li>
+</ul>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230516210618744.png" alt="image-20230516210618744" style="zoom:67%;" />
+<ul>
+<li>显示链接</li>
+</ul>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230516210708324.png" alt="image-20230516210708324" style="zoom:67%;" />
+</li>
+<li>
+<p>索引分配</p>
+<ul>
+<li>
+<p>FAT占内存，所以将该文件所对应盘块编号放在一起，目录查找到它就行了</p>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230516211025053.png" alt="image-20230516211025053" style="zoom:67%;" />
+</li>
+</ul>
+</li>
+<li>
+<p>混合索引分配</p>
+</li>
+</ul>
+<h2 id="5-文件逻辑结构">
+  5 文件逻辑结构
+  <a class="anchor" href="#5-%e6%96%87%e4%bb%b6%e9%80%bb%e8%be%91%e7%bb%93%e6%9e%84">#</a>
+</h2>
+<p>呈现给用户的结构</p>
+<ul>
+<li>无结构文件：流文件，完全按字节流顺序排列</li>
+<li>有结构文件：
+<ul>
+<li>顺序文件：和链表相似</li>
+<li>索引文件：和数组相似</li>
+<li>索引顺序文件：</li>
+<li>直接文件（散列、哈希）：和哈希表、字典相似</li>
+</ul>
+</li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-文件控制块fcb">1 文件控制块FCB</a></li>
+    <li><a href="#2-文件打开与关闭">2 文件打开与关闭</a></li>
+    <li><a href="#3-文件保护">3 文件保护</a></li>
+    <li><a href="#4-文件物理结构">4 文件物理结构</a>
+      <ul>
+        <li><a href="#heading"></a></li>
+      </ul>
+    </li>
+    <li><a href="#5-文件逻辑结构">5 文件逻辑结构</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

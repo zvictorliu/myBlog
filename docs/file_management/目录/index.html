@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="目录#FCB的有序集合为文件目录，一个FCB就是一个文件目录项
+（说是这么说，之前好像说不是整个FCB 🤔 索引节点是一种FCB改进
+目录提供 文件名和文件的映射，按名存取
+目录的检索速度影响性能 多用户系统应该允许重名，单用户则不能 有四种结构，一般是树形结构
+1 目录结构#1.1 单级目录结构#一张目录表，一个文件占一个目录项
+查找：根据文件名找到对应的FCB，检查合法后进行操作
+创建：先检索所有目录以确保没有重名，然后再添加一项
+删除：先找到目录项，回收文件的存储空间，然后再删除FCB
+1.2 两级目录结构#分成主文件目录和用户文件目录
+这样就可以不同用户重名
+为何说提高效率，且用户不能对文件分类？
+1.3 树形目录结构#这个是我们熟悉的结构
+绝对目录和相对目录
+原来分类是这个意思
+缺点是：查找文件需要逐级访问中间节点，增加了磁盘访问次数
+大多数操作系统都是树形结构目录
+1.4 无环图目录结构#为便于实现文件共享
+增加了有向边指向共享的节点（可以是文件，也可以是目录，而且两边还可以不同名）
+并设置了一个共享计数器，为0时才算真正删除，否则只是删除一个用户的链接关系
+2 文件共享#共享不同于拷贝，现代有两种常用共享办法
+2.1 硬链接#就是1.4的思想，具体来说是通过索引结点实现的，计数器保存至文件的索引节点当中
+计数器更新：
+这里面其实是有：A共享给B，所以owner还是A
+2.2 软链接#给B创建一个LINK类型的文件，B访问共享文件找到LINK，操作系统将其转到共享文件，这样只有A的指针指向了索引节点，这种叫做符号链接
+这样A删除文件，B的LINK就找不到会被操作系统删除而不产生影响
+硬链接查找速度比软链接块">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="目录" />
+<meta property="og:description" content="目录#FCB的有序集合为文件目录，一个FCB就是一个文件目录项
+（说是这么说，之前好像说不是整个FCB 🤔 索引节点是一种FCB改进
+目录提供 文件名和文件的映射，按名存取
+目录的检索速度影响性能 多用户系统应该允许重名，单用户则不能 有四种结构，一般是树形结构
+1 目录结构#1.1 单级目录结构#一张目录表，一个文件占一个目录项
+查找：根据文件名找到对应的FCB，检查合法后进行操作
+创建：先检索所有目录以确保没有重名，然后再添加一项
+删除：先找到目录项，回收文件的存储空间，然后再删除FCB
+1.2 两级目录结构#分成主文件目录和用户文件目录
+这样就可以不同用户重名
+为何说提高效率，且用户不能对文件分类？
+1.3 树形目录结构#这个是我们熟悉的结构
+绝对目录和相对目录
+原来分类是这个意思
+缺点是：查找文件需要逐级访问中间节点，增加了磁盘访问次数
+大多数操作系统都是树形结构目录
+1.4 无环图目录结构#为便于实现文件共享
+增加了有向边指向共享的节点（可以是文件，也可以是目录，而且两边还可以不同名）
+并设置了一个共享计数器，为0时才算真正删除，否则只是删除一个用户的链接关系
+2 文件共享#共享不同于拷贝，现代有两种常用共享办法
+2.1 硬链接#就是1.4的思想，具体来说是通过索引结点实现的，计数器保存至文件的索引节点当中
+计数器更新：
+这里面其实是有：A共享给B，所以owner还是A
+2.2 软链接#给B创建一个LINK类型的文件，B访问共享文件找到LINK，操作系统将其转到共享文件，这样只有A的指针指向了索引节点，这种叫做符号链接
+这样A删除文件，B的LINK就找不到会被操作系统删除而不产生影响
+硬链接查找速度比软链接块" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://zvictorliu.github.io/myBlog/file_management/%E7%9B%AE%E5%BD%95/" /><meta property="article:section" content="file_management" />
+
+
+<title>目录 | Operating System</title>
+<link rel="manifest" href="/myBlog/manifest.json">
+<link rel="icon" href="/myBlog/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/myBlog/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/myBlog/flexsearch.min.js"></script>
+  <script defer src="/myBlog/en.search.min.9d20f1f983ebc82627e0f85efc631cc6b201279cfbcafa2ba6e5e74decb2b0f7.js" integrity="sha256-nSDx&#43;YPryCYn4Phe/GMcxrIBJ5z7yvorpuXnTeyysPc=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/myBlog/"><span>Operating System</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li><a href="/myBlog/chapter01/">绪论</a>
+<ul>
+<li><a href="/myBlog/chapter01/history-of-os-development/">操作系统历史发展</a></li>
+<li><a href="/myBlog/chapter01/pre/">前置知识</a></li>
+<li><a href="/myBlog/chapter01/blind/">扫盲</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter02/">进程</a>
+<ul>
+<li><a href="/myBlog/chapter02/process_concept/">进程概念</a></li>
+<li><a href="/myBlog/chapter02/ipc/">进程通信</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter05/">进程同步</a>
+<ul>
+<li><a href="/myBlog/chapter05/syn/">背景</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter06/">多线程编程</a>
+<ul>
+<li><a href="/myBlog/chapter06/pthreads/">线程库</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter07/">内存分配</a>
+<ul>
+<li><a href="/myBlog/chapter07/pre/">基本原理和要求</a></li>
+<li><a href="/myBlog/chapter07/virtual_memory/">虚拟内存</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/file_management/">文件管理</a>
+<ul>
+<li><a href="/myBlog/file_management/%E6%96%87%E4%BB%B6/">文件</a></li>
+<li><a href="/myBlog/file_management/%E7%9B%AE%E5%BD%95/"class=active>目录</a></li>
+<li><a href="/myBlog/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">文件系统</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/io_management/">IO管理</a>
+<ul>
+<li><a href="/myBlog/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/">IO管理基础</a></li>
+<li><a href="/myBlog/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/">设备独立性软件</a></li>
+<li><a href="/myBlog/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/">磁盘和固态硬盘</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/myBlog/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>目录</strong>
+
+  <label for="toc-control">
+    
+    <img src="/myBlog/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-目录结构">1 目录结构</a>
+      <ul>
+        <li><a href="#11-单级目录结构">1.1 单级目录结构</a></li>
+        <li><a href="#12-两级目录结构">1.2 两级目录结构</a></li>
+        <li><a href="#13-树形目录结构">1.3 树形目录结构</a></li>
+        <li><a href="#14-无环图目录结构">1.4 无环图目录结构</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-文件共享">2 文件共享</a>
+      <ul>
+        <li><a href="#21-硬链接">2.1 硬链接</a></li>
+        <li><a href="#22-软链接">2.2 软链接</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="目录">
+  目录
+  <a class="anchor" href="#%e7%9b%ae%e5%bd%95">#</a>
+</h1>
+<blockquote>
+<p>FCB的有序集合为文件目录，一个FCB就是一个文件目录项</p>
+</blockquote>
+<p>（说是这么说，之前好像说不是整个FCB 🤔 索引节点是一种FCB改进</p>
+<p>目录提供 文件名和文件的映射，按名存取</p>
+<ul>
+<li>目录的检索速度影响性能</li>
+<li>多用户系统应该允许重名，单用户则不能</li>
+</ul>
+<p>有四种结构，一般是树形结构</p>
+<h2 id="1-目录结构">
+  1 目录结构
+  <a class="anchor" href="#1-%e7%9b%ae%e5%bd%95%e7%bb%93%e6%9e%84">#</a>
+</h2>
+<h3 id="11-单级目录结构">
+  1.1 单级目录结构
+  <a class="anchor" href="#11-%e5%8d%95%e7%ba%a7%e7%9b%ae%e5%bd%95%e7%bb%93%e6%9e%84">#</a>
+</h3>
+<p>一张目录表，一个文件占一个目录项</p>
+<p><img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230517200312384.png" alt="image-20230517200312384" /></p>
+<p>查找：根据文件名找到对应的FCB，检查合法后进行操作</p>
+<p>创建：先检索所有目录以确保没有重名，然后再添加一项</p>
+<p>删除：先找到目录项，回收文件的存储空间，然后再删除FCB</p>
+<h3 id="12-两级目录结构">
+  1.2 两级目录结构
+  <a class="anchor" href="#12-%e4%b8%a4%e7%ba%a7%e7%9b%ae%e5%bd%95%e7%bb%93%e6%9e%84">#</a>
+</h3>
+<p>分成主文件目录和用户文件目录</p>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230517201233290.png" alt="image-20230517201233290" style="zoom:67%;" />
+<p>这样就可以不同用户重名</p>
+<p><em>为何说提高效率，且用户不能对文件分类？</em></p>
+<h3 id="13-树形目录结构">
+  1.3 树形目录结构
+  <a class="anchor" href="#13-%e6%a0%91%e5%bd%a2%e7%9b%ae%e5%bd%95%e7%bb%93%e6%9e%84">#</a>
+</h3>
+<p>这个是我们熟悉的结构</p>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230517202056526.png" alt="image-20230517202056526" style="zoom:67%;" />
+<p>绝对目录和相对目录</p>
+<p>原来分类是这个意思</p>
+<p>缺点是：查找文件需要逐级访问中间节点，增加了磁盘访问次数</p>
+<p>大多数操作系统都是树形结构目录</p>
+<h3 id="14-无环图目录结构">
+  1.4 无环图目录结构
+  <a class="anchor" href="#14-%e6%97%a0%e7%8e%af%e5%9b%be%e7%9b%ae%e5%bd%95%e7%bb%93%e6%9e%84">#</a>
+</h3>
+<p>为便于实现文件共享</p>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230517202603842.png" alt="image-20230517202603842" style="zoom:67%;" />
+<p>增加了有向边指向共享的节点（可以是文件，也可以是目录，而且两边还可以不同名）</p>
+<p>并设置了一个共享计数器，为0时才算真正删除，否则只是删除一个用户的链接关系</p>
+<h2 id="2-文件共享">
+  2 文件共享
+  <a class="anchor" href="#2-%e6%96%87%e4%bb%b6%e5%85%b1%e4%ba%ab">#</a>
+</h2>
+<p>共享不同于拷贝，现代有两种常用共享办法</p>
+<h3 id="21-硬链接">
+  2.1 硬链接
+  <a class="anchor" href="#21-%e7%a1%ac%e9%93%be%e6%8e%a5">#</a>
+</h3>
+<p>就是1.4的思想，具体来说是通过索引结点实现的，计数器保存至文件的索引节点当中</p>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230517204112844.png" alt="image-20230517204112844" style="zoom:67%;" />
+<p>计数器更新：</p>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230517204202137.png" alt="image-20230517204202137" style="zoom:67%;" />
+<p>这里面其实是有：A共享给B，所以owner还是A</p>
+<h3 id="22-软链接">
+  2.2 软链接
+  <a class="anchor" href="#22-%e8%bd%af%e9%93%be%e6%8e%a5">#</a>
+</h3>
+<p>给B创建一个LINK类型的文件，B访问共享文件找到LINK，操作系统将其转到共享文件，这样只有A的指针指向了索引节点，这种叫做<em>符号链接</em></p>
+<p>这样A删除文件，B的LINK就找不到会被操作系统删除而不产生影响</p>
+<p>硬链接查找速度比软链接块</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-目录结构">1 目录结构</a>
+      <ul>
+        <li><a href="#11-单级目录结构">1.1 单级目录结构</a></li>
+        <li><a href="#12-两级目录结构">1.2 两级目录结构</a></li>
+        <li><a href="#13-树形目录结构">1.3 树形目录结构</a></li>
+        <li><a href="#14-无环图目录结构">1.4 无环图目录结构</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-文件共享">2 文件共享</a>
+      <ul>
+        <li><a href="#21-硬链接">2.1 硬链接</a></li>
+        <li><a href="#22-软链接">2.2 软链接</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

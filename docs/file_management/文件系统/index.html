@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="文件系统#应用程序通过文件系统和磁盘交互
+具有层次结构：
+说来就是操作系统了？
+1 文件系统布局#1.1 在磁盘上#文件系统存在磁盘上，磁盘分区，每个分区有一个独立的文件系统
+MBR: 主引导记录，引导计算机，BIOS读入MBR并执行，确定活动分区，即引导块
+引导块：执行引导块的程序，启动操作系统，在此之后布局就不一定一样了，和文件系统有关系
+超级块：包含了文件系统的信息，启动时或者首次使用文件系统时调入内存
+空闲块信息
+1.2 在内存中#保存信息数据在安装文件系统时被加载，在文件系统操作期间被更新，在卸载时被丢弃
+安装表：已安装文件系统分区的信息 目录结构缓存 系统打开文件表 进程打开文件表 2 外存空闲空间管理#磁盘中包含文件系统的分区叫做卷(volume)
+一个磁盘可以有多个卷，也可以一个磁盘本身就是一个卷，甚至多个磁盘构成一个卷
+文件存储设备也是分块的，管理起来也就是对空闲块的管理：组织、分配、回收
+空闲表法
+空闲链表法
+位示图法
+成组链接法
+3 虚拟文件系统#统一接口，统一调用VFS提供的函数操作不同的文件系统和存储介质
+面向对象设计
+4 分区和安装#">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="文件系统" />
+<meta property="og:description" content="文件系统#应用程序通过文件系统和磁盘交互
+具有层次结构：
+说来就是操作系统了？
+1 文件系统布局#1.1 在磁盘上#文件系统存在磁盘上，磁盘分区，每个分区有一个独立的文件系统
+MBR: 主引导记录，引导计算机，BIOS读入MBR并执行，确定活动分区，即引导块
+引导块：执行引导块的程序，启动操作系统，在此之后布局就不一定一样了，和文件系统有关系
+超级块：包含了文件系统的信息，启动时或者首次使用文件系统时调入内存
+空闲块信息
+1.2 在内存中#保存信息数据在安装文件系统时被加载，在文件系统操作期间被更新，在卸载时被丢弃
+安装表：已安装文件系统分区的信息 目录结构缓存 系统打开文件表 进程打开文件表 2 外存空闲空间管理#磁盘中包含文件系统的分区叫做卷(volume)
+一个磁盘可以有多个卷，也可以一个磁盘本身就是一个卷，甚至多个磁盘构成一个卷
+文件存储设备也是分块的，管理起来也就是对空闲块的管理：组织、分配、回收
+空闲表法
+空闲链表法
+位示图法
+成组链接法
+3 虚拟文件系统#统一接口，统一调用VFS提供的函数操作不同的文件系统和存储介质
+面向对象设计
+4 分区和安装#" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://zvictorliu.github.io/myBlog/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" /><meta property="article:section" content="file_management" />
+
+
+<title>文件系统 | Operating System</title>
+<link rel="manifest" href="/myBlog/manifest.json">
+<link rel="icon" href="/myBlog/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/myBlog/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/myBlog/flexsearch.min.js"></script>
+  <script defer src="/myBlog/en.search.min.9d20f1f983ebc82627e0f85efc631cc6b201279cfbcafa2ba6e5e74decb2b0f7.js" integrity="sha256-nSDx&#43;YPryCYn4Phe/GMcxrIBJ5z7yvorpuXnTeyysPc=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/myBlog/"><span>Operating System</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li><a href="/myBlog/chapter01/">绪论</a>
+<ul>
+<li><a href="/myBlog/chapter01/history-of-os-development/">操作系统历史发展</a></li>
+<li><a href="/myBlog/chapter01/pre/">前置知识</a></li>
+<li><a href="/myBlog/chapter01/blind/">扫盲</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter02/">进程</a>
+<ul>
+<li><a href="/myBlog/chapter02/process_concept/">进程概念</a></li>
+<li><a href="/myBlog/chapter02/ipc/">进程通信</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter05/">进程同步</a>
+<ul>
+<li><a href="/myBlog/chapter05/syn/">背景</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter06/">多线程编程</a>
+<ul>
+<li><a href="/myBlog/chapter06/pthreads/">线程库</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter07/">内存分配</a>
+<ul>
+<li><a href="/myBlog/chapter07/pre/">基本原理和要求</a></li>
+<li><a href="/myBlog/chapter07/virtual_memory/">虚拟内存</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/file_management/">文件管理</a>
+<ul>
+<li><a href="/myBlog/file_management/%E6%96%87%E4%BB%B6/">文件</a></li>
+<li><a href="/myBlog/file_management/%E7%9B%AE%E5%BD%95/">目录</a></li>
+<li><a href="/myBlog/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/"class=active>文件系统</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/io_management/">IO管理</a>
+<ul>
+<li><a href="/myBlog/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/">IO管理基础</a></li>
+<li><a href="/myBlog/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/">设备独立性软件</a></li>
+<li><a href="/myBlog/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/">磁盘和固态硬盘</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/myBlog/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>文件系统</strong>
+
+  <label for="toc-control">
+    
+    <img src="/myBlog/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-文件系统布局">1 文件系统布局</a>
+      <ul>
+        <li><a href="#11-在磁盘上">1.1 在磁盘上</a></li>
+        <li><a href="#12-在内存中">1.2 在内存中</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-外存空闲空间管理">2 外存空闲空间管理</a></li>
+    <li><a href="#3-虚拟文件系统">3 虚拟文件系统</a></li>
+    <li><a href="#4-分区和安装">4 分区和安装</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="文件系统">
+  文件系统
+  <a class="anchor" href="#%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f">#</a>
+</h1>
+<p>应用程序通过文件系统和磁盘交互</p>
+<p>具有层次结构：</p>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230517205706694.png" alt="image-20230517205706694" style="zoom:67%;" />
+<p>说来就是操作系统了？</p>
+<h2 id="1-文件系统布局">
+  1 文件系统布局
+  <a class="anchor" href="#1-%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f%e5%b8%83%e5%b1%80">#</a>
+</h2>
+<h3 id="11-在磁盘上">
+  1.1 在磁盘上
+  <a class="anchor" href="#11-%e5%9c%a8%e7%a3%81%e7%9b%98%e4%b8%8a">#</a>
+</h3>
+<p>文件系统存在磁盘上，磁盘分区，每个分区有一个独立的文件系统</p>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230517210156268.png" alt="image-20230517210156268" style="zoom:80%;" />
+<ul>
+<li>
+<p>MBR: 主引导记录，引导计算机，BIOS读入MBR并执行，确定活动分区，即引导块</p>
+</li>
+<li>
+<p>引导块：执行引导块的程序，启动操作系统，在此之后布局就不一定一样了，和文件系统有关系</p>
+</li>
+<li>
+<p>超级块：包含了文件系统的信息，启动时或者首次使用文件系统时调入内存</p>
+</li>
+<li>
+<p>空闲块信息</p>
+</li>
+</ul>
+<h3 id="12-在内存中">
+  1.2 在内存中
+  <a class="anchor" href="#12-%e5%9c%a8%e5%86%85%e5%ad%98%e4%b8%ad">#</a>
+</h3>
+<p>保存信息数据在安装文件系统时被加载，在文件系统操作期间被更新，在卸载时被丢弃</p>
+<ul>
+<li>安装表：已安装文件系统分区的信息</li>
+<li>目录结构缓存</li>
+<li>系统打开文件表</li>
+<li>进程打开文件表</li>
+</ul>
+<h2 id="2-外存空闲空间管理">
+  2 外存空闲空间管理
+  <a class="anchor" href="#2-%e5%a4%96%e5%ad%98%e7%a9%ba%e9%97%b2%e7%a9%ba%e9%97%b4%e7%ae%a1%e7%90%86">#</a>
+</h2>
+<p>磁盘中包含文件系统的分区叫做<em>卷(volume)</em></p>
+<p>一个磁盘可以有多个卷，也可以一个磁盘本身就是一个卷，甚至多个磁盘构成一个卷</p>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230517211347899.png" alt="image-20230517211347899" style="zoom:80%;" />
+<p>文件存储设备也是分块的，管理起来也就是对空闲块的管理：组织、分配、回收</p>
+<ul>
+<li>
+<p>空闲表法</p>
+</li>
+<li>
+<p>空闲链表法</p>
+</li>
+<li>
+<p>位示图法</p>
+</li>
+<li>
+<p>成组链接法</p>
+</li>
+</ul>
+<h2 id="3-虚拟文件系统">
+  3 虚拟文件系统
+  <a class="anchor" href="#3-%e8%99%9a%e6%8b%9f%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f">#</a>
+</h2>
+<p><img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230517221938744.png" alt="image-20230517221938744" /></p>
+<p>统一接口，统一调用VFS提供的函数操作不同的文件系统和存储介质</p>
+<p>面向对象设计</p>
+<h2 id="4-分区和安装">
+  4 分区和安装
+  <a class="anchor" href="#4-%e5%88%86%e5%8c%ba%e5%92%8c%e5%ae%89%e8%a3%85">#</a>
+</h2>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-文件系统布局">1 文件系统布局</a>
+      <ul>
+        <li><a href="#11-在磁盘上">1.1 在磁盘上</a></li>
+        <li><a href="#12-在内存中">1.2 在内存中</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-外存空闲空间管理">2 外存空闲空间管理</a></li>
+    <li><a href="#3-虚拟文件系统">3 虚拟文件系统</a></li>
+    <li><a href="#4-分区和安装">4 分区和安装</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
