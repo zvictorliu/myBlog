@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="进程管理API#1 fork()#进程创建的方式，它的特点是复制父进程
+子进程和父进程一样的代码，所以这个函数从父进程进入，从父进程和子进程中都退出，就是相当于创建了一个平行宇宙
+父进程返回子进程pid，它一定大于0，小于0则说明失败 子进程返回0 创建之后，父进程和子进程谁先被调用是不确定的
+它复制的虚拟地址空间和父进程一致，但其实物理上是隔开的，即identical but seperate
+再细节一点，它的复制是写时拷贝
+当子进程刚被创建，都还未返回时，它们还是同一片物理空间
+而一旦一个返回了，就会给子进程分配新的空间
+PPT2 exit()#return和exit是不同的
+return() 代表调用栈的返回，exit()代表一个进程的结束。 从main函数退出，会隐式的调用exit()函数，并将return的返回值传递给 exit() 从exit()退出，会先调用退出程序，刷新stdio流缓冲区，使用由status提 供的值执行_exit()系统调用 return 是关键字，exit()是库函数 3 exec()#它的功能有点不好用语言表达：初始化堆栈底部，启动新的程序
+重新初始化了指令段和用户数据段，堆栈段以及CPU的PC指针 是overwrite这些区域，但是又不会去修改另外的如pid这些 这样其实是可以把父进程在fork之前的一些结果给清理掉，这个是让这个平行宇宙的开局不一样一点
+相当于重启了一个main函数，但参数是和父进程当初不一样的
+4 wait()#等待某个子进程，调用者会被阻塞，子进程结束，回收资源返回pid
+如果没有子进程，则立刻返回-1
+而waitpid() 则是通过指定pid，并且还可以设置options选择是否阻塞
+5 kill()#发信号
+避免僵尸进程的办法：有人收尸
+可以是父进程收尸，也可以是操作系统">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="进程管理API介绍" />
+<meta property="og:description" content="进程管理API#1 fork()#进程创建的方式，它的特点是复制父进程
+子进程和父进程一样的代码，所以这个函数从父进程进入，从父进程和子进程中都退出，就是相当于创建了一个平行宇宙
+父进程返回子进程pid，它一定大于0，小于0则说明失败 子进程返回0 创建之后，父进程和子进程谁先被调用是不确定的
+它复制的虚拟地址空间和父进程一致，但其实物理上是隔开的，即identical but seperate
+再细节一点，它的复制是写时拷贝
+当子进程刚被创建，都还未返回时，它们还是同一片物理空间
+而一旦一个返回了，就会给子进程分配新的空间
+PPT2 exit()#return和exit是不同的
+return() 代表调用栈的返回，exit()代表一个进程的结束。 从main函数退出，会隐式的调用exit()函数，并将return的返回值传递给 exit() 从exit()退出，会先调用退出程序，刷新stdio流缓冲区，使用由status提 供的值执行_exit()系统调用 return 是关键字，exit()是库函数 3 exec()#它的功能有点不好用语言表达：初始化堆栈底部，启动新的程序
+重新初始化了指令段和用户数据段，堆栈段以及CPU的PC指针 是overwrite这些区域，但是又不会去修改另外的如pid这些 这样其实是可以把父进程在fork之前的一些结果给清理掉，这个是让这个平行宇宙的开局不一样一点
+相当于重启了一个main函数，但参数是和父进程当初不一样的
+4 wait()#等待某个子进程，调用者会被阻塞，子进程结束，回收资源返回pid
+如果没有子进程，则立刻返回-1
+而waitpid() 则是通过指定pid，并且还可以设置options选择是否阻塞
+5 kill()#发信号
+避免僵尸进程的办法：有人收尸
+可以是父进程收尸，也可以是操作系统" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://zvictorliu.github.io/myBlog/chapter02/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/" /><meta property="article:section" content="chapter02" />
+
+
+<title>进程管理API介绍 | Operating System</title>
+<link rel="manifest" href="/myBlog/manifest.json">
+<link rel="icon" href="/myBlog/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/myBlog/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/myBlog/flexsearch.min.js"></script>
+  <script defer src="/myBlog/en.search.min.9d20f1f983ebc82627e0f85efc631cc6b201279cfbcafa2ba6e5e74decb2b0f7.js" integrity="sha256-nSDx&#43;YPryCYn4Phe/GMcxrIBJ5z7yvorpuXnTeyysPc=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/myBlog/"><span>Operating System</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li><a href="/myBlog/chapter01/">绪论</a>
+<ul>
+<li><a href="/myBlog/chapter01/history-of-os-development/">操作系统历史发展</a></li>
+<li><a href="/myBlog/chapter01/pre/">前置知识</a></li>
+<li><a href="/myBlog/chapter01/blind/">扫盲</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter02/">进程</a>
+<ul>
+<li><a href="/myBlog/chapter02/process_concept/">进程概念</a></li>
+<li><a href="/myBlog/chapter02/ipc/">进程通信</a></li>
+<li><a href="/myBlog/chapter02/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/"class=active>进程管理API</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter05/">进程同步</a>
+<ul>
+<li><a href="/myBlog/chapter05/syn/">背景</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter06/">多线程编程</a>
+<ul>
+<li><a href="/myBlog/chapter06/pthreads/">线程库</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/chapter07/">内存分配</a>
+<ul>
+<li><a href="/myBlog/chapter07/pre/">基本原理和要求</a></li>
+<li><a href="/myBlog/chapter07/virtual_memory/">虚拟内存</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/file_management/">文件管理</a>
+<ul>
+<li><a href="/myBlog/file_management/%E6%96%87%E4%BB%B6/">文件</a></li>
+<li><a href="/myBlog/file_management/%E7%9B%AE%E5%BD%95/">目录</a></li>
+<li><a href="/myBlog/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">文件系统</a></li>
+</ul>
+</li>
+<li><a href="/myBlog/io_management/">IO管理</a>
+<ul>
+<li><a href="/myBlog/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/">IO管理基础</a></li>
+<li><a href="/myBlog/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/">设备独立性软件</a></li>
+<li><a href="/myBlog/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/">磁盘和固态硬盘</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/myBlog/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>进程管理API介绍</strong>
+
+  <label for="toc-control">
+    
+    <img src="/myBlog/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-fork">1 fork()</a></li>
+    <li><a href="#2-exit">2 exit()</a></li>
+    <li><a href="#3-exec">3 exec()</a></li>
+    <li><a href="#4-wait">4 wait()</a></li>
+    <li><a href="#5-kill">5 kill()</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="进程管理api">
+  进程管理API
+  <a class="anchor" href="#%e8%bf%9b%e7%a8%8b%e7%ae%a1%e7%90%86api">#</a>
+</h1>
+<h2 id="1-fork">
+  1 fork()
+  <a class="anchor" href="#1-fork">#</a>
+</h2>
+<p>进程创建的方式，它的特点是<em>复制</em>父进程</p>
+<p>子进程和父进程一样的代码，所以这个函数从父进程进入，从父进程和子进程中都退出，就是相当于创建了一个平行宇宙</p>
+<ul>
+<li>父进程返回子进程pid，它一定大于0，小于0则说明失败</li>
+<li>子进程返回0</li>
+</ul>
+<p><img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230526210843996.png" alt="image-20230526210843996" /></p>
+<p>创建之后，父进程和子进程谁先被调用是不确定的</p>
+<p>它复制的虚拟地址空间和父进程一致，但其实物理上是隔开的，即<code>identical but seperate</code></p>
+<p>再细节一点，它的复制是<code>写时拷贝</code></p>
+<p>当子进程刚被创建，都还未返回时，它们还是同一片物理空间</p>
+<p>而一旦一个返回了，就会给子进程分配新的空间</p>
+<details ><summary>PPT</summary>
+  <div class="markdown-inner">
+    <img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230526211406311.png" alt="image-20230526211406311" />
+  </div>
+</details>
+
+<h2 id="2-exit">
+  2 exit()
+  <a class="anchor" href="#2-exit">#</a>
+</h2>
+<p>return和exit是不同的</p>
+<ul>
+<li>return() 代表调用栈的返回，exit()代表一个进程的结束。</li>
+<li>从main函数退出，会隐式的调用exit()函数，并将return的返回值传递给 exit()</li>
+<li>从exit()退出，会先调用退出程序，刷新stdio流缓冲区，使用由status提 供的值执行_exit()系统调用</li>
+<li>return 是关键字，exit()是库函数</li>
+</ul>
+<h2 id="3-exec">
+  3 exec()
+  <a class="anchor" href="#3-exec">#</a>
+</h2>
+<p>它的功能有点不好用语言表达：初始化堆栈底部，启动新的程序</p>
+<ul>
+<li>重新初始化了指令段和用户数据段，堆栈段以及CPU的PC指针</li>
+<li>是overwrite这些区域，但是又不会去修改另外的如pid这些</li>
+</ul>
+<p>这样其实是可以把父进程在fork之前的一些结果给清理掉，这个是让这个平行宇宙的开局不一样一点</p>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230526212305219.png" alt="image-20230526212305219" style="zoom:67%;" />
+<p>相当于重启了一个main函数，但参数是和父进程当初不一样的</p>
+<h2 id="4-wait">
+  4 wait()
+  <a class="anchor" href="#4-wait">#</a>
+</h2>
+<p>等待某个子进程，调用者会被阻塞，子进程结束，回收资源返回pid</p>
+<p>如果没有子进程，则立刻返回-1</p>
+<p>而<code>waitpid()</code> 则是通过指定pid，并且还可以设置options选择是否阻塞</p>
+<h2 id="5-kill">
+  5 kill()
+  <a class="anchor" href="#5-kill">#</a>
+</h2>
+<p>发信号</p>
+<p>避免僵尸进程的办法：有人收尸</p>
+<p>可以是父进程收尸，也可以是操作系统</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-fork">1 fork()</a></li>
+    <li><a href="#2-exit">2 exit()</a></li>
+    <li><a href="#3-exec">3 exec()</a></li>
+    <li><a href="#4-wait">4 wait()</a></li>
+    <li><a href="#5-kill">5 kill()</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -3,15 +3,29 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
+<meta name="description" content="进程概念#1.1 进程的状态#进程具有多种运行状态
+最基本的：
+运行态：正在处理机上运行，是真正的运行，进程本身就是动态的也可以理解为”运行“，此处可以理解为CPU正在处理 就绪态：即将送入处理机运行，其它都已准备好，多个进程会排成就绪队列 阻塞态：进程等待某一事件（不包括等待处理机，那是就绪态） 另外还有细分的两种状态：
+创建态：进程正在被创建，这个过程是多个步骤的显得比较漫长，所以有这个状态，即准备中 结束态：正在从系统中消失 1.2 进程的表示#一定要注意 进程不是PCB，进程实体是 PCB &#43; 程序段 &#43; 数据段
+进程控制块 (Process Control Block, PCB) ：多少感觉像哈希值一样，记录了进程的信息
+PCB是进程存在的唯一标志，创建了PCB，进程才算是”活的“
+在linux中，它就是一个C语言的结构体：
+linux PCBpid t pid; /* process identifier */ long state; /* state of the process */ unsigned int time slice /* scheduling information */ struct task_struct *parent; /* this process’s parent */ struct list_head children; /* this process’s children */ struct files_struct *files; /* list of open files */ struct mm_struct *mm; /* address space of this pro */ PCB具体记录了哪些信息这个太多了，主要是这些： PCB通常包含的内容这些信息会让每个进程自己认为自己独立使用CPU，看上去用于整个内存空间">
 <meta name="theme-color" content="#FFFFFF">
-<meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
-<meta property="og:description" content="" />
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="进程概念" />
+<meta property="og:description" content="进程概念#1.1 进程的状态#进程具有多种运行状态
+最基本的：
+运行态：正在处理机上运行，是真正的运行，进程本身就是动态的也可以理解为”运行“，此处可以理解为CPU正在处理 就绪态：即将送入处理机运行，其它都已准备好，多个进程会排成就绪队列 阻塞态：进程等待某一事件（不包括等待处理机，那是就绪态） 另外还有细分的两种状态：
+创建态：进程正在被创建，这个过程是多个步骤的显得比较漫长，所以有这个状态，即准备中 结束态：正在从系统中消失 1.2 进程的表示#一定要注意 进程不是PCB，进程实体是 PCB &#43; 程序段 &#43; 数据段
+进程控制块 (Process Control Block, PCB) ：多少感觉像哈希值一样，记录了进程的信息
+PCB是进程存在的唯一标志，创建了PCB，进程才算是”活的“
+在linux中，它就是一个C语言的结构体：
+linux PCBpid t pid; /* process identifier */ long state; /* state of the process */ unsigned int time slice /* scheduling information */ struct task_struct *parent; /* this process’s parent */ struct list_head children; /* this process’s children */ struct files_struct *files; /* list of open files */ struct mm_struct *mm; /* address space of this pro */ PCB具体记录了哪些信息这个太多了，主要是这些： PCB通常包含的内容这些信息会让每个进程自己认为自己独立使用CPU，看上去用于整个内存空间" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://zvictorliu.github.io/myBlog/chapter02/process_concept/" /><meta property="article:section" content="chapter02" />
 
 
-<title>Process Concept | Operating System</title>
+<title>进程概念 | Operating System</title>
 <link rel="manifest" href="/myBlog/manifest.json">
 <link rel="icon" href="/myBlog/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/myBlog/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
@@ -66,6 +80,7 @@ https://github.com/alex-shpak/hugo-book
 <ul>
 <li><a href="/myBlog/chapter02/process_concept/"class=active>进程概念</a></li>
 <li><a href="/myBlog/chapter02/ipc/">进程通信</a></li>
+<li><a href="/myBlog/chapter02/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/">进程管理API</a></li>
 </ul>
 </li>
 <li><a href="/myBlog/chapter05/">进程同步</a>
@@ -129,7 +144,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/myBlog/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>Process Concept</strong>
+  <strong>进程概念</strong>
 
   <label for="toc-control">
     
@@ -143,7 +158,19 @@ https://github.com/alex-shpak/hugo-book
   <aside class="hidden clearfix">
     
   
-<nav id="TableOfContents"></nav>
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#11-进程的状态">1.1 进程的状态</a></li>
+    <li><a href="#12-进程的表示">1.2 进程的表示</a></li>
+    <li><a href="#13-进程控制">1.3 进程控制</a>
+      <ul>
+        <li><a href="#131-创建">1.3.1 创建</a></li>
+        <li><a href="#132-进程终止">1.3.2 进程终止</a></li>
+        <li><a href="#133-进程阻塞和唤醒">1.3.3 进程阻塞和唤醒</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
 
 
 
@@ -154,7 +181,106 @@ https://github.com/alex-shpak/hugo-book
 
       
       
-  <article class="markdown"></article>
+  <article class="markdown"><h1 id="进程概念">
+  进程概念
+  <a class="anchor" href="#%e8%bf%9b%e7%a8%8b%e6%a6%82%e5%bf%b5">#</a>
+</h1>
+<h2 id="11-进程的状态">
+  1.1 进程的状态
+  <a class="anchor" href="#11-%e8%bf%9b%e7%a8%8b%e7%9a%84%e7%8a%b6%e6%80%81">#</a>
+</h2>
+<p>进程具有多种运行状态</p>
+<p>最基本的：</p>
+<ul>
+<li>运行态：正在处理机上运行，是真正的运行，进程本身就是动态的也可以理解为”运行“，此处可以理解为CPU正在处理</li>
+<li>就绪态：即将送入处理机运行，其它都已准备好，多个进程会排成就绪队列</li>
+<li>阻塞态：进程等待某一事件（不包括等待处理机，那是就绪态）</li>
+</ul>
+<p>另外还有细分的两种状态：</p>
+<ul>
+<li>创建态：进程正在被创建，这个过程是多个步骤的显得比较漫长，所以有这个状态，即准备中</li>
+<li>结束态：正在从系统中消失</li>
+</ul>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230526194635294.png" alt="image-20230526194635294" style="zoom:67%;" />
+<h2 id="12-进程的表示">
+  1.2 进程的表示
+  <a class="anchor" href="#12-%e8%bf%9b%e7%a8%8b%e7%9a%84%e8%a1%a8%e7%a4%ba">#</a>
+</h2>
+<p>一定要注意 <em>进程不是PCB</em>，进程实体是 <u>PCB + 程序段 + 数据段</u></p>
+<p>进程控制块 (Process Control Block, PCB) ：多少感觉像哈希值一样，记录了进程的信息</p>
+<p>PCB是进程存在的唯一标志，创建了PCB，进程才算是”活的“</p>
+<p>在linux中，它就是一个C语言的结构体：</p>
+<details ><summary>linux PCB</summary>
+  <div class="markdown-inner">
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>pid t pid; <span style="color:#75715e">/* process identifier */</span> 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">long</span> state; <span style="color:#75715e">/* state of the process */</span> 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> time slice <span style="color:#75715e">/* scheduling information */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> task_struct <span style="color:#f92672">*</span>parent; <span style="color:#75715e">/* this process’s parent */</span> 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> list_head children; <span style="color:#75715e">/* this process’s children */</span> 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> files_struct <span style="color:#f92672">*</span>files; <span style="color:#75715e">/* list of open files */</span> 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> mm_struct <span style="color:#f92672">*</span>mm; <span style="color:#75715e">/* address space of this pro */</span>
+</span></span></code></pre></div>
+  </div>
+</details>
+
+<p>PCB具体记录了哪些信息这个太多了，主要是这些：
+<details ><summary>PCB通常包含的内容</summary>
+  <div class="markdown-inner">
+    <img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230526195844759.png" alt="image-20230526195844759" style="zoom:67%;" />
+  </div>
+</details>
+</p>
+<p>这些信息会让每个进程自己认为自己独立使用CPU，看上去用于整个内存空间</p>
+<h2 id="13-进程控制">
+  1.3 进程控制
+  <a class="anchor" href="#13-%e8%bf%9b%e7%a8%8b%e6%8e%a7%e5%88%b6">#</a>
+</h2>
+<p>对于进程的控制我们不希望它被打断，所以设计了<code>原语</code>，执行期间不许中断</p>
+<h3 id="131-创建">
+  1.3.1 创建
+  <a class="anchor" href="#131-%e5%88%9b%e5%bb%ba">#</a>
+</h3>
+<p>一般来说是一个进程创建另一个进程</p>
+<p>创建原语的工作：</p>
+<ul>
+<li>为新进程分配一个唯一的进程标识号（返回给父进程），并申请一个空白的PCB（PCB总数是有限的）
+<ul>
+<li>如果未能申请成功，创建失败</li>
+</ul>
+</li>
+<li>为新进程分配资源：可以从操作系统单独获得，也可以只从父进程那里获得
+<ul>
+<li>如果资源不足<u>并不是创建失败</u>，而是处于创建态等待</li>
+</ul>
+</li>
+<li>初始化PCB</li>
+<li>如果就绪队列能够接纳，就插入，等待被调度运行</li>
+</ul>
+<h3 id="132-进程终止">
+  1.3.2 进程终止
+  <a class="anchor" href="#132-%e8%bf%9b%e7%a8%8b%e7%bb%88%e6%ad%a2">#</a>
+</h3>
+<p>这里终止是删除，而不是停止暂停运行</p>
+<p>终止可能是主动的（正常运行结束），也可能是被动的</p>
+<p>终止原语的工作：</p>
+<ul>
+<li>根据pid找到对应的PCB，读取状态</li>
+<li>如果正处于运行态，就应该停止执行，处理机资源释放给其它进程</li>
+<li>如果该进程有子孙进程则需要先去终止它们 (儿子永远是儿子，还是会被爸爸管着)</li>
+<li>归还资源</li>
+<li>从队列中删除PCB</li>
+</ul>
+<p><code>僵尸进程</code>：资源被释放后，PCB没有被删除，仍然占用着进程表的资源</p>
+<h3 id="133-进程阻塞和唤醒">
+  1.3.3 进程阻塞和唤醒
+  <a class="anchor" href="#133-%e8%bf%9b%e7%a8%8b%e9%98%bb%e5%a1%9e%e5%92%8c%e5%94%a4%e9%86%92">#</a>
+</h3>
+<p>正在运行态的进程需要等待某个响应，就会调用阻塞原语变为阻塞态</p>
+<p>当响应出现时，对方进程（例如提供数据的进程）会调用唤醒原语进行唤醒</p>
+<p>所以说，自己阻塞了，需要靠对方来将它唤醒，成对出现</p>
+<p>这个切换的过程有<code>上下文切换</code>，会保存堆栈、寄存器、计数器值等信息</p>
+<p>控制的过程是操作系统在内核态执行的</p>
+</article>
  
       
 
@@ -179,6 +305,10 @@ https://github.com/alex-shpak/hugo-book
 
       
   
+  <div class="book-comments">
+
+</div>
+  
  
 
       <label for="menu-control" class="hidden book-menu-overlay"></label>
@@ -189,7 +319,19 @@ https://github.com/alex-shpak/hugo-book
       <div class="book-toc-content">
         
   
-<nav id="TableOfContents"></nav>
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#11-进程的状态">1.1 进程的状态</a></li>
+    <li><a href="#12-进程的表示">1.2 进程的表示</a></li>
+    <li><a href="#13-进程控制">1.3 进程控制</a>
+      <ul>
+        <li><a href="#131-创建">1.3.1 创建</a></li>
+        <li><a href="#132-进程终止">1.3.2 进程终止</a></li>
+        <li><a href="#133-进程阻塞和唤醒">1.3.3 进程阻塞和唤醒</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
 
 
  

@@ -7,7 +7,8 @@
 CPU负责执行指令，在操作系统设计中将CPU的运行模式通过硬件的方式分为两种：用户态和内核态，使得只有内核态才能使用底层资源
 操作系统中这部分使用硬件资源的以及一些核心功能叫做内核，在内核之外才是提供的一些接口，运行在用户态（比如自带软件）
 而用户程序要依靠操作系统提供的接口来完成自己的功能
-用户程序也能用CPU，只是不能用CPU干坏事，需要依托于操作系统内核来做">
+用户程序也能用CPU，只是不能用CPU干坏事，需要依托于操作系统内核来做
+而程序通过系统调用来请求操作系统帮助，具体原理设置了陷阱，被理解为中断和异常">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="对操作系统的认识" />
 <meta property="og:description" content="" />
@@ -69,6 +70,7 @@ https://github.com/alex-shpak/hugo-book
 <ul>
 <li><a href="/myBlog/chapter02/process_concept/">进程概念</a></li>
 <li><a href="/myBlog/chapter02/ipc/">进程通信</a></li>
+<li><a href="/myBlog/chapter02/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/">进程管理API</a></li>
 </ul>
 </li>
 <li><a href="/myBlog/chapter05/">进程同步</a>
@@ -163,6 +165,7 @@ https://github.com/alex-shpak/hugo-book
 <p>而用户程序要依靠操作系统提供的接口来完成自己的功能</p>
 <img src="https://pic3.zhimg.com/80/v2-506586ddee155b7c553e3d5cf660209e_720w.webp" alt="img" style="zoom:70%;" />
 <p>用户程序也能用CPU，只是不能用CPU干坏事，需要依托于操作系统内核来做</p>
+<p>而程序通过<code>系统调用</code>来请求操作系统帮助，具体原理设置了陷阱，被理解为中断和异常</p>
 </article>
  
       

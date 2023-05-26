@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="进程概念#何为进程？">
+<meta name="description" content="进程#设计出进程的目的是为了多道程序的并发执行
+为了管理进程设计了PCB，用来描述进程的基本信息，从而进行控制和管理
+进程实体 又叫进程映像，是包含：程序段、相关数据段和PCB三部分的
+进程是动态的，进程映像是静态的，进程是进程实体的运行过程
+由于并发执行，所以进程具有多种运行状态，至少直观上来讲肯定有正在运行和暂停运行两种状态
+为了方便进程调度和管理，需要用一定的组织方法：
+链接：即队列 索引表 ">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="进程" />
 <meta property="og:description" content="" />
@@ -65,6 +71,7 @@ https://github.com/alex-shpak/hugo-book
 <ul>
 <li><a href="/myBlog/chapter02/process_concept/">进程概念</a></li>
 <li><a href="/myBlog/chapter02/ipc/">进程通信</a></li>
+<li><a href="/myBlog/chapter02/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/">进程管理API</a></li>
 </ul>
 </li>
 <li><a href="/myBlog/chapter05/">进程同步</a>
@@ -153,11 +160,20 @@ https://github.com/alex-shpak/hugo-book
 
       
       
-  <article class="markdown"><h1 id="进程概念">
-  进程概念
-  <a class="anchor" href="#%e8%bf%9b%e7%a8%8b%e6%a6%82%e5%bf%b5">#</a>
+  <article class="markdown"><h1 id="进程">
+  进程
+  <a class="anchor" href="#%e8%bf%9b%e7%a8%8b">#</a>
 </h1>
-<p>何为进程？</p>
+<p>设计出进程的目的是为了多道程序的并发执行</p>
+<p>为了管理进程设计了PCB，用来描述进程的基本信息，从而进行控制和管理</p>
+<p><code>进程实体</code> 又叫<code>进程映像</code>，是包含：程序段、相关数据段和PCB三部分的</p>
+<p>进程是动态的，进程映像是静态的，进程是进程实体的运行<em>过程</em></p>
+<p>由于并发执行，所以进程具有多种运行状态，至少直观上来讲肯定有正在运行和暂停运行两种状态</p>
+<p>为了方便进程调度和管理，需要用一定的组织方法：</p>
+<ul>
+<li>链接：即队列</li>
+<li>索引表</li>
+</ul>
 </article>
  
       

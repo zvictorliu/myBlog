@@ -7,12 +7,44 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="https://zvictorliu.github.io/myBlog/chapter02/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title></title>
+      <title>进程概念</title>
       <link>https://zvictorliu.github.io/myBlog/chapter02/process_concept/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://zvictorliu.github.io/myBlog/chapter02/process_concept/</guid>
-      <description></description>
+      <description>进程概念#1.1 进程的状态#进程具有多种运行状态
+最基本的：
+运行态：正在处理机上运行，是真正的运行，进程本身就是动态的也可以理解为”运行“，此处可以理解为CPU正在处理 就绪态：即将送入处理机运行，其它都已准备好，多个进程会排成就绪队列 阻塞态：进程等待某一事件（不包括等待处理机，那是就绪态） 另外还有细分的两种状态：
+创建态：进程正在被创建，这个过程是多个步骤的显得比较漫长，所以有这个状态，即准备中 结束态：正在从系统中消失 1.2 进程的表示#一定要注意 进程不是PCB，进程实体是 PCB + 程序段 + 数据段
+进程控制块 (Process Control Block, PCB) ：多少感觉像哈希值一样，记录了进程的信息
+PCB是进程存在的唯一标志，创建了PCB，进程才算是”活的“
+在linux中，它就是一个C语言的结构体：
+linux PCBpid t pid; /* process identifier */ long state; /* state of the process */ unsigned int time slice /* scheduling information */ struct task_struct *parent; /* this process’s parent */ struct list_head children; /* this process’s children */ struct files_struct *files; /* list of open files */ struct mm_struct *mm; /* address space of this pro */ PCB具体记录了哪些信息这个太多了，主要是这些： PCB通常包含的内容这些信息会让每个进程自己认为自己独立使用CPU，看上去用于整个内存空间</description>
+    </item>
+    
+    <item>
+      <title>进程管理API介绍</title>
+      <link>https://zvictorliu.github.io/myBlog/chapter02/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/myBlog/chapter02/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</guid>
+      <description>进程管理API#1 fork()#进程创建的方式，它的特点是复制父进程
+子进程和父进程一样的代码，所以这个函数从父进程进入，从父进程和子进程中都退出，就是相当于创建了一个平行宇宙
+父进程返回子进程pid，它一定大于0，小于0则说明失败 子进程返回0 创建之后，父进程和子进程谁先被调用是不确定的
+它复制的虚拟地址空间和父进程一致，但其实物理上是隔开的，即identical but seperate
+再细节一点，它的复制是写时拷贝
+当子进程刚被创建，都还未返回时，它们还是同一片物理空间
+而一旦一个返回了，就会给子进程分配新的空间
+PPT2 exit()#return和exit是不同的
+return() 代表调用栈的返回，exit()代表一个进程的结束。 从main函数退出，会隐式的调用exit()函数，并将return的返回值传递给 exit() 从exit()退出，会先调用退出程序，刷新stdio流缓冲区，使用由status提 供的值执行_exit()系统调用 return 是关键字，exit()是库函数 3 exec()#它的功能有点不好用语言表达：初始化堆栈底部，启动新的程序
+重新初始化了指令段和用户数据段，堆栈段以及CPU的PC指针 是overwrite这些区域，但是又不会去修改另外的如pid这些 这样其实是可以把父进程在fork之前的一些结果给清理掉，这个是让这个平行宇宙的开局不一样一点
+相当于重启了一个main函数，但参数是和父进程当初不一样的
+4 wait()#等待某个子进程，调用者会被阻塞，子进程结束，回收资源返回pid
+如果没有子进程，则立刻返回-1
+而waitpid() 则是通过指定pid，并且还可以设置options选择是否阻塞
+5 kill()#发信号
+避免僵尸进程的办法：有人收尸
+可以是父进程收尸，也可以是操作系统</description>
     </item>
     
     <item>
