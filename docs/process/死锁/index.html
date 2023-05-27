@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="死锁#多个进程竞争资源造成了一种僵局，使得互相等待，陷入死循环
+死锁的必要条件
+互斥条件：某一资源只能互斥访问 不剥夺条件（非抢占）：只能主动释放 请求并保持条件：进程已经占了一个资源，并请求另一个被占的资源，此时进程被阻塞但是并没有释放资源 循环等待条件：循环等待链关系，占用的资源总被环上下一个所请求，并且只能是自己释放才能满足它，如果还有别的进程释放了、又或者不只一台设备，也不会构成死锁 ​	所以，对死锁的策略：
+预防：限制其出现必要条件中的几个 避免（其实也是一种预防了） 检测并解除 1 预防#破坏四个必要条件之一
+互斥：不太可行，因为有些资源是无法共享的，只能互斥 非抢占：实现起来比较麻烦 请求并保持：一次申请完并占用，之后不再请求，比较浪费 循环等待：按顺序分配 2 避免#并不是事先预防，是动态检测资源分配的状态
+2.1 安全检查#允许进程随时申请，但是系统在分配之前会先进行计算安全性，不安全就先让进程等待
+需要找到一种安全序列
+例题注意不安全不代表一定会死锁，只是有可能死锁
+2.2 银行家算法#决定要不要分配的算法 可利用资源向量记录第i类资源的可用数目最大需求矩阵每个进程对每类资源的最大需求分配矩阵实际已经分配的情况需求矩阵Max - Allocation，表示接下来最多还要多少具体算法是：
+定义请求向量，即某个进程此时对各类资源的申请数量
+检查此次申请是否超过了之前声明的最大需求数 检查此时系统剩余的可用资源是否还能满足这次请求 试探着分配，更改各数据结构 用安全性算法检查此次分配是否会导致系统进入不安全状态 能通过检查就分配，否则让其等待
+而安全性算法：
+前面说了是试探性分配，用修改后的数据来，令work = available
+检查当前的剩余可用资源是否能满足某个进程的最大需求，如果可以，就把该进程加入安全序列， 并把该进程持有的资源全部回收（修改work） 不断重复上述过程，看最终是否能让所有进程都加入安全序列 3 检测和解除#如果不预防和避免，那就应该能够检测到并解除
+维护一张资源分配图：
+然后进行简化：见王道P145
+当不可完全简化时，就是死锁了，这叫死锁定理
+解除的方法：
+剥夺抢占 撤销进程 进程回退 ">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="死锁" />
+<meta property="og:description" content="死锁#多个进程竞争资源造成了一种僵局，使得互相等待，陷入死循环
+死锁的必要条件
+互斥条件：某一资源只能互斥访问 不剥夺条件（非抢占）：只能主动释放 请求并保持条件：进程已经占了一个资源，并请求另一个被占的资源，此时进程被阻塞但是并没有释放资源 循环等待条件：循环等待链关系，占用的资源总被环上下一个所请求，并且只能是自己释放才能满足它，如果还有别的进程释放了、又或者不只一台设备，也不会构成死锁 ​	所以，对死锁的策略：
+预防：限制其出现必要条件中的几个 避免（其实也是一种预防了） 检测并解除 1 预防#破坏四个必要条件之一
+互斥：不太可行，因为有些资源是无法共享的，只能互斥 非抢占：实现起来比较麻烦 请求并保持：一次申请完并占用，之后不再请求，比较浪费 循环等待：按顺序分配 2 避免#并不是事先预防，是动态检测资源分配的状态
+2.1 安全检查#允许进程随时申请，但是系统在分配之前会先进行计算安全性，不安全就先让进程等待
+需要找到一种安全序列
+例题注意不安全不代表一定会死锁，只是有可能死锁
+2.2 银行家算法#决定要不要分配的算法 可利用资源向量记录第i类资源的可用数目最大需求矩阵每个进程对每类资源的最大需求分配矩阵实际已经分配的情况需求矩阵Max - Allocation，表示接下来最多还要多少具体算法是：
+定义请求向量，即某个进程此时对各类资源的申请数量
+检查此次申请是否超过了之前声明的最大需求数 检查此时系统剩余的可用资源是否还能满足这次请求 试探着分配，更改各数据结构 用安全性算法检查此次分配是否会导致系统进入不安全状态 能通过检查就分配，否则让其等待
+而安全性算法：
+前面说了是试探性分配，用修改后的数据来，令work = available
+检查当前的剩余可用资源是否能满足某个进程的最大需求，如果可以，就把该进程加入安全序列， 并把该进程持有的资源全部回收（修改work） 不断重复上述过程，看最终是否能让所有进程都加入安全序列 3 检测和解除#如果不预防和避免，那就应该能够检测到并解除
+维护一张资源分配图：
+然后进行简化：见王道P145
+当不可完全简化时，就是死锁了，这叫死锁定理
+解除的方法：
+剥夺抢占 撤销进程 进程回退 " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://zvictorliu.github.io/operating_system/process/%E6%AD%BB%E9%94%81/" /><meta property="article:section" content="process" />
+
+
+<title>死锁 | Operating System</title>
+<link rel="manifest" href="/operating_system/manifest.json">
+<link rel="icon" href="/operating_system/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/operating_system/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/operating_system/flexsearch.min.js"></script>
+  <script defer src="/operating_system/en.search.min.5cdf029a976e16e632835545e3bdbb6bfedc57637615eecb506c7c4747236ab2.js" integrity="sha256-XN8CmpduFuYyg1VF4727a/7cV2N2Fe7LUGx8R0cjarI=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/operating_system/"><span>Operating System</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li><a href="/operating_system/chapter01/">绪论</a>
+<ul>
+<li><a href="/operating_system/chapter01/history-of-os-development/">操作系统历史发展</a></li>
+<li><a href="/operating_system/chapter01/pre/">前置知识</a></li>
+<li><a href="/operating_system/chapter01/blind/">扫盲</a></li>
+</ul>
+</li>
+<li><a href="/operating_system/process/">进程</a>
+<ul>
+<li><a href="/operating_system/process/process_concept/">进程概念</a></li>
+<li><a href="/operating_system/process/ipc/">进程通信</a></li>
+<li><a href="/operating_system/process/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/">进程管理API</a></li>
+<li><a href="/operating_system/process/schedule/">进程调度</a></li>
+<li><a href="/operating_system/process/%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/">同步互斥</a></li>
+<li><a href="/operating_system/process/%E6%AD%BB%E9%94%81/"class=active>死锁</a></li>
+<li><a href="/operating_system/process/thread/">线程</a></li>
+</ul>
+</li>
+<li><a href="/operating_system/chapter07/">内存分配</a>
+<ul>
+<li><a href="/operating_system/chapter07/pre/">基本原理和要求</a></li>
+<li><a href="/operating_system/chapter07/virtual_memory/">虚拟内存</a></li>
+</ul>
+</li>
+<li><a href="/operating_system/file_management/">文件管理</a>
+<ul>
+<li><a href="/operating_system/file_management/%E6%96%87%E4%BB%B6/">文件</a></li>
+<li><a href="/operating_system/file_management/%E7%9B%AE%E5%BD%95/">目录</a></li>
+<li><a href="/operating_system/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">文件系统</a></li>
+</ul>
+</li>
+<li><a href="/operating_system/io_management/">IO管理</a>
+<ul>
+<li><a href="/operating_system/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/">IO管理基础</a></li>
+<li><a href="/operating_system/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/">设备独立性软件</a></li>
+<li><a href="/operating_system/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/">磁盘和固态硬盘</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/operating_system/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>死锁</strong>
+
+  <label for="toc-control">
+    
+    <img src="/operating_system/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-预防">1 预防</a></li>
+    <li><a href="#2-避免">2 避免</a>
+      <ul>
+        <li><a href="#21-安全检查">2.1 安全检查</a></li>
+        <li><a href="#22-银行家算法">2.2 银行家算法</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-检测和解除">3 检测和解除</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="死锁">
+  死锁
+  <a class="anchor" href="#%e6%ad%bb%e9%94%81">#</a>
+</h1>
+<p>多个进程竞争资源造成了一种僵局，使得互相等待，陷入死循环</p>
+<p>死锁的必要条件</p>
+<ul>
+<li>互斥条件：某一资源只能互斥访问</li>
+<li>不剥夺条件（非抢占）：只能主动释放</li>
+<li>请求并保持条件：进程已经占了一个资源，并请求另一个被占的资源，此时进程被阻塞但是并没有释放资源</li>
+<li>循环等待条件：循环等待链关系，占用的资源总被环上下一个所请求，并且只能是自己释放才能满足它，如果还有别的进程释放了、又或者不只一台设备，也不会构成死锁</li>
+</ul>
+<p>​		<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230527163242757.png" alt="image-20230527163242757" style="zoom:67%;" /></p>
+<p>所以，对死锁的策略：</p>
+<ul>
+<li>预防：限制其出现必要条件中的几个</li>
+<li>避免（其实也是一种预防了）</li>
+<li>检测并解除</li>
+</ul>
+<h2 id="1-预防">
+  1 预防
+  <a class="anchor" href="#1-%e9%a2%84%e9%98%b2">#</a>
+</h2>
+<p>破坏四个必要条件之一</p>
+<ul>
+<li>互斥：不太可行，因为有些资源是无法共享的，只能互斥</li>
+<li>非抢占：实现起来比较麻烦</li>
+<li>请求并保持：一次申请完并占用，之后不再请求，比较浪费</li>
+<li>循环等待：按顺序分配</li>
+</ul>
+<h2 id="2-避免">
+  2 避免
+  <a class="anchor" href="#2-%e9%81%bf%e5%85%8d">#</a>
+</h2>
+<p>并不是事先预防，是动态检测资源分配的状态</p>
+<h3 id="21-安全检查">
+  2.1 安全检查
+  <a class="anchor" href="#21-%e5%ae%89%e5%85%a8%e6%a3%80%e6%9f%a5">#</a>
+</h3>
+<p>允许进程随时申请，但是系统在分配之前会先进行计算安全性，不安全就先让进程等待</p>
+<p>需要找到一种<code>安全序列</code></p>
+<details open><summary>例题</summary>
+  <div class="markdown-inner">
+    <img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230527165425149.png" alt="image-20230527165425149" />
+  </div>
+</details>
+
+<p>注意不安全不代表一定会死锁，只是有可能死锁</p>
+<h3 id="22-银行家算法">
+  2.2 银行家算法
+  <a class="anchor" href="#22-%e9%93%b6%e8%a1%8c%e5%ae%b6%e7%ae%97%e6%b3%95">#</a>
+</h3>
+<p>决定要不要分配的算法
+
+
+
+
+<div class="book-tabs"><input type="radio" class="toggle" name="tabs-数据结构" id="tabs-数据结构-0" checked="checked" />
+  <label for="tabs-数据结构-0">可利用资源向量</label>
+  <div class="book-tabs-content markdown-inner">记录第i类资源的可用数目</div><input type="radio" class="toggle" name="tabs-数据结构" id="tabs-数据结构-1"  />
+  <label for="tabs-数据结构-1">最大需求矩阵</label>
+  <div class="book-tabs-content markdown-inner">每个进程对每类资源的最大需求</div><input type="radio" class="toggle" name="tabs-数据结构" id="tabs-数据结构-2"  />
+  <label for="tabs-数据结构-2">分配矩阵</label>
+  <div class="book-tabs-content markdown-inner">实际已经分配的情况</div><input type="radio" class="toggle" name="tabs-数据结构" id="tabs-数据结构-3"  />
+  <label for="tabs-数据结构-3">需求矩阵</label>
+  <div class="book-tabs-content markdown-inner">Max - Allocation，表示接下来最多还要多少</div></div>
+</p>
+<p>具体算法是：</p>
+<p>定义请求向量，即某个进程此时对各类资源的申请数量</p>
+<ol>
+<li>检查此次申请是否超过了之前声明的最大需求数</li>
+<li>检查此时系统剩余的可用资源是否还能满足这次请求</li>
+<li>试探着分配，更改各数据结构</li>
+<li>用安全性算法检查此次分配是否会导致系统进入不安全状态</li>
+</ol>
+<p>能通过检查就分配，否则让其等待</p>
+<p>而安全性算法：</p>
+<p>前面说了是试探性分配，用修改后的数据来，令work = available</p>
+<ul>
+<li>检查当前的剩余可用资源是否能满足某个进程的最大需求，如果可以，就把该进程加入安全序列， 并把该进程持有的资源全部回收（修改work）</li>
+<li>不断重复上述过程，看最终是否能让所有进程都加入安全序列</li>
+</ul>
+<h2 id="3-检测和解除">
+  3 检测和解除
+  <a class="anchor" href="#3-%e6%a3%80%e6%b5%8b%e5%92%8c%e8%a7%a3%e9%99%a4">#</a>
+</h2>
+<p>如果不预防和避免，那就应该能够检测到并解除</p>
+<p>维护一张资源分配图：</p>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230527172240284.png" alt="image-20230527172240284" style="zoom:67%;" />
+<p>然后进行简化：见王道P145</p>
+<p>当不可完全简化时，就是死锁了，这叫<em>死锁定理</em></p>
+<p>解除的方法：</p>
+<ul>
+<li>剥夺抢占</li>
+<li>撤销进程</li>
+<li>进程回退</li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-预防">1 预防</a></li>
+    <li><a href="#2-避免">2 避免</a>
+      <ul>
+        <li><a href="#21-安全检查">2.1 安全检查</a></li>
+        <li><a href="#22-银行家算法">2.2 银行家算法</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-检测和解除">3 检测和解除</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

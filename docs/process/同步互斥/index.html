@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en-us" dir="ltr">
 <head>
-	<meta name="generator" content="Hugo 0.111.3">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="绪#一切的一切，都是为了性能才这么多事
-学这个操作系统，学的其实并不是一个具体的操作系统比如linux等，而是操作系统设计所考虑的问题，以及对应的方案，而且这些方案基本没有完美的，基本是历史上用过的都会再介绍
-所以，不具体，多种方法不是最优解才是os的常态，学的是操作系统，而不是linux内核">
+<meta name="description" content="同步与互斥#信号量#P操作：阻塞式查询
+V操作：释放">
 <meta name="theme-color" content="#FFFFFF">
-<meta name="color-scheme" content="light dark"><meta property="og:title" content="hello" />
-<meta property="og:description" content="" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://zvictorliu.github.io/operating_system/" />
-<title>hello | Operating System</title>
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
+<meta property="og:description" content="同步与互斥#信号量#P操作：阻塞式查询
+V操作：释放" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://zvictorliu.github.io/operating_system/process/%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/" /><meta property="article:section" content="process" />
+
+
+<title>同步互斥 | Operating System</title>
 <link rel="manifest" href="/operating_system/manifest.json">
 <link rel="icon" href="/operating_system/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/operating_system/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
   <script defer src="/operating_system/flexsearch.min.js"></script>
   <script defer src="/operating_system/en.search.min.5cdf029a976e16e632835545e3bdbb6bfedc57637615eecb506c7c4747236ab2.js" integrity="sha256-XN8CmpduFuYyg1VF4727a/7cV2N2Fe7LUGx8R0cjarI=" crossorigin="anonymous"></script>
-<link rel="alternate" type="application/rss+xml" href="https://zvictorliu.github.io/operating_system/index.xml" title="Operating System" />
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -70,7 +70,7 @@ https://github.com/alex-shpak/hugo-book
 <li><a href="/operating_system/process/ipc/">进程通信</a></li>
 <li><a href="/operating_system/process/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/">进程管理API</a></li>
 <li><a href="/operating_system/process/schedule/">进程调度</a></li>
-<li><a href="/operating_system/process/%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/">同步互斥</a></li>
+<li><a href="/operating_system/process/%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/"class=active>同步互斥</a></li>
 <li><a href="/operating_system/process/%E6%AD%BB%E9%94%81/">死锁</a></li>
 <li><a href="/operating_system/process/thread/">线程</a></li>
 </ul>
@@ -126,7 +126,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/operating_system/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>hello</strong>
+  <strong>同步互斥</strong>
 
   <label for="toc-control">
     
@@ -140,7 +140,11 @@ https://github.com/alex-shpak/hugo-book
   <aside class="hidden clearfix">
     
   
-<nav id="TableOfContents"></nav>
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#信号量">信号量</a></li>
+  </ul>
+</nav>
 
 
 
@@ -151,13 +155,16 @@ https://github.com/alex-shpak/hugo-book
 
       
       
-  <article class="markdown"><h1 id="绪">
-  绪
-  <a class="anchor" href="#%e7%bb%aa">#</a>
+  <article class="markdown"><h1 id="同步与互斥">
+  同步与互斥
+  <a class="anchor" href="#%e5%90%8c%e6%ad%a5%e4%b8%8e%e4%ba%92%e6%96%a5">#</a>
 </h1>
-<p>一切的一切，都是为了性能才这么多事</p>
-<p>学这个操作系统，学的其实并不是一个具体的操作系统比如linux等，而是操作系统设计所考虑的问题，以及对应的方案，而且这些方案基本没有完美的，基本是历史上用过的都会再介绍</p>
-<p>所以，不具体，多种方法不是最优解才是os的常态，学的是操作系统，而不是linux内核</p>
+<h2 id="信号量">
+  信号量
+  <a class="anchor" href="#%e4%bf%a1%e5%8f%b7%e9%87%8f">#</a>
+</h2>
+<p>P操作：阻塞式查询</p>
+<p>V操作：释放</p>
 </article>
  
       
@@ -197,7 +204,11 @@ https://github.com/alex-shpak/hugo-book
       <div class="book-toc-content">
         
   
-<nav id="TableOfContents"></nav>
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#信号量">信号量</a></li>
+  </ul>
+</nav>
 
 
  

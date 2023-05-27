@@ -14,7 +14,7 @@
   </url><url>
     <loc>https://zvictorliu.github.io/operating_system/chapter01/blind/</loc>
   </url><url>
-    <loc>https://zvictorliu.github.io/operating_system/chapter02/</loc>
+    <loc>https://zvictorliu.github.io/operating_system/process/</loc>
   </url><url>
     <loc>https://zvictorliu.github.io/operating_system/chapter03/</loc>
   </url><url>
@@ -24,6 +24,8 @@
     <lastmod>2023-04-19T21:49:43+08:00</lastmod>
   </url><url>
     <loc>https://zvictorliu.github.io/operating_system/menu/</loc>
+  </url><url>
+    <loc>https://zvictorliu.github.io/operating_system/process/%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/</loc>
   </url><url>
     <loc>https://zvictorliu.github.io/operating_system/categories/</loc>
   </url><url>
@@ -47,9 +49,13 @@
   </url><url>
     <loc>https://zvictorliu.github.io/operating_system/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</loc>
   </url><url>
+    <loc>https://zvictorliu.github.io/operating_system/process/%E6%AD%BB%E9%94%81/</loc>
+  </url><url>
     <loc>https://zvictorliu.github.io/operating_system/file_management/%E7%9B%AE%E5%BD%95/</loc>
   </url><url>
     <loc>https://zvictorliu.github.io/operating_system/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/</loc>
+  </url><url>
+    <loc>https://zvictorliu.github.io/operating_system/process/thread/</loc>
   </url><url>
     <loc>https://zvictorliu.github.io/operating_system/chapter06/pthreads/</loc>
   </url><url>
@@ -61,11 +67,15 @@
   </url><url>
     <loc>https://zvictorliu.github.io/operating_system/chapter05/</loc>
   </url><url>
-    <loc>https://zvictorliu.github.io/operating_system/chapter02/process_concept/</loc>
+    <loc>https://zvictorliu.github.io/operating_system/process/process_concept/</loc>
   </url><url>
-    <loc>https://zvictorliu.github.io/operating_system/chapter02/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</loc>
+    <loc>https://zvictorliu.github.io/operating_system/process/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</loc>
   </url><url>
-    <loc>https://zvictorliu.github.io/operating_system/chapter02/ipc/</loc>
+    <loc>https://zvictorliu.github.io/operating_system/process/schedule/</loc>
+  </url><url>
+    <loc>https://zvictorliu.github.io/operating_system/process/ipc-csapp/</loc>
+  </url><url>
+    <loc>https://zvictorliu.github.io/operating_system/process/ipc/</loc>
   </url><url>
     <loc>https://zvictorliu.github.io/operating_system/chapter07/continue/</loc>
   </url>

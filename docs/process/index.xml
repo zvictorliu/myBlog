@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>进程 on Operating System</title>
+    <link>https://zvictorliu.github.io/operating_system/process/</link>
+    <description>Recent content in 进程 on Operating System</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://zvictorliu.github.io/operating_system/process/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>https://zvictorliu.github.io/operating_system/process/%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/operating_system/process/%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/</guid>
+      <description>同步与互斥#信号量#P操作：阻塞式查询
+V操作：释放</description>
+    </item>
+    
+    <item>
+      <title>死锁</title>
+      <link>https://zvictorliu.github.io/operating_system/process/%E6%AD%BB%E9%94%81/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/operating_system/process/%E6%AD%BB%E9%94%81/</guid>
+      <description>死锁#多个进程竞争资源造成了一种僵局，使得互相等待，陷入死循环
+死锁的必要条件
+互斥条件：某一资源只能互斥访问 不剥夺条件（非抢占）：只能主动释放 请求并保持条件：进程已经占了一个资源，并请求另一个被占的资源，此时进程被阻塞但是并没有释放资源 循环等待条件：循环等待链关系，占用的资源总被环上下一个所请求，并且只能是自己释放才能满足它，如果还有别的进程释放了、又或者不只一台设备，也不会构成死锁 ​	所以，对死锁的策略：
+预防：限制其出现必要条件中的几个 避免（其实也是一种预防了） 检测并解除 1 预防#破坏四个必要条件之一
+互斥：不太可行，因为有些资源是无法共享的，只能互斥 非抢占：实现起来比较麻烦 请求并保持：一次申请完并占用，之后不再请求，比较浪费 循环等待：按顺序分配 2 避免#并不是事先预防，是动态检测资源分配的状态
+2.1 安全检查#允许进程随时申请，但是系统在分配之前会先进行计算安全性，不安全就先让进程等待
+需要找到一种安全序列
+例题注意不安全不代表一定会死锁，只是有可能死锁
+2.2 银行家算法#决定要不要分配的算法 可利用资源向量记录第i类资源的可用数目最大需求矩阵每个进程对每类资源的最大需求分配矩阵实际已经分配的情况需求矩阵Max - Allocation，表示接下来最多还要多少具体算法是：
+定义请求向量，即某个进程此时对各类资源的申请数量
+检查此次申请是否超过了之前声明的最大需求数 检查此时系统剩余的可用资源是否还能满足这次请求 试探着分配，更改各数据结构 用安全性算法检查此次分配是否会导致系统进入不安全状态 能通过检查就分配，否则让其等待
+而安全性算法：
+前面说了是试探性分配，用修改后的数据来，令work = available
+检查当前的剩余可用资源是否能满足某个进程的最大需求，如果可以，就把该进程加入安全序列， 并把该进程持有的资源全部回收（修改work） 不断重复上述过程，看最终是否能让所有进程都加入安全序列 3 检测和解除#如果不预防和避免，那就应该能够检测到并解除
+维护一张资源分配图：
+然后进行简化：见王道P145
+当不可完全简化时，就是死锁了，这叫死锁定理
+解除的方法：
+剥夺抢占 撤销进程 进程回退 </description>
+    </item>
+    
+    <item>
+      <title>线程</title>
+      <link>https://zvictorliu.github.io/operating_system/process/thread/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/operating_system/process/thread/</guid>
+      <description>线程#1 概念#线程是进程内部中的”进程“，是平行宇宙下的各个国家，它们共享该平行宇宙的资源，做各自的工作
+切换起来开销少
+线程不拥有系统资源，它与该进程内的其它线程共享整个进程的资源
+每个线程还是有自己独立的堆栈和寄存器，否则就会彼此产生很大干扰
+对于进程打开的文件、地址空间是共享的
+所以，线程中创建的变量？ 变量是放在堆栈空间的，作用域还是只有该线程
+2 线程实现模型#什么叫线程实现呢？大概就是线程表的位置吧，是谁在负责管理线程
+如果线程表放在进程内，那么对于内核来说它只是在执行进程，意识不到线程，CPU调度还是以进程为单位
+而如果放在内核内，内核负责管理，那它就能感知到了
+3 多线程模型#这又是什么意思？指的是用户级线程和内核级线程的对应关系
+用户线程需要被映射到内核线程，因为是内核将线程安排到CPU上执行，为此它必须知道它所安排的线程。对于一个简单的进程来说，内核只知道这个进程的存在，而不知道在这个进程中创建的用户线程，所以内核只会把这个进程的线程安排到CPU上，所有在这个进程中的其他用户线程如果要被执行，就必须一个一个地映射到指定给创建进程的内核线程
+作者：小墙程序员 链接：https://juejin.cn/post/7167914276575789087 来源：稀土掘金 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+说明，内核线程也不只是控制表在内核中，而是内核中真的有线程，它这个线程和用户级的线程是对应的
+多对一：用户级一个阻塞，整个进程就阻塞</description>
+    </item>
+    
+    <item>
+      <title>进程概念</title>
+      <link>https://zvictorliu.github.io/operating_system/process/process_concept/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/operating_system/process/process_concept/</guid>
+      <description>进程概念#1.1 进程的状态#进程具有多种运行状态
+最基本的：
+运行态：正在处理机上运行，是真正的运行，进程本身就是动态的也可以理解为”运行“，此处可以理解为CPU正在处理 就绪态：即将送入处理机运行，其它都已准备好，多个进程会排成就绪队列 阻塞态：进程等待某一事件（不包括等待处理机，那是就绪态） 另外还有细分的两种状态：
+创建态：进程正在被创建，这个过程是多个步骤的显得比较漫长，所以有这个状态，即准备中 结束态：正在从系统中消失 1.2 进程的表示#一定要注意 进程不是PCB，进程实体是 PCB + 程序段 + 数据段
+进程控制块 (Process Control Block, PCB) ：多少感觉像哈希值一样，记录了进程的信息
+PCB是进程存在的唯一标志，创建了PCB，进程才算是”活的“
+在linux中，它就是一个C语言的结构体：
+linux PCBpid t pid; /* process identifier */ long state; /* state of the process */ unsigned int time slice /* scheduling information */ struct task_struct *parent; /* this process’s parent */ struct list_head children; /* this process’s children */ struct files_struct *files; /* list of open files */ struct mm_struct *mm; /* address space of this pro */ PCB具体记录了哪些信息这个太多了，主要是这些： PCB通常包含的内容这些信息会让每个进程自己认为自己独立使用CPU，看上去用于整个内存空间</description>
+    </item>
+    
+    <item>
+      <title>进程管理API介绍</title>
+      <link>https://zvictorliu.github.io/operating_system/process/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/operating_system/process/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</guid>
+      <description>进程管理API#1 fork()#进程创建的方式，它的特点是复制父进程
+子进程和父进程一样的代码，所以这个函数从父进程进入，从父进程和子进程中都退出，就是相当于创建了一个平行宇宙
+父进程返回子进程pid，它一定大于0，小于0则说明失败 子进程返回0 创建之后，父进程和子进程谁先被调用是不确定的
+它复制的虚拟地址空间和父进程一致，但其实物理上是隔开的，即identical but seperate
+再细节一点，它的复制是写时拷贝
+当子进程刚被创建，都还未返回时，它们还是同一片物理空间
+而一旦一个返回了，就会给子进程分配新的空间
+PPT2 exit()#return和exit是不同的
+return() 代表调用栈的返回，exit()代表一个进程的结束。 从main函数退出，会隐式的调用exit()函数，并将return的返回值传递给 exit() 从exit()退出，会先调用退出程序，刷新stdio流缓冲区，使用由status提 供的值执行_exit()系统调用 return 是关键字，exit()是库函数 3 exec()#它的功能有点不好用语言表达：初始化堆栈底部，启动新的程序
+重新初始化了指令段和用户数据段，堆栈段以及CPU的PC指针 是overwrite这些区域，但是又不会去修改另外的如pid这些 这样其实是可以把父进程在fork之前的一些结果给清理掉，这个是让这个平行宇宙的开局不一样一点
+相当于重启了一个main函数，但参数是和父进程当初不一样的
+4 wait()#等待某个子进程，调用者会被阻塞，子进程结束，回收资源返回pid
+如果没有子进程，则立刻返回-1
+而waitpid() 则是通过指定pid，并且还可以设置options选择是否阻塞
+5 kill()#发信号
+避免僵尸进程的办法：有人收尸
+可以是父进程收尸，也可以是操作系统</description>
+    </item>
+    
+    <item>
+      <title>进程调度</title>
+      <link>https://zvictorliu.github.io/operating_system/process/schedule/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/operating_system/process/schedule/</guid>
+      <description>进程调度#1 概念#平均等待时间
+平均周转时间
+饥饿现象
+2 典型调度算法#2.1 FCFS#2.2 SJF 短作业优先#2.3 优先级调度#2.4 RR 时间轮转#上下文切换：一个进程执行完从而换到另一个不叫上下文切换，因为已经不需要保存现场了
+2.5 多级反馈队列#</description>
+    </item>
+    
+    <item>
+      <title>进程通信</title>
+      <link>https://zvictorliu.github.io/operating_system/process/ipc-csapp/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/operating_system/process/ipc-csapp/</guid>
+      <description>进程通信#有些进程是完全独立的，自成一派，而有些则是协作进程，会受到其它进程的影响，比如：共享资源可能会被其它进程所修改
+进程通信 (InterProcess Communication, IPC) 机制就是用于进程间交互的一套规则
+进程通信有两种基本的形式：
+共享内存，好比网盘传输 消息传递，好比文件传输助手 共享内存系统#一个共享区域应该这样产生：一个进程（生产者）创建共享内存段，这段空间被加到另一个进程（消费者）的地址空间内
+有两个注意的问题：
+操作系统一般会限制进程只访问自己的地址空间 即使是共享的，也不能同时写，有可能发生冲 在生产-消费关系里面，消费者可以在生产者写的同时，读取已经写过的区域 这段缓冲区可以是无界的，生产者可以一直生产放进无底洞，也可以是有界的，仓库满了生产者就必须要等消费者取走以腾出位置（假设知道读写状态）
+消息传递系统#两个进程之间能够互相发送和接收消息
+要认识到通信需要存在一种“电话线”，将二者连接起来，这和广播不同，进程通信的电话线叫做链路
+一般来说发送消息需要指明对象，可是如果对方改电话号码了呢？要知道进程的标识符是可以被改变的
+有一种间接通信方案，那就是“基站”，一般是邮箱或端口，这个和共享内存的区别在于基站并非是地址空间的一部分
+基站的问题是无法限制在两个进程之间，还可以有第三个第四个，那么就要有所选择谁能收到消息
+注意这两个名词的含义
+同步：阻塞模式 发送时有人接收才能完成 持续等待知道有消息来 异步：非阻塞 发出去就完事，对方收没收到不管 读取一个消息，可能是有效的也可能是空 如果生产者和消费者是同步的，那么两者之间就建立了交会 rendezvous
+再说这个基站，它应是一个缓存区
+几种操作系统的IPC实例#POSIX系统 API Mach操作系统 Windows系统 与之类似的客户机/服务器的通信#套接字：网络 远程过程调用（RPC） 管道 </description>
+    </item>
+    
+    <item>
+      <title>进程通信</title>
+      <link>https://zvictorliu.github.io/operating_system/process/ipc/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/operating_system/process/ipc/</guid>
+      <description>进程通信#进程之间需要通信：通知信息，数据传输，共享等待
+进程通信 (InterProcess Communication, IPC) 机制就是用于进程间交互的一套规则
+进程通信三种基本形式
+共享内存，好比网盘传输 消息传递，好比文件传输助手 管道 1 共享内存#两个通信的进程之间存在一个可以直接进行访问的共享空间
+linux共享内存函数#include &amp;lt;sys/shm.h&amp;gt; // 创建或获取一个共享内存：成功返回共享内存ID，失败返回-1 int shmget(key_t key, size_t size, int flag); // 连接共享内存到当前进程的地址空间：成功返回指向共享内存的指针，失败返回-1 void *shmat(int shm_id, const void *addr, int flag); // 断开与共享内存的连接：成功返回0，失败返回-1 int shmdt(void *addr); // 控制共享内存的相关信息：成功返回0，失败返回-1 int shmctl(int shm_id, int cmd, struct shmid_ds *buf); 编程示例虽然是共享，但对其读写也应是同步互斥的，需要同步互斥工具
+需要特殊的系统调用才能让两个进程共享一片内存空间
+2 消息传递#操作系统提供了发送和接收消息的两个原语，数据交换以格式化的Message为单位
+形象的例子：A要向B通信，需要把信息装在信封里寄给B
+此时有：
+直接：邮差直接给B，挂在B的一个消息缓冲队列里，B依次读取 间接：邮差放到B门口的邮箱里，B从里面拿 听起来感觉还是有点中间商
+3 管道通信#管道是连接一个读进程和一个写进程的一个共享文件，即pipe文件</description>
+    </item>
+    
+  </channel>
+</rss>

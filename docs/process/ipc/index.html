@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="进程通信#进程之间需要通信：通知信息，数据传输，共享等待
+进程通信 (InterProcess Communication, IPC) 机制就是用于进程间交互的一套规则
+进程通信三种基本形式
+共享内存，好比网盘传输 消息传递，好比文件传输助手 管道 1 共享内存#两个通信的进程之间存在一个可以直接进行访问的共享空间
+linux共享内存函数#include &lt;sys/shm.h&gt; // 创建或获取一个共享内存：成功返回共享内存ID，失败返回-1 int shmget(key_t key, size_t size, int flag); // 连接共享内存到当前进程的地址空间：成功返回指向共享内存的指针，失败返回-1 void *shmat(int shm_id, const void *addr, int flag); // 断开与共享内存的连接：成功返回0，失败返回-1 int shmdt(void *addr); // 控制共享内存的相关信息：成功返回0，失败返回-1 int shmctl(int shm_id, int cmd, struct shmid_ds *buf); 编程示例虽然是共享，但对其读写也应是同步互斥的，需要同步互斥工具
+需要特殊的系统调用才能让两个进程共享一片内存空间
+2 消息传递#操作系统提供了发送和接收消息的两个原语，数据交换以格式化的Message为单位
+形象的例子：A要向B通信，需要把信息装在信封里寄给B
+此时有：
+直接：邮差直接给B，挂在B的一个消息缓冲队列里，B依次读取 间接：邮差放到B门口的邮箱里，B从里面拿 听起来感觉还是有点中间商
+3 管道通信#管道是连接一个读进程和一个写进程的一个共享文件，即pipe文件">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="进程通信" />
+<meta property="og:description" content="进程通信#进程之间需要通信：通知信息，数据传输，共享等待
+进程通信 (InterProcess Communication, IPC) 机制就是用于进程间交互的一套规则
+进程通信三种基本形式
+共享内存，好比网盘传输 消息传递，好比文件传输助手 管道 1 共享内存#两个通信的进程之间存在一个可以直接进行访问的共享空间
+linux共享内存函数#include &lt;sys/shm.h&gt; // 创建或获取一个共享内存：成功返回共享内存ID，失败返回-1 int shmget(key_t key, size_t size, int flag); // 连接共享内存到当前进程的地址空间：成功返回指向共享内存的指针，失败返回-1 void *shmat(int shm_id, const void *addr, int flag); // 断开与共享内存的连接：成功返回0，失败返回-1 int shmdt(void *addr); // 控制共享内存的相关信息：成功返回0，失败返回-1 int shmctl(int shm_id, int cmd, struct shmid_ds *buf); 编程示例虽然是共享，但对其读写也应是同步互斥的，需要同步互斥工具
+需要特殊的系统调用才能让两个进程共享一片内存空间
+2 消息传递#操作系统提供了发送和接收消息的两个原语，数据交换以格式化的Message为单位
+形象的例子：A要向B通信，需要把信息装在信封里寄给B
+此时有：
+直接：邮差直接给B，挂在B的一个消息缓冲队列里，B依次读取 间接：邮差放到B门口的邮箱里，B从里面拿 听起来感觉还是有点中间商
+3 管道通信#管道是连接一个读进程和一个写进程的一个共享文件，即pipe文件" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://zvictorliu.github.io/operating_system/process/ipc/" /><meta property="article:section" content="process" />
+
+
+<title>进程通信 | Operating System</title>
+<link rel="manifest" href="/operating_system/manifest.json">
+<link rel="icon" href="/operating_system/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/operating_system/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/operating_system/flexsearch.min.js"></script>
+  <script defer src="/operating_system/en.search.min.5cdf029a976e16e632835545e3bdbb6bfedc57637615eecb506c7c4747236ab2.js" integrity="sha256-XN8CmpduFuYyg1VF4727a/7cV2N2Fe7LUGx8R0cjarI=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/operating_system/"><span>Operating System</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li><a href="/operating_system/chapter01/">绪论</a>
+<ul>
+<li><a href="/operating_system/chapter01/history-of-os-development/">操作系统历史发展</a></li>
+<li><a href="/operating_system/chapter01/pre/">前置知识</a></li>
+<li><a href="/operating_system/chapter01/blind/">扫盲</a></li>
+</ul>
+</li>
+<li><a href="/operating_system/process/">进程</a>
+<ul>
+<li><a href="/operating_system/process/process_concept/">进程概念</a></li>
+<li><a href="/operating_system/process/ipc/"class=active>进程通信</a></li>
+<li><a href="/operating_system/process/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/">进程管理API</a></li>
+<li><a href="/operating_system/process/schedule/">进程调度</a></li>
+<li><a href="/operating_system/process/%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/">同步互斥</a></li>
+<li><a href="/operating_system/process/%E6%AD%BB%E9%94%81/">死锁</a></li>
+<li><a href="/operating_system/process/thread/">线程</a></li>
+</ul>
+</li>
+<li><a href="/operating_system/chapter07/">内存分配</a>
+<ul>
+<li><a href="/operating_system/chapter07/pre/">基本原理和要求</a></li>
+<li><a href="/operating_system/chapter07/virtual_memory/">虚拟内存</a></li>
+</ul>
+</li>
+<li><a href="/operating_system/file_management/">文件管理</a>
+<ul>
+<li><a href="/operating_system/file_management/%E6%96%87%E4%BB%B6/">文件</a></li>
+<li><a href="/operating_system/file_management/%E7%9B%AE%E5%BD%95/">目录</a></li>
+<li><a href="/operating_system/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">文件系统</a></li>
+</ul>
+</li>
+<li><a href="/operating_system/io_management/">IO管理</a>
+<ul>
+<li><a href="/operating_system/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/">IO管理基础</a></li>
+<li><a href="/operating_system/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/">设备独立性软件</a></li>
+<li><a href="/operating_system/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/">磁盘和固态硬盘</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/operating_system/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>进程通信</strong>
+
+  <label for="toc-control">
+    
+    <img src="/operating_system/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-共享内存">1 共享内存</a></li>
+    <li><a href="#2-消息传递">2 消息传递</a></li>
+    <li><a href="#3-管道通信">3 管道通信</a></li>
+    <li><a href="#套接字-socket">套接字 Socket</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="进程通信">
+  进程通信
+  <a class="anchor" href="#%e8%bf%9b%e7%a8%8b%e9%80%9a%e4%bf%a1">#</a>
+</h1>
+<p>进程之间需要通信：通知信息，数据传输，共享等待</p>
+<p><code>进程通信 (InterProcess Communication, IPC)</code> 机制就是用于进程间交互的一套规则</p>
+<p>进程通信三种基本形式</p>
+<ul>
+<li>共享内存，好比网盘传输</li>
+<li>消息传递，好比文件传输助手</li>
+<li>管道</li>
+</ul>
+<h2 id="1-共享内存">
+  1 共享内存
+  <a class="anchor" href="#1-%e5%85%b1%e4%ba%ab%e5%86%85%e5%ad%98">#</a>
+</h2>
+<p>两个通信的进程之间存在一个可以直接进行访问的共享空间</p>
+<details ><summary>linux共享内存函数</summary>
+  <div class="markdown-inner">
+    <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;sys/shm.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e">// 创建或获取一个共享内存：成功返回共享内存ID，失败返回-1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">shmget</span>(<span style="color:#66d9ef">key_t</span> key, <span style="color:#66d9ef">size_t</span> size, <span style="color:#66d9ef">int</span> flag);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 连接共享内存到当前进程的地址空间：成功返回指向共享内存的指针，失败返回-1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">shmat</span>(<span style="color:#66d9ef">int</span> shm_id, <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>addr, <span style="color:#66d9ef">int</span> flag);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 断开与共享内存的连接：成功返回0，失败返回-1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">shmdt</span>(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>addr); 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 控制共享内存的相关信息：成功返回0，失败返回-1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">shmctl</span>(<span style="color:#66d9ef">int</span> shm_id, <span style="color:#66d9ef">int</span> cmd, <span style="color:#66d9ef">struct</span> shmid_ds <span style="color:#f92672">*</span>buf);
+</span></span></code></pre></div>
+  </div>
+</details>
+
+<details ><summary>编程示例</summary>
+  <div class="markdown-inner">
+    <img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230527135203399.png" alt="image-20230527135203399" style="zoom:80%;" />
+  </div>
+</details>
+
+<p>虽然是共享，但对其读写也应是同步互斥的，需要同步互斥工具</p>
+<p>需要特殊的系统调用才能让两个进程共享一片内存空间</p>
+<img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230527140740181.png" alt="image-20230527140740181" style="zoom:67%;" />
+<h2 id="2-消息传递">
+  2 消息传递
+  <a class="anchor" href="#2-%e6%b6%88%e6%81%af%e4%bc%a0%e9%80%92">#</a>
+</h2>
+<p>操作系统提供了发送和接收消息的两个原语，数据交换以格式化的<code>Message</code>为单位</p>
+<p><img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230527141004702.png" alt="image-20230527141004702" /></p>
+<p>形象的例子：A要向B通信，需要把信息装在信封里寄给B</p>
+<p>此时有：</p>
+<ul>
+<li>直接：邮差直接给B，挂在B的一个消息缓冲队列里，B依次读取</li>
+<li>间接：邮差放到B门口的邮箱里，B从里面拿</li>
+</ul>
+<p>听起来感觉还是有点中间商</p>
+<h2 id="3-管道通信">
+  3 管道通信
+  <a class="anchor" href="#3-%e7%ae%a1%e9%81%93%e9%80%9a%e4%bf%a1">#</a>
+</h2>
+<p>管道是连接一个读进程和一个写进程的一个共享文件，即<code>pipe</code>文件</p>
+<p>这种和共享内存的区别是，共享内存是完全互斥的，不能同时写，但管道是一种缓冲区，可以一边写，另一边同时读</p>
+<p><img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230527141057424.png" alt="image-20230527141057424" /></p>
+<p>管道是半双工通信，即某一时刻只能单向传输，为了全双工需要定义两个管道</p>
+<p>此外，OS课程还介绍了套接字</p>
+<h2 id="套接字-socket">
+  套接字 Socket
+  <a class="anchor" href="#%e5%a5%97%e6%8e%a5%e5%ad%97-socket">#</a>
+</h2>
+<p>网络编程中常用</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-共享内存">1 共享内存</a></li>
+    <li><a href="#2-消息传递">2 消息传递</a></li>
+    <li><a href="#3-管道通信">3 管道通信</a></li>
+    <li><a href="#套接字-socket">套接字 Socket</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
