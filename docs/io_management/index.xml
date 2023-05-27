@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>输入输出管理 on Operating System</title>
-    <link>https://zvictorliu.github.io/myBlog/io_management/</link>
+    <link>https://zvictorliu.github.io/operating_system/io_management/</link>
     <description>Recent content in 输入输出管理 on Operating System</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://zvictorliu.github.io/myBlog/io_management/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language><atom:link href="https://zvictorliu.github.io/operating_system/io_management/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>IO管理基础</title>
-      <link>https://zvictorliu.github.io/myBlog/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/</link>
+      <link>https://zvictorliu.github.io/operating_system/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/</guid>
       <description>IO管理基础#1 IO设备#IO设备根据信息交换的单位可分为：
 块设备：以数据块为单位，比如磁盘，可寻址 字符设备：以字符串为单位，比如键盘，不可寻址 1.1 IO接口#设备控制器，即是IO接口，它既要能和CPU通信，还要和设备通信，并能按照CPU指令控制设备
 有与CPU的接口，也有与设备的接口
@@ -42,20 +42,20 @@ CPU接收到设备发出的DMA请求，给DMA控制器发一条命令启动后�
     
     <item>
       <title>磁盘和固态硬盘</title>
-      <link>https://zvictorliu.github.io/myBlog/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/</link>
+      <link>https://zvictorliu.github.io/operating_system/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/</guid>
       <description>磁盘和固态硬盘#磁盘，磁盘管理方式，调度算法
 固态硬盘简介</description>
     </item>
     
     <item>
       <title>设备独立性软件</title>
-      <link>https://zvictorliu.github.io/myBlog/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/</link>
+      <link>https://zvictorliu.github.io/operating_system/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/</guid>
       <description>设备独立性软件#执行所有设备公有操作的软件
 1 高速缓存与缓冲区#高速缓存逻辑上属于磁盘，其实物理上是在内存中的盘块
 缓冲区可以很好接近速度不匹配的问题，减少对CPU中断频率，也能接近基本数据单元大小不一致的问题

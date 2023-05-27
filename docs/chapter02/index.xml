@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>进程 on Operating System</title>
-    <link>https://zvictorliu.github.io/myBlog/chapter02/</link>
+    <link>https://zvictorliu.github.io/operating_system/chapter02/</link>
     <description>Recent content in 进程 on Operating System</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://zvictorliu.github.io/myBlog/chapter02/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language><atom:link href="https://zvictorliu.github.io/operating_system/chapter02/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>进程概念</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter02/process_concept/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter02/process_concept/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter02/process_concept/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter02/process_concept/</guid>
       <description>进程概念#1.1 进程的状态#进程具有多种运行状态
 最基本的：
 运行态：正在处理机上运行，是真正的运行，进程本身就是动态的也可以理解为”运行“，此处可以理解为CPU正在处理 就绪态：即将送入处理机运行，其它都已准备好，多个进程会排成就绪队列 阻塞态：进程等待某一事件（不包括等待处理机，那是就绪态） 另外还有细分的两种状态：
@@ -24,10 +24,10 @@ linux PCBpid t pid; /* process identifier */ long state; /* state of the proces
     
     <item>
       <title>进程管理API介绍</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter02/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter02/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter02/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter02/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</guid>
       <description>进程管理API#1 fork()#进程创建的方式，它的特点是复制父进程
 子进程和父进程一样的代码，所以这个函数从父进程进入，从父进程和子进程中都退出，就是相当于创建了一个平行宇宙
 父进程返回子进程pid，它一定大于0，小于0则说明失败 子进程返回0 创建之后，父进程和子进程谁先被调用是不确定的
@@ -49,10 +49,10 @@ return() 代表调用栈的返回，exit()代表一个进程的结束。 从main
     
     <item>
       <title>进程通信</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter02/ipc/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter02/ipc/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter02/ipc/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter02/ipc/</guid>
       <description>有些进程是完全独立的，自成一派，而有些则是协作进程，会受到其它进程的影响，比如：共享资源可能会被其它进程所修改
 进程通信 (InterProcess Communication, IPC) 机制就是用于进程间交互的一套规则
 进程通信有两种基本的形式：

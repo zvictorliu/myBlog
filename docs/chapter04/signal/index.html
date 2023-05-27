@@ -10,15 +10,15 @@
 <meta property="og:description" content="何为并发？
 何为互斥？" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://zvictorliu.github.io/myBlog/chapter04/signal/" /><meta property="article:section" content="chapter04" />
+<meta property="og:url" content="https://zvictorliu.github.io/operating_system/chapter04/signal/" /><meta property="article:section" content="chapter04" />
 
 
 <title>并发和互斥 | Operating System</title>
-<link rel="manifest" href="/myBlog/manifest.json">
-<link rel="icon" href="/myBlog/favicon.png" type="image/x-icon">
-<link rel="stylesheet" href="/myBlog/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
-  <script defer src="/myBlog/flexsearch.min.js"></script>
-  <script defer src="/myBlog/en.search.min.9d20f1f983ebc82627e0f85efc631cc6b201279cfbcafa2ba6e5e74decb2b0f7.js" integrity="sha256-nSDx&#43;YPryCYn4Phe/GMcxrIBJ5z7yvorpuXnTeyysPc=" crossorigin="anonymous"></script>
+<link rel="manifest" href="/operating_system/manifest.json">
+<link rel="icon" href="/operating_system/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/operating_system/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/operating_system/flexsearch.min.js"></script>
+  <script defer src="/operating_system/en.search.min.5cdf029a976e16e632835545e3bdbb6bfedc57637615eecb506c7c4747236ab2.js" integrity="sha256-XN8CmpduFuYyg1VF4727a/7cV2N2Fe7LUGx8R0cjarI=" crossorigin="anonymous"></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -34,7 +34,7 @@ https://github.com/alex-shpak/hugo-book
         
   <nav>
 <h2 class="book-brand">
-  <a class="flex align-center" href="/myBlog/"><span>Operating System</span>
+  <a class="flex align-center" href="/operating_system/"><span>Operating System</span>
   </a>
 </h2>
 
@@ -57,48 +57,48 @@ https://github.com/alex-shpak/hugo-book
 
 
   <ul>
-<li><a href="/myBlog/chapter01/">绪论</a>
+<li><a href="/operating_system/chapter01/">绪论</a>
 <ul>
-<li><a href="/myBlog/chapter01/history-of-os-development/">操作系统历史发展</a></li>
-<li><a href="/myBlog/chapter01/pre/">前置知识</a></li>
-<li><a href="/myBlog/chapter01/blind/">扫盲</a></li>
+<li><a href="/operating_system/chapter01/history-of-os-development/">操作系统历史发展</a></li>
+<li><a href="/operating_system/chapter01/pre/">前置知识</a></li>
+<li><a href="/operating_system/chapter01/blind/">扫盲</a></li>
 </ul>
 </li>
-<li><a href="/myBlog/chapter02/">进程</a>
+<li><a href="/operating_system/chapter02/">进程</a>
 <ul>
-<li><a href="/myBlog/chapter02/process_concept/">进程概念</a></li>
-<li><a href="/myBlog/chapter02/ipc/">进程通信</a></li>
-<li><a href="/myBlog/chapter02/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/">进程管理API</a></li>
+<li><a href="/operating_system/chapter02/process_concept/">进程概念</a></li>
+<li><a href="/operating_system/chapter02/ipc/">进程通信</a></li>
+<li><a href="/operating_system/chapter02/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/">进程管理API</a></li>
 </ul>
 </li>
-<li><a href="/myBlog/chapter05/">进程同步</a>
+<li><a href="/operating_system/chapter05/">进程同步</a>
 <ul>
-<li><a href="/myBlog/chapter05/syn/">背景</a></li>
+<li><a href="/operating_system/chapter05/syn/">背景</a></li>
 </ul>
 </li>
-<li><a href="/myBlog/chapter06/">多线程编程</a>
+<li><a href="/operating_system/chapter06/">多线程编程</a>
 <ul>
-<li><a href="/myBlog/chapter06/pthreads/">线程库</a></li>
+<li><a href="/operating_system/chapter06/pthreads/">线程库</a></li>
 </ul>
 </li>
-<li><a href="/myBlog/chapter07/">内存分配</a>
+<li><a href="/operating_system/chapter07/">内存分配</a>
 <ul>
-<li><a href="/myBlog/chapter07/pre/">基本原理和要求</a></li>
-<li><a href="/myBlog/chapter07/virtual_memory/">虚拟内存</a></li>
+<li><a href="/operating_system/chapter07/pre/">基本原理和要求</a></li>
+<li><a href="/operating_system/chapter07/virtual_memory/">虚拟内存</a></li>
 </ul>
 </li>
-<li><a href="/myBlog/file_management/">文件管理</a>
+<li><a href="/operating_system/file_management/">文件管理</a>
 <ul>
-<li><a href="/myBlog/file_management/%E6%96%87%E4%BB%B6/">文件</a></li>
-<li><a href="/myBlog/file_management/%E7%9B%AE%E5%BD%95/">目录</a></li>
-<li><a href="/myBlog/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">文件系统</a></li>
+<li><a href="/operating_system/file_management/%E6%96%87%E4%BB%B6/">文件</a></li>
+<li><a href="/operating_system/file_management/%E7%9B%AE%E5%BD%95/">目录</a></li>
+<li><a href="/operating_system/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">文件系统</a></li>
 </ul>
 </li>
-<li><a href="/myBlog/io_management/">IO管理</a>
+<li><a href="/operating_system/io_management/">IO管理</a>
 <ul>
-<li><a href="/myBlog/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/">IO管理基础</a></li>
-<li><a href="/myBlog/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/">设备独立性软件</a></li>
-<li><a href="/myBlog/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/">磁盘和固态硬盘</a></li>
+<li><a href="/operating_system/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/">IO管理基础</a></li>
+<li><a href="/operating_system/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/">设备独立性软件</a></li>
+<li><a href="/operating_system/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/">磁盘和固态硬盘</a></li>
 </ul>
 </li>
 </ul>
@@ -129,14 +129,14 @@ https://github.com/alex-shpak/hugo-book
         
   <div class="flex align-center justify-between">
   <label for="menu-control">
-    <img src="/myBlog/svg/menu.svg" class="book-icon" alt="Menu" />
+    <img src="/operating_system/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
   <strong>并发和互斥</strong>
 
   <label for="toc-control">
     
-    <img src="/myBlog/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    <img src="/operating_system/svg/toc.svg" class="book-icon" alt="Table of Contents" />
     
   </label>
 </div>

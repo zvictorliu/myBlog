@@ -2,54 +2,54 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>hello on Operating System</title>
-    <link>https://zvictorliu.github.io/myBlog/</link>
+    <link>https://zvictorliu.github.io/operating_system/</link>
     <description>Recent content in hello on Operating System</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 19 Apr 2023 21:49:43 +0800</lastBuildDate><atom:link href="https://zvictorliu.github.io/myBlog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 19 Apr 2023 21:49:43 +0800</lastBuildDate><atom:link href="https://zvictorliu.github.io/operating_system/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>几种调度算法</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter04/schedule_alg/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter04/schedule_alg/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter04/schedule_alg/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter04/schedule_alg/</guid>
       <description>先到先得#时间轮转#多级反馈#</description>
     </item>
     
     <item>
       <title>操作系统的历史</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter01/history-of-os-development/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter01/history-of-os-development/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter01/history-of-os-development/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter01/history-of-os-development/</guid>
       <description>先欠着</description>
     </item>
     
     <item>
       <title>前置基础</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter01/pre/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter01/pre/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter01/pre/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter01/pre/</guid>
       <description>这部分与操作系统这个课本身并没有多大关系，但是又或许需要它以便于理解，先欠着</description>
     </item>
     
     <item>
       <title>并发和互斥</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter04/signal/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter04/signal/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter04/signal/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter04/signal/</guid>
       <description>何为并发？
 何为互斥？</description>
     </item>
     
     <item>
       <title>扫盲</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter01/blind/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter01/blind/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter01/blind/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter01/blind/</guid>
       <description>这里介绍一下常见的一些概念却很少有深入解释的
 Linux和Unix#简单来说UNIX就是没有图形界面的那种，比较老
 Linux是基于其设计思想的，因此经常会说”在Linux/Unix系统中&amp;quot;，就是说它们在理念上很多是相似的，只是实现方式有些不同
@@ -59,10 +59,10 @@ x86, win32, win64#POSIX#POSIX（Portable Operating System Interface，可移
     
     <item>
       <title>IO管理基础</title>
-      <link>https://zvictorliu.github.io/myBlog/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/</link>
+      <link>https://zvictorliu.github.io/operating_system/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/</guid>
       <description>IO管理基础#1 IO设备#IO设备根据信息交换的单位可分为：
 块设备：以数据块为单位，比如磁盘，可寻址 字符设备：以字符串为单位，比如键盘，不可寻址 1.1 IO接口#设备控制器，即是IO接口，它既要能和CPU通信，还要和设备通信，并能按照CPU指令控制设备
 有与CPU的接口，也有与设备的接口
@@ -93,29 +93,29 @@ CPU接收到设备发出的DMA请求，给DMA控制器发一条命令启动后�
     
     <item>
       <title>临界区问题</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter05/syn/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter05/syn/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter05/syn/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter05/syn/</guid>
       <description>hello</description>
     </item>
     
     <item>
       <title>基本分页存储管理</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter07/basic_page/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter07/basic_page/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter07/basic_page/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter07/basic_page/</guid>
       <description>所谓分页是指：把内存空间分为一个个很小的块（等分），进程也这样切割，然后以块为单位逐个申请空间（这样就可以不连续了）
 这样只有除不尽的那部分占了整个块会有内部碎片，但本来块已经够小了，这个就更小了</description>
     </item>
     
     <item>
       <title>基本原理和要求</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter07/pre/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter07/pre/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter07/pre/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter07/pre/</guid>
       <description>1
 这些内容初看还挺杂乱，不知道主线是什么，这些或许是为后面的内容做一个铺垫
 程序的链接
@@ -128,10 +128,10 @@ CPU接收到设备发出的DMA请求，给DMA控制器发一条命令启动后�
     
     <item>
       <title>文件</title>
-      <link>https://zvictorliu.github.io/myBlog/file_management/%E6%96%87%E4%BB%B6/</link>
+      <link>https://zvictorliu.github.io/operating_system/file_management/%E6%96%87%E4%BB%B6/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/file_management/%E6%96%87%E4%BB%B6/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/file_management/%E6%96%87%E4%BB%B6/</guid>
       <description>文件#要明确文件不只是数据项（虽然其它信息本质也是数据）
 文件除了数据，还会记录与文件相关的信息，叫做文件元数据，其实就是文件属性的意思
 包括名称、类型、位置、大小、创建时间等信息
@@ -164,10 +164,10 @@ FAT占内存，所以将该文件所对应盘块编号放在一起，目录查�
     
     <item>
       <title>文件系统</title>
-      <link>https://zvictorliu.github.io/myBlog/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</link>
+      <link>https://zvictorliu.github.io/operating_system/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</guid>
       <description>文件系统#应用程序通过文件系统和磁盘交互
 具有层次结构：
 说来就是操作系统了？
@@ -191,10 +191,10 @@ MBR: 主引导记录，引导计算机，BIOS读入MBR并执行，确定活动�
     
     <item>
       <title>目录</title>
-      <link>https://zvictorliu.github.io/myBlog/file_management/%E7%9B%AE%E5%BD%95/</link>
+      <link>https://zvictorliu.github.io/operating_system/file_management/%E7%9B%AE%E5%BD%95/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/file_management/%E7%9B%AE%E5%BD%95/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/file_management/%E7%9B%AE%E5%BD%95/</guid>
       <description>目录#FCB的有序集合为文件目录，一个FCB就是一个文件目录项
 （说是这么说，之前好像说不是整个FCB 🤔 索引节点是一种FCB改进
 目录提供 文件名和文件的映射，按名存取
@@ -225,20 +225,20 @@ MBR: 主引导记录，引导计算机，BIOS读入MBR并执行，确定活动�
     
     <item>
       <title>磁盘和固态硬盘</title>
-      <link>https://zvictorliu.github.io/myBlog/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/</link>
+      <link>https://zvictorliu.github.io/operating_system/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/</guid>
       <description>磁盘和固态硬盘#磁盘，磁盘管理方式，调度算法
 固态硬盘简介</description>
     </item>
     
     <item>
       <title>线程库Pthreads</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter06/pthreads/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter06/pthreads/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter06/pthreads/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter06/pthreads/</guid>
       <description>本节主要介绍 Pthreads
 首先 pthreads 虽说是API库，但是只是一种规范，实现方式仍然取决于操作系统的设计方式
 但是我们在使用时，当成一般的库也没啥问题
@@ -249,10 +249,10 @@ phread_join()函数</description>
     
     <item>
       <title>虚拟内存</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter07/virtual_memory/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter07/virtual_memory/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter07/virtual_memory/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter07/virtual_memory/</guid>
       <description>先知道一下局部性原理
 虚拟存储器的思想是：
 作业只先把当前需要的那部分程序和数据装入内存，当运行到没有的时，再次装入 将暂时不用的部分换出去，需要时再换进来 在逻辑上容量得到扩充（不是很理解这部分） 为实现虚拟存储器，有三种方式：
@@ -281,10 +281,10 @@ phread_join()函数</description>
     
     <item>
       <title>设备独立性软件</title>
-      <link>https://zvictorliu.github.io/myBlog/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/</link>
+      <link>https://zvictorliu.github.io/operating_system/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/</guid>
       <description>设备独立性软件#执行所有设备公有操作的软件
 1 高速缓存与缓冲区#高速缓存逻辑上属于磁盘，其实物理上是在内存中的盘块
 缓冲区可以很好接近速度不匹配的问题，减少对CPU中断频率，也能接近基本数据单元大小不一致的问题
@@ -300,10 +300,10 @@ phread_join()函数</description>
     
     <item>
       <title>进程概念</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter02/process_concept/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter02/process_concept/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter02/process_concept/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter02/process_concept/</guid>
       <description>进程概念#1.1 进程的状态#进程具有多种运行状态
 最基本的：
 运行态：正在处理机上运行，是真正的运行，进程本身就是动态的也可以理解为”运行“，此处可以理解为CPU正在处理 就绪态：即将送入处理机运行，其它都已准备好，多个进程会排成就绪队列 阻塞态：进程等待某一事件（不包括等待处理机，那是就绪态） 另外还有细分的两种状态：
@@ -316,10 +316,10 @@ linux PCBpid t pid; /* process identifier */ long state; /* state of the proces
     
     <item>
       <title>进程管理API介绍</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter02/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter02/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter02/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter02/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/</guid>
       <description>进程管理API#1 fork()#进程创建的方式，它的特点是复制父进程
 子进程和父进程一样的代码，所以这个函数从父进程进入，从父进程和子进程中都退出，就是相当于创建了一个平行宇宙
 父进程返回子进程pid，它一定大于0，小于0则说明失败 子进程返回0 创建之后，父进程和子进程谁先被调用是不确定的
@@ -341,10 +341,10 @@ return() 代表调用栈的返回，exit()代表一个进程的结束。 从main
     
     <item>
       <title>进程通信</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter02/ipc/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter02/ipc/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter02/ipc/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter02/ipc/</guid>
       <description>有些进程是完全独立的，自成一派，而有些则是协作进程，会受到其它进程的影响，比如：共享资源可能会被其它进程所修改
 进程通信 (InterProcess Communication, IPC) 机制就是用于进程间交互的一套规则
 进程通信有两种基本的形式：
@@ -364,10 +364,10 @@ return() 代表调用栈的返回，exit()代表一个进程的结束。 从main
     
     <item>
       <title>连续分配管理方式</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter07/continue/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter07/continue/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter07/continue/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter07/continue/</guid>
       <description>就是给用户程序分配一段连续的空间（即一个程序的东西是放在一处的）来存，具体来说有三种方式
 单一连续分配 固定分区分配 动态分区分配 单一连续分配#这个就是很基础很早期的，只能单一程序的时候，除了低地址的操作系统区，用户区全给一个程序，是一个不是多个
 固定分区分配#在单一的基础上，把用户区分成几个段，每段给一个程序

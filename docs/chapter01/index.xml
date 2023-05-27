@@ -2,34 +2,34 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>对操作系统的认识 on Operating System</title>
-    <link>https://zvictorliu.github.io/myBlog/chapter01/</link>
+    <link>https://zvictorliu.github.io/operating_system/chapter01/</link>
     <description>Recent content in 对操作系统的认识 on Operating System</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://zvictorliu.github.io/myBlog/chapter01/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language><atom:link href="https://zvictorliu.github.io/operating_system/chapter01/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>操作系统的历史</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter01/history-of-os-development/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter01/history-of-os-development/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter01/history-of-os-development/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter01/history-of-os-development/</guid>
       <description>先欠着</description>
     </item>
     
     <item>
       <title>前置基础</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter01/pre/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter01/pre/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter01/pre/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter01/pre/</guid>
       <description>这部分与操作系统这个课本身并没有多大关系，但是又或许需要它以便于理解，先欠着</description>
     </item>
     
     <item>
       <title>扫盲</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter01/blind/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter01/blind/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter01/blind/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter01/blind/</guid>
       <description>这里介绍一下常见的一些概念却很少有深入解释的
 Linux和Unix#简单来说UNIX就是没有图形界面的那种，比较老
 Linux是基于其设计思想的，因此经常会说”在Linux/Unix系统中&amp;quot;，就是说它们在理念上很多是相似的，只是实现方式有些不同

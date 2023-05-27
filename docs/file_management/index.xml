@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>文件管理 on Operating System</title>
-    <link>https://zvictorliu.github.io/myBlog/file_management/</link>
+    <link>https://zvictorliu.github.io/operating_system/file_management/</link>
     <description>Recent content in 文件管理 on Operating System</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://zvictorliu.github.io/myBlog/file_management/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language><atom:link href="https://zvictorliu.github.io/operating_system/file_management/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>文件</title>
-      <link>https://zvictorliu.github.io/myBlog/file_management/%E6%96%87%E4%BB%B6/</link>
+      <link>https://zvictorliu.github.io/operating_system/file_management/%E6%96%87%E4%BB%B6/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/file_management/%E6%96%87%E4%BB%B6/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/file_management/%E6%96%87%E4%BB%B6/</guid>
       <description>文件#要明确文件不只是数据项（虽然其它信息本质也是数据）
 文件除了数据，还会记录与文件相关的信息，叫做文件元数据，其实就是文件属性的意思
 包括名称、类型、位置、大小、创建时间等信息
@@ -44,10 +44,10 @@ FAT占内存，所以将该文件所对应盘块编号放在一起，目录查�
     
     <item>
       <title>文件系统</title>
-      <link>https://zvictorliu.github.io/myBlog/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</link>
+      <link>https://zvictorliu.github.io/operating_system/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</guid>
       <description>文件系统#应用程序通过文件系统和磁盘交互
 具有层次结构：
 说来就是操作系统了？
@@ -71,10 +71,10 @@ MBR: 主引导记录，引导计算机，BIOS读入MBR并执行，确定活动�
     
     <item>
       <title>目录</title>
-      <link>https://zvictorliu.github.io/myBlog/file_management/%E7%9B%AE%E5%BD%95/</link>
+      <link>https://zvictorliu.github.io/operating_system/file_management/%E7%9B%AE%E5%BD%95/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/file_management/%E7%9B%AE%E5%BD%95/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/file_management/%E7%9B%AE%E5%BD%95/</guid>
       <description>目录#FCB的有序集合为文件目录，一个FCB就是一个文件目录项
 （说是这么说，之前好像说不是整个FCB 🤔 索引节点是一种FCB改进
 目录提供 文件名和文件的映射，按名存取

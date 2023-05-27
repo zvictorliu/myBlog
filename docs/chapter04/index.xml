@@ -2,25 +2,25 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>调度 on Operating System</title>
-    <link>https://zvictorliu.github.io/myBlog/chapter04/</link>
+    <link>https://zvictorliu.github.io/operating_system/chapter04/</link>
     <description>Recent content in 调度 on Operating System</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://zvictorliu.github.io/myBlog/chapter04/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language><atom:link href="https://zvictorliu.github.io/operating_system/chapter04/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>几种调度算法</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter04/schedule_alg/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter04/schedule_alg/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter04/schedule_alg/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter04/schedule_alg/</guid>
       <description>先到先得#时间轮转#多级反馈#</description>
     </item>
     
     <item>
       <title>并发和互斥</title>
-      <link>https://zvictorliu.github.io/myBlog/chapter04/signal/</link>
+      <link>https://zvictorliu.github.io/operating_system/chapter04/signal/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/myBlog/chapter04/signal/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/chapter04/signal/</guid>
       <description>何为并发？
 何为互斥？</description>
     </item>
