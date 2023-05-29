@@ -3,9 +3,13 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="输入输出管理#输入输出管理
-IO管理基础 设备是什么，控制方式是什么，软件层次，应用程序接口 设备独立软件 设备上的软件 外存管理 感觉都还是比较具体的内容
-#">
+<meta name="description" content="输入输出管理#对于IO设备，如何进行控制，接口如何设计以便于交互
+对于设备应该如何分配给多个进程
+对于多个磁盘读写请求应该如何进行调度处理
+研究的还是设备这一块
+文件管理是文件在磁盘上的分配
+内存管理是进程如何分配到内存中
+IO管理则比较杂，类似的部分则是IO设备如何分配、磁盘访问请求的调度">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="输入输出管理" />
 <meta property="og:description" content="" />
@@ -74,10 +78,11 @@ https://github.com/alex-shpak/hugo-book
 <li><a href="/operating_system/process/thread/">线程</a></li>
 </ul>
 </li>
-<li><a href="/operating_system/chapter07/">内存分配</a>
+<li><a href="/operating_system/memory_management/">内存分配</a>
 <ul>
-<li><a href="/operating_system/chapter07/pre/">基本原理和要求</a></li>
-<li><a href="/operating_system/chapter07/virtual_memory/">虚拟内存</a></li>
+<li><a href="/operating_system/memory_management/pre/">前置内容</a></li>
+<li><a href="/operating_system/memory_management/basic/">基本管理方式</a></li>
+<li><a href="/operating_system/memory_management/virtual_memory/">虚拟内存</a></li>
 </ul>
 </li>
 <li><a href="/operating_system/file_management/">文件管理</a>
@@ -139,15 +144,7 @@ https://github.com/alex-shpak/hugo-book
   <aside class="hidden clearfix">
     
   
-<nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#heading"></a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
+<nav id="TableOfContents"></nav>
 
 
 
@@ -162,25 +159,13 @@ https://github.com/alex-shpak/hugo-book
   输入输出管理
   <a class="anchor" href="#%e8%be%93%e5%85%a5%e8%be%93%e5%87%ba%e7%ae%a1%e7%90%86">#</a>
 </h1>
-<p>输入输出管理</p>
-<ul>
-<li>IO管理基础
-<ul>
-<li>设备是什么，控制方式是什么，软件层次，应用程序接口</li>
-</ul>
-</li>
-<li>设备独立软件
-<ul>
-<li>设备上的软件</li>
-</ul>
-</li>
-<li>外存管理</li>
-</ul>
-<p>感觉都还是比较具体的内容</p>
-<h3 id="heading">
-  
-  <a class="anchor" href="#heading">#</a>
-</h3>
+<p>对于IO设备，如何进行控制，接口如何设计以便于交互</p>
+<p>对于设备应该如何分配给多个进程</p>
+<p>对于多个磁盘读写请求应该如何进行调度处理</p>
+<p>研究的还是设备这一块</p>
+<p>文件管理是文件在磁盘上的分配</p>
+<p>内存管理是进程如何分配到内存中</p>
+<p>IO管理则比较杂，类似的部分则是IO设备如何分配、磁盘访问请求的调度</p>
 </article>
  
       
@@ -220,15 +205,7 @@ https://github.com/alex-shpak/hugo-book
       <div class="book-toc-content">
         
   
-<nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#heading"></a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
+<nav id="TableOfContents"></nav>
 
 
  

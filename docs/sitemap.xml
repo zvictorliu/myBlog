@@ -23,6 +23,8 @@
     <loc>https://zvictorliu.github.io/operating_system/</loc>
     <lastmod>2023-04-19T21:49:43+08:00</lastmod>
   </url><url>
+    <loc>https://zvictorliu.github.io/operating_system/memory_management/basic/</loc>
+  </url><url>
     <loc>https://zvictorliu.github.io/operating_system/menu/</loc>
   </url><url>
     <loc>https://zvictorliu.github.io/operating_system/process/%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/</loc>
@@ -35,11 +37,9 @@
   </url><url>
     <loc>https://zvictorliu.github.io/operating_system/chapter05/syn/</loc>
   </url><url>
-    <loc>https://zvictorliu.github.io/operating_system/chapter07/</loc>
+    <loc>https://zvictorliu.github.io/operating_system/memory_management/</loc>
   </url><url>
-    <loc>https://zvictorliu.github.io/operating_system/chapter07/basic_page/</loc>
-  </url><url>
-    <loc>https://zvictorliu.github.io/operating_system/chapter07/pre/</loc>
+    <loc>https://zvictorliu.github.io/operating_system/memory_management/pre/</loc>
   </url><url>
     <loc>https://zvictorliu.github.io/operating_system/chapter06/</loc>
   </url><url>
@@ -59,7 +59,7 @@
   </url><url>
     <loc>https://zvictorliu.github.io/operating_system/chapter06/pthreads/</loc>
   </url><url>
-    <loc>https://zvictorliu.github.io/operating_system/chapter07/virtual_memory/</loc>
+    <loc>https://zvictorliu.github.io/operating_system/memory_management/virtual_memory/</loc>
   </url><url>
     <loc>https://zvictorliu.github.io/operating_system/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/</loc>
   </url><url>
@@ -76,7 +76,5 @@
     <loc>https://zvictorliu.github.io/operating_system/process/ipc-csapp/</loc>
   </url><url>
     <loc>https://zvictorliu.github.io/operating_system/process/ipc/</loc>
-  </url><url>
-    <loc>https://zvictorliu.github.io/operating_system/chapter07/continue/</loc>
   </url>
 </urlset>

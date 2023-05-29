@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="基本管理方式#这种分配方式是将用户需要的内存空间全部分配给用户，要多少有多少，与之对应后面有不是全部分配的管理方式
+分配给用户的空间有连续和非连续的区别，分成三种：
+1 连续分配#1.1 单一连续#这个就是很基础很早期的，只能单一程序的时候，除了低地址的操作系统区，用户区全给一个程序，是一个不是多个
+1.2 固定分区#在单一的基础上，把用户区分成几个段，每段给一个程序
+然后要考虑的问题是：
+怎么分？是均分还是不均分，对应的问题：引出内部碎片概念
+怎么排？设置了一个叫分区说明表的记录册
+1.3 动态分区#这里王道有说这个规划过程：刚开始一个个接着装，当放不下时，就要把前面空闲的进程给替换掉
+这里有外部碎片的概念：替换掉前面之后，分区和分区之间就可能有一段空白了（这里的分区就是程序所需的大小，这段空白在分区外面所以叫外部，而前面是在固定分区内放一个不那么大的程序，是在分区内部）
+2 基本分页式#2.1 基本概念#将内存和进程均分块，进程中叫页、页面、Page，内存中叫页框、页帧、Page Frame
+逻辑地址由页号&#43;页内偏移量组成，一般是高位存页号，则共可以表示$2^{20}$个页，低12位为偏移地址，即一页有$2^{12}$个单元，通常是字节为单位，所以是4KB，不过这也不一定
+系统为每个进程建立一张页表，上面是逻辑地址到物理地址的转换，这个页表也是整个存在内存中以查找，先找到页表再去找相应的页框中存的页
+一个页表项是 页号&#43;块号，也就是说页号是页的编号，块号是页框的编号
+2.2 地址变换#前面已经说了，寻址方式就是
+首先根据逻辑地址中的页号($P = A / L$)，在页表中找对应的块号，那么怎么找到页表呢？有一个专门的页表寄存器，记录了页表的起始地址以及页表长度，后者可以用来检查是否越界
+起始地址with页号就足够在内存中找到页表中的那一项了，从而得到块号
+块号with偏移量能够计算出物理地址：$E = b*L &#43; W, \quad W = A % L$，这样的前提是连续的
+所以有两次查找内存的过程：找页表项和找页框
+为了提高速度，可以设置一个高速缓冲存储器：快表，在其中找页表项比访问内存要快得多，没找到再去在内存中找
+因为页表也要存在连续的内存中，就比较占空间，于是设置多级页表，顶级页表只有一个页面，根据一级页号找到顶级页表，从中根据指引利用二级页号再找到块号
+3 基本分段式#分段式可以不需要段与段之间连续
+段表存的就不是 块号而是基地址
+注意分页式计算块的物理地址并没有基地址
+4 段页式#段号找到页表的基地址，跟二级有点类似">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
+<meta property="og:description" content="基本管理方式#这种分配方式是将用户需要的内存空间全部分配给用户，要多少有多少，与之对应后面有不是全部分配的管理方式
+分配给用户的空间有连续和非连续的区别，分成三种：
+1 连续分配#1.1 单一连续#这个就是很基础很早期的，只能单一程序的时候，除了低地址的操作系统区，用户区全给一个程序，是一个不是多个
+1.2 固定分区#在单一的基础上，把用户区分成几个段，每段给一个程序
+然后要考虑的问题是：
+怎么分？是均分还是不均分，对应的问题：引出内部碎片概念
+怎么排？设置了一个叫分区说明表的记录册
+1.3 动态分区#这里王道有说这个规划过程：刚开始一个个接着装，当放不下时，就要把前面空闲的进程给替换掉
+这里有外部碎片的概念：替换掉前面之后，分区和分区之间就可能有一段空白了（这里的分区就是程序所需的大小，这段空白在分区外面所以叫外部，而前面是在固定分区内放一个不那么大的程序，是在分区内部）
+2 基本分页式#2.1 基本概念#将内存和进程均分块，进程中叫页、页面、Page，内存中叫页框、页帧、Page Frame
+逻辑地址由页号&#43;页内偏移量组成，一般是高位存页号，则共可以表示$2^{20}$个页，低12位为偏移地址，即一页有$2^{12}$个单元，通常是字节为单位，所以是4KB，不过这也不一定
+系统为每个进程建立一张页表，上面是逻辑地址到物理地址的转换，这个页表也是整个存在内存中以查找，先找到页表再去找相应的页框中存的页
+一个页表项是 页号&#43;块号，也就是说页号是页的编号，块号是页框的编号
+2.2 地址变换#前面已经说了，寻址方式就是
+首先根据逻辑地址中的页号($P = A / L$)，在页表中找对应的块号，那么怎么找到页表呢？有一个专门的页表寄存器，记录了页表的起始地址以及页表长度，后者可以用来检查是否越界
+起始地址with页号就足够在内存中找到页表中的那一项了，从而得到块号
+块号with偏移量能够计算出物理地址：$E = b*L &#43; W, \quad W = A % L$，这样的前提是连续的
+所以有两次查找内存的过程：找页表项和找页框
+为了提高速度，可以设置一个高速缓冲存储器：快表，在其中找页表项比访问内存要快得多，没找到再去在内存中找
+因为页表也要存在连续的内存中，就比较占空间，于是设置多级页表，顶级页表只有一个页面，根据一级页号找到顶级页表，从中根据指引利用二级页号再找到块号
+3 基本分段式#分段式可以不需要段与段之间连续
+段表存的就不是 块号而是基地址
+注意分页式计算块的物理地址并没有基地址
+4 段页式#段号找到页表的基地址，跟二级有点类似" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://zvictorliu.github.io/operating_system/memory_management/basic/" /><meta property="article:section" content="memory_management" />
+
+
+<title>Basic | Operating System</title>
+<link rel="manifest" href="/operating_system/manifest.json">
+<link rel="icon" href="/operating_system/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/operating_system/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/operating_system/flexsearch.min.js"></script>
+  <script defer src="/operating_system/en.search.min.5cdf029a976e16e632835545e3bdbb6bfedc57637615eecb506c7c4747236ab2.js" integrity="sha256-XN8CmpduFuYyg1VF4727a/7cV2N2Fe7LUGx8R0cjarI=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/operating_system/"><span>Operating System</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li><a href="/operating_system/chapter01/">绪论</a>
+<ul>
+<li><a href="/operating_system/chapter01/history-of-os-development/">操作系统历史发展</a></li>
+<li><a href="/operating_system/chapter01/pre/">前置知识</a></li>
+<li><a href="/operating_system/chapter01/blind/">扫盲</a></li>
+</ul>
+</li>
+<li><a href="/operating_system/process/">进程</a>
+<ul>
+<li><a href="/operating_system/process/process_concept/">进程概念</a></li>
+<li><a href="/operating_system/process/ipc/">进程通信</a></li>
+<li><a href="/operating_system/process/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/">进程管理API</a></li>
+<li><a href="/operating_system/process/schedule/">进程调度</a></li>
+<li><a href="/operating_system/process/%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/">同步互斥</a></li>
+<li><a href="/operating_system/process/%E6%AD%BB%E9%94%81/">死锁</a></li>
+<li><a href="/operating_system/process/thread/">线程</a></li>
+</ul>
+</li>
+<li><a href="/operating_system/memory_management/">内存分配</a>
+<ul>
+<li><a href="/operating_system/memory_management/pre/">前置内容</a></li>
+<li><a href="/operating_system/memory_management/basic/"class=active>基本管理方式</a></li>
+<li><a href="/operating_system/memory_management/virtual_memory/">虚拟内存</a></li>
+</ul>
+</li>
+<li><a href="/operating_system/file_management/">文件管理</a>
+<ul>
+<li><a href="/operating_system/file_management/%E6%96%87%E4%BB%B6/">文件</a></li>
+<li><a href="/operating_system/file_management/%E7%9B%AE%E5%BD%95/">目录</a></li>
+<li><a href="/operating_system/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">文件系统</a></li>
+</ul>
+</li>
+<li><a href="/operating_system/io_management/">IO管理</a>
+<ul>
+<li><a href="/operating_system/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/">IO管理基础</a></li>
+<li><a href="/operating_system/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/">设备独立性软件</a></li>
+<li><a href="/operating_system/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/">磁盘和固态硬盘</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/operating_system/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Basic</strong>
+
+  <label for="toc-control">
+    
+    <img src="/operating_system/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-连续分配">1 连续分配</a>
+      <ul>
+        <li><a href="#11-单一连续">1.1 单一连续</a></li>
+        <li><a href="#12-固定分区">1.2 固定分区</a></li>
+        <li><a href="#13-动态分区">1.3 动态分区</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-基本分页式">2 基本分页式</a>
+      <ul>
+        <li><a href="#21-基本概念">2.1 基本概念</a></li>
+        <li><a href="#22-地址变换">2.2 地址变换</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-基本分段式">3 基本分段式</a></li>
+    <li><a href="#4-段页式">4 段页式</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="基本管理方式">
+  基本管理方式
+  <a class="anchor" href="#%e5%9f%ba%e6%9c%ac%e7%ae%a1%e7%90%86%e6%96%b9%e5%bc%8f">#</a>
+</h1>
+<p>这种分配方式是将用户需要的内存空间全部分配给用户，要多少有多少，与之对应后面有不是全部分配的管理方式</p>
+<p>分配给用户的空间有连续和非连续的区别，分成三种：</p>
+<h2 id="1-连续分配">
+  1 连续分配
+  <a class="anchor" href="#1-%e8%bf%9e%e7%bb%ad%e5%88%86%e9%85%8d">#</a>
+</h2>
+<h3 id="11-单一连续">
+  1.1 单一连续
+  <a class="anchor" href="#11-%e5%8d%95%e4%b8%80%e8%bf%9e%e7%bb%ad">#</a>
+</h3>
+<p>这个就是很基础很早期的，只能单一程序的时候，除了低地址的操作系统区，用户区全给一个程序，是一个不是多个</p>
+<h3 id="12-固定分区">
+  1.2 固定分区
+  <a class="anchor" href="#12-%e5%9b%ba%e5%ae%9a%e5%88%86%e5%8c%ba">#</a>
+</h3>
+<p>在单一的基础上，把用户区分成几个段，每段给一个程序</p>
+<p>然后要考虑的问题是：</p>
+<p>怎么分？是均分还是不均分，对应的问题：引出<em>内部碎片</em>概念</p>
+<p>怎么排？设置了一个叫分区说明表的记录册</p>
+<h3 id="13-动态分区">
+  1.3 动态分区
+  <a class="anchor" href="#13-%e5%8a%a8%e6%80%81%e5%88%86%e5%8c%ba">#</a>
+</h3>
+<p>这里王道有说这个规划过程：刚开始一个个接着装，当放不下时，就要把前面空闲的进程给替换掉</p>
+<p>这里有<em>外部碎片</em>的概念：替换掉前面之后，分区和分区之间就可能有一段空白了（这里的分区就是程序所需的大小，这段空白在分区外面所以叫外部，而前面是在固定分区内放一个不那么大的程序，是在分区内部）</p>
+<h2 id="2-基本分页式">
+  2 基本分页式
+  <a class="anchor" href="#2-%e5%9f%ba%e6%9c%ac%e5%88%86%e9%a1%b5%e5%bc%8f">#</a>
+</h2>
+<h3 id="21-基本概念">
+  2.1 基本概念
+  <a class="anchor" href="#21-%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5">#</a>
+</h3>
+<p>将内存和进程均分块，进程中叫<code>页、页面、Page</code>，内存中叫<code>页框、页帧、Page Frame</code></p>
+<p>逻辑地址由页号+页内偏移量组成，一般是高位存页号，则共可以表示$2^{20}$个页，低12位为偏移地址，即一页有$2^{12}$个单元，通常是字节为单位，所以是4KB，不过这也不一定</p>
+<p>系统为每个进程建立一张<code>页表</code>，上面是逻辑地址到物理地址的转换，这个页表也是整个存在内存中以查找，先找到页表再去找相应的页框中存的页</p>
+<p>一个页表项是 页号+块号，也就是说页号是页的编号，块号是页框的编号</p>
+<h3 id="22-地址变换">
+  2.2 地址变换
+  <a class="anchor" href="#22-%e5%9c%b0%e5%9d%80%e5%8f%98%e6%8d%a2">#</a>
+</h3>
+<p>前面已经说了，寻址方式就是</p>
+<p>首先根据逻辑地址中的页号($P = A / L$)，在页表中找对应的块号，那么怎么找到页表呢？有一个专门的页表寄存器，记录了页表的起始地址以及页表长度，后者可以用来检查是否越界</p>
+<p>起始地址with页号就足够在内存中找到页表中的那一项了，从而得到块号</p>
+<p>块号with偏移量能够计算出物理地址：$E = b*L + W, \quad W = A % L$，这样的前提是<u>连续的</u></p>
+<p>所以有两次查找内存的过程：找页表项和找页框</p>
+<p>为了提高速度，可以设置一个高速缓冲存储器：<code>快表</code>，在其中找页表项比访问内存要快得多，没找到再去在内存中找</p>
+<p>因为页表也要存在连续的内存中，就比较占空间，于是设置多级页表，顶级页表只有一个页面，根据一级页号找到顶级页表，从中根据指引利用二级页号再找到块号</p>
+<h2 id="3-基本分段式">
+  3 基本分段式
+  <a class="anchor" href="#3-%e5%9f%ba%e6%9c%ac%e5%88%86%e6%ae%b5%e5%bc%8f">#</a>
+</h2>
+<p>分段式可以不需要段与段之间连续</p>
+<p>段表存的就不是 块号而是基地址</p>
+<p>注意分页式计算块的物理地址并没有基地址</p>
+<h2 id="4-段页式">
+  4 段页式
+  <a class="anchor" href="#4-%e6%ae%b5%e9%a1%b5%e5%bc%8f">#</a>
+</h2>
+<p>段号找到页表的基地址，跟二级有点类似</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-连续分配">1 连续分配</a>
+      <ul>
+        <li><a href="#11-单一连续">1.1 单一连续</a></li>
+        <li><a href="#12-固定分区">1.2 固定分区</a></li>
+        <li><a href="#13-动态分区">1.3 动态分区</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-基本分页式">2 基本分页式</a>
+      <ul>
+        <li><a href="#21-基本概念">2.1 基本概念</a></li>
+        <li><a href="#22-地址变换">2.2 地址变换</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-基本分段式">3 基本分段式</a></li>
+    <li><a href="#4-段页式">4 段页式</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

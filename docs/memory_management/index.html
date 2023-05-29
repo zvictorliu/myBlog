@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="内存管理#此为新的篇章了
+主要研究的就是把进程放到内存中的分配方式
+一个进程应该要放在主存当中执行，放入的情况，叫做内存映像，操作系统需要为进程分配内存，并能够不断更新和回收，这叫内存空间分配和回收 内存的低地址区域是给操作系统的 对于程序自身来说使用的是逻辑地址（都从0开始），将其放入时需要进行转换为实际的物理地址，所以这里面有地址转换 此外，还需要保护内存，即进程运行时对内存的访问应该是有检查的 还有，内存也可以用来共享 对于内存的分配，有好几种分配方式的选择，每一种的具体分配包括进程各部分安排在哪个位置、程序运行时该如何找到内存中正确的位置、什么时候回收等等，并且有对应的地址变换和检查的工作
+在此之上，为了实现虚拟存储功能，又设计了一种请求分配方法，即并不是把整个进程全部调入内存，二是按需取，但是对于用户来说却感受不到，就感觉还是全部放了一样，内存中能放的进程变多了，在逻辑上的容量扩大了，这就是虚拟存储
+那么，对此请求分配的话如何调入需要的，如何回收不用的，这些就是研究的问题
+这章讨论的都还是在内存空间寻址的问题，并不涉及从磁盘中读取文件，下一张才是">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="内存管理" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://zvictorliu.github.io/operating_system/memory_management/" />
+<title>内存管理 | Operating System</title>
+<link rel="manifest" href="/operating_system/manifest.json">
+<link rel="icon" href="/operating_system/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/operating_system/book.min.c58292d36b18b675680ab9baea2029204537b839ea72f258746ec0f32ce8d6c8.css" integrity="sha256-xYKS02sYtnVoCrm66iApIEU3uDnqcvJYdG7A8yzo1sg=" crossorigin="anonymous">
+  <script defer src="/operating_system/flexsearch.min.js"></script>
+  <script defer src="/operating_system/en.search.min.5cdf029a976e16e632835545e3bdbb6bfedc57637615eecb506c7c4747236ab2.js" integrity="sha256-XN8CmpduFuYyg1VF4727a/7cV2N2Fe7LUGx8R0cjarI=" crossorigin="anonymous"></script>
+<link rel="alternate" type="application/rss+xml" href="https://zvictorliu.github.io/operating_system/memory_management/index.xml" title="Operating System" />
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/operating_system/"><span>Operating System</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li><a href="/operating_system/chapter01/">绪论</a>
+<ul>
+<li><a href="/operating_system/chapter01/history-of-os-development/">操作系统历史发展</a></li>
+<li><a href="/operating_system/chapter01/pre/">前置知识</a></li>
+<li><a href="/operating_system/chapter01/blind/">扫盲</a></li>
+</ul>
+</li>
+<li><a href="/operating_system/process/">进程</a>
+<ul>
+<li><a href="/operating_system/process/process_concept/">进程概念</a></li>
+<li><a href="/operating_system/process/ipc/">进程通信</a></li>
+<li><a href="/operating_system/process/%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86/">进程管理API</a></li>
+<li><a href="/operating_system/process/schedule/">进程调度</a></li>
+<li><a href="/operating_system/process/%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/">同步互斥</a></li>
+<li><a href="/operating_system/process/%E6%AD%BB%E9%94%81/">死锁</a></li>
+<li><a href="/operating_system/process/thread/">线程</a></li>
+</ul>
+</li>
+<li><a href="/operating_system/memory_management/"class=active>内存分配</a>
+<ul>
+<li><a href="/operating_system/memory_management/pre/">前置内容</a></li>
+<li><a href="/operating_system/memory_management/basic/">基本管理方式</a></li>
+<li><a href="/operating_system/memory_management/virtual_memory/">虚拟内存</a></li>
+</ul>
+</li>
+<li><a href="/operating_system/file_management/">文件管理</a>
+<ul>
+<li><a href="/operating_system/file_management/%E6%96%87%E4%BB%B6/">文件</a></li>
+<li><a href="/operating_system/file_management/%E7%9B%AE%E5%BD%95/">目录</a></li>
+<li><a href="/operating_system/file_management/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">文件系统</a></li>
+</ul>
+</li>
+<li><a href="/operating_system/io_management/">IO管理</a>
+<ul>
+<li><a href="/operating_system/io_management/io%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80/">IO管理基础</a></li>
+<li><a href="/operating_system/io_management/%E8%AE%BE%E5%A4%87%E7%8B%AC%E7%AB%8B%E6%80%A7%E8%BD%AF%E4%BB%B6/">设备独立性软件</a></li>
+<li><a href="/operating_system/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/">磁盘和固态硬盘</a></li>
+</ul>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/operating_system/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>内存管理</strong>
+
+  <label for="toc-control">
+    
+    <img src="/operating_system/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents"></nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="内存管理">
+  内存管理
+  <a class="anchor" href="#%e5%86%85%e5%ad%98%e7%ae%a1%e7%90%86">#</a>
+</h1>
+<p>此为新的篇章了</p>
+<p>主要研究的就是把<u>进程放到内存</u>中的分配方式</p>
+<ul>
+<li>一个进程应该要放在主存当中执行，放入的情况，叫做<em>内存映像</em>，操作系统需要为进程分配内存，并能够不断更新和回收，这叫内存空间<code>分配和回收</code></li>
+<li>内存的低地址区域是给操作系统的</li>
+<li>对于程序自身来说使用的是逻辑地址（都从0开始），将其放入时需要进行转换为实际的物理地址，所以这里面有<code>地址转换</code></li>
+<li>此外，还需要<code>保护内存</code>，即进程运行时对内存的访问应该是有检查的</li>
+<li>还有，内存也可以用来共享</li>
+</ul>
+<p>对于内存的分配，有好几种分配方式的选择，每一种的具体分配包括进程各部分安排在哪个位置、程序运行时该如何找到内存中正确的位置、什么时候回收等等，并且有对应的地址变换和检查的工作</p>
+<p>在此之上，为了实现<code>虚拟存储</code>功能，又设计了一种请求分配方法，即并不是把整个进程全部调入内存，二是按需取，但是对于用户来说却感受不到，就感觉还是全部放了一样，内存中能放的进程变多了，在逻辑上的容量扩大了，这就是虚拟存储</p>
+<p>那么，对此请求分配的话如何调入需要的，如何回收不用的，这些就是研究的问题</p>
+<p>这章讨论的都还是在内存空间寻址的问题，并不涉及从磁盘中读取文件，下一张才是</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents"></nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
