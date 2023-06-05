@@ -56,6 +56,8 @@ title: 虚拟内存
 
   <img src="https://cdn.jsdelivr.net/gh/zvictorliu/typoraPics@main/img/image-20230515201414793.png" alt="image-20230515201414793" style="zoom:60%;" />
 
+- 它是可以在一条指令执行期间产生中断的，是一种内部异常
+
 - 一条指令可能有多次缺页中断
 
 ### 1.3 地址变换

@@ -2,10 +2,11 @@
 headless = true
 +++
 
-- [绪论]({{< relref "/chapter01/" >}})
-  - [操作系统历史发展]({{< relref "/chapter01/history-of-os-development" >}})
-  - [前置知识]({{< relref "/chapter01/pre" >}})
-  - [扫盲]({{< relref "/chapter01/blind" >}})
+- [前置基础]({{< relref "/pre/" >}})
+  - [操作系统历史发展]({{< relref "/pre/history-of-os-development" >}})
+  - [前置知识]({{< relref "/pre/pre" >}})
+  - [扫盲]({{< relref "/pre/blind" >}})
+  - [用户态与核心态]({{< relref "/pre/用户态与核心态" >}})
 - [进程]({{< relref "/process" >}})
   - [进程概念]({{< relref "/process/process_concept" >}})
   - [进程通信]({{< relref "/process/ipc" >}})
