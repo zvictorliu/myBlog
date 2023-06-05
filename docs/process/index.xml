@@ -12,8 +12,26 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://zvictorliu.github.io/operating_system/process/%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/</guid>
-      <description>同步与互斥#信号量#P操作：阻塞式查询
-V操作：释放</description>
+      <description>同步与互斥#再次强调：
+并发：一个时间段内多个任务
+同步：一个任务一定要先于某个任务发生 互斥：不能同时访问某些资源 并行：同一时刻多个任务
+临界资源：一次只能一个进程访问的资源，包括设备、变量等等
+为了正确访问临界资源，将代码分区，访问临界资源的那部分为临界区，只有这部分是互斥执行的
+一个理想的临界区互斥机制应该是：
+空闲让进 忙则等待 有限等待：不能等待过错 让权等待：等待不能占用CPU，即最好不要忙等待 1 实现临界区互斥的软硬件方法#这个其实了解一下就够了，不是很重点
+1.1 软件#通过设置标志，在进入临界区时检查标志，满足条件再往下执行
+单标志法#一个flag
+一个标志看似足够，实则问题很大
+只能适合交替运行，一旦另一个不再进入，自己就无法再次进入了 双标志法#flags = [flag_i, flag_j] 先检查：检查放在修改前，有可能在条件满足进入到修改自己已进入的空挡另一个进程也进入了，即检查和修改不能同时执行
+后检查：检查放在修改后，这样又有可能两个几乎同时修改而使得都进入不了
+Peterson&amp;rsquo;s Algorithm#在双标志后检查法的基础上再设置一个变量turn
+flag[i] = true; turn = j; while (flag[j] &amp;amp;&amp;amp; turn == j); 这样就不会卡死了
+软件方法无论哪种都是忙等待，仍然不够好
+1.2 硬件#又叫低级方法、元方法
+中断屏蔽：如果不能中断就不能进程切换，但这样就不能交替执行了，我们只是不希望两个同时在临界区而已 硬件指令：有一个名叫TestAndSet的原子指令可供调用，感觉还是忙等待；Swap指令 2 互斥锁 mutex#利用原子语句检查和修改
+aquire()和release()
+仍然是忙等待
+3 信号量 Semaphore#也是有两个原语wait(S)和signal(S)，又可以简记为：P操作和V操作</description>
     </item>
     
     <item>
@@ -26,7 +44,7 @@ V操作：释放</description>
 死锁的必要条件
 互斥条件：某一资源只能互斥访问 不剥夺条件（非抢占）：只能主动释放 请求并保持条件：进程已经占了一个资源，并请求另一个被占的资源，此时进程被阻塞但是并没有释放资源 循环等待条件：循环等待链关系，占用的资源总被环上下一个所请求，并且只能是自己释放才能满足它，如果还有别的进程释放了、又或者不只一台设备，也不会构成死锁 ​	所以，对死锁的策略：
 预防：限制其出现必要条件中的几个 避免（其实也是一种预防了） 检测并解除 1 预防#破坏四个必要条件之一
-互斥：不太可行，因为有些资源是无法共享的，只能互斥 非抢占：实现起来比较麻烦 请求并保持：一次申请完并占用，之后不再请求，比较浪费 循环等待：按顺序分配 2 避免#并不是事先预防，是动态检测资源分配的状态
+互斥：不太可行，因为有些资源是无法共享的，只能互斥 非抢占：即允许被其它进程抢走资源，但实现起来比较麻烦 请求并保持：一次申请完并占用，之后不再请求，比较浪费 循环等待：按顺序分配 2 避免#并不是事先预防，而是在动态分配的过程中防止进入不安全状态（疑似可能死锁）
 2.1 安全检查#允许进程随时申请，但是系统在分配之前会先进行计算安全性，不安全就先让进程等待
 需要找到一种安全序列
 例题注意不安全不代表一定会死锁，只是有可能死锁
@@ -78,7 +96,7 @@ V操作：释放</description>
 进程控制块 (Process Control Block, PCB) ：多少感觉像哈希值一样，记录了进程的信息
 PCB是进程存在的唯一标志，创建了PCB，进程才算是”活的“
 在linux中，它就是一个C语言的结构体：
-linux PCBpid t pid; /* process identifier */ long state; /* state of the process */ unsigned int time slice /* scheduling information */ struct task_struct *parent; /* this process’s parent */ struct list_head children; /* this process’s children */ struct files_struct *files; /* list of open files */ struct mm_struct *mm; /* address space of this pro */ PCB具体记录了哪些信息这个太多了，主要是这些： PCB通常包含的内容这些信息会让每个进程自己认为自己独立使用CPU，看上去用于整个内存空间</description>
+linux PCBpid t pid; /* process identifier */ long state; /* state of the process */ unsigned int time slice /* scheduling information */ struct task_struct *parent; /* this process’s parent */ struct list_head children; /* this process’s children */ struct files_struct *files; /* list of open files */ struct mm_struct *mm; /* address space of this pro */ PCB具体记录了哪些信息这个太多了，主要是这些： PCB通常包含的内容其中有处理机相关信息，也就是这个程序运行的上下文，它是被保存在PCB中的，可见PCB的意义</description>
     </item>
     
     <item>

@@ -3,12 +3,48 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="同步与互斥#信号量#P操作：阻塞式查询
-V操作：释放">
+<meta name="description" content="同步与互斥#再次强调：
+并发：一个时间段内多个任务
+同步：一个任务一定要先于某个任务发生 互斥：不能同时访问某些资源 并行：同一时刻多个任务
+临界资源：一次只能一个进程访问的资源，包括设备、变量等等
+为了正确访问临界资源，将代码分区，访问临界资源的那部分为临界区，只有这部分是互斥执行的
+一个理想的临界区互斥机制应该是：
+空闲让进 忙则等待 有限等待：不能等待过错 让权等待：等待不能占用CPU，即最好不要忙等待 1 实现临界区互斥的软硬件方法#这个其实了解一下就够了，不是很重点
+1.1 软件#通过设置标志，在进入临界区时检查标志，满足条件再往下执行
+单标志法#一个flag
+一个标志看似足够，实则问题很大
+只能适合交替运行，一旦另一个不再进入，自己就无法再次进入了 双标志法#flags = [flag_i, flag_j] 先检查：检查放在修改前，有可能在条件满足进入到修改自己已进入的空挡另一个进程也进入了，即检查和修改不能同时执行
+后检查：检查放在修改后，这样又有可能两个几乎同时修改而使得都进入不了
+Peterson&rsquo;s Algorithm#在双标志后检查法的基础上再设置一个变量turn
+flag[i] = true; turn = j; while (flag[j] &amp;&amp; turn == j); 这样就不会卡死了
+软件方法无论哪种都是忙等待，仍然不够好
+1.2 硬件#又叫低级方法、元方法
+中断屏蔽：如果不能中断就不能进程切换，但这样就不能交替执行了，我们只是不希望两个同时在临界区而已 硬件指令：有一个名叫TestAndSet的原子指令可供调用，感觉还是忙等待；Swap指令 2 互斥锁 mutex#利用原子语句检查和修改
+aquire()和release()
+仍然是忙等待
+3 信号量 Semaphore#也是有两个原语wait(S)和signal(S)，又可以简记为：P操作和V操作">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="" />
-<meta property="og:description" content="同步与互斥#信号量#P操作：阻塞式查询
-V操作：释放" />
+<meta property="og:description" content="同步与互斥#再次强调：
+并发：一个时间段内多个任务
+同步：一个任务一定要先于某个任务发生 互斥：不能同时访问某些资源 并行：同一时刻多个任务
+临界资源：一次只能一个进程访问的资源，包括设备、变量等等
+为了正确访问临界资源，将代码分区，访问临界资源的那部分为临界区，只有这部分是互斥执行的
+一个理想的临界区互斥机制应该是：
+空闲让进 忙则等待 有限等待：不能等待过错 让权等待：等待不能占用CPU，即最好不要忙等待 1 实现临界区互斥的软硬件方法#这个其实了解一下就够了，不是很重点
+1.1 软件#通过设置标志，在进入临界区时检查标志，满足条件再往下执行
+单标志法#一个flag
+一个标志看似足够，实则问题很大
+只能适合交替运行，一旦另一个不再进入，自己就无法再次进入了 双标志法#flags = [flag_i, flag_j] 先检查：检查放在修改前，有可能在条件满足进入到修改自己已进入的空挡另一个进程也进入了，即检查和修改不能同时执行
+后检查：检查放在修改后，这样又有可能两个几乎同时修改而使得都进入不了
+Peterson&rsquo;s Algorithm#在双标志后检查法的基础上再设置一个变量turn
+flag[i] = true; turn = j; while (flag[j] &amp;&amp; turn == j); 这样就不会卡死了
+软件方法无论哪种都是忙等待，仍然不够好
+1.2 硬件#又叫低级方法、元方法
+中断屏蔽：如果不能中断就不能进程切换，但这样就不能交替执行了，我们只是不希望两个同时在临界区而已 硬件指令：有一个名叫TestAndSet的原子指令可供调用，感觉还是忙等待；Swap指令 2 互斥锁 mutex#利用原子语句检查和修改
+aquire()和release()
+仍然是忙等待
+3 信号量 Semaphore#也是有两个原语wait(S)和signal(S)，又可以简记为：P操作和V操作" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://zvictorliu.github.io/operating_system/process/%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/" /><meta property="article:section" content="process" />
 
@@ -57,11 +93,12 @@ https://github.com/alex-shpak/hugo-book
 
 
   <ul>
-<li><a href="/operating_system/chapter01/">绪论</a>
+<li><a href="/operating_system/pre/">前置基础</a>
 <ul>
-<li><a href="/operating_system/chapter01/history-of-os-development/">操作系统历史发展</a></li>
-<li><a href="/operating_system/chapter01/pre/">前置知识</a></li>
-<li><a href="/operating_system/chapter01/blind/">扫盲</a></li>
+<li><a href="/operating_system/pre/history-of-os-development/">操作系统历史发展</a></li>
+<li><a href="/operating_system/pre/pre/">前置知识</a></li>
+<li><a href="/operating_system/pre/blind/">扫盲</a></li>
+<li><a href="/operating_system/pre/%E7%94%A8%E6%88%B7%E6%80%81%E4%B8%8E%E6%A0%B8%E5%BF%83%E6%80%81/">用户态与核心态</a></li>
 </ul>
 </li>
 <li><a href="/operating_system/process/">进程</a>
@@ -143,7 +180,29 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#信号量">信号量</a></li>
+    <li><a href="#1-实现临界区互斥的软硬件方法">1 实现临界区互斥的软硬件方法</a>
+      <ul>
+        <li><a href="#11-软件">1.1 软件</a></li>
+        <li><a href="#12-硬件">1.2 硬件</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-互斥锁-mutex">2 互斥锁 mutex</a></li>
+    <li><a href="#3-信号量-semaphore">3 信号量 Semaphore</a>
+      <ul>
+        <li><a href="#31-实现同步">3.1 实现同步</a></li>
+        <li><a href="#32-实现互斥">3.2 实现互斥</a></li>
+        <li><a href="#33-实现前驱">3.3 实现前驱</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-管程方法">4 管程方法</a></li>
+    <li><a href="#5-经典同步问题">5 经典同步问题</a>
+      <ul>
+        <li><a href="#51-生产-消费模型">5.1 生产-消费模型</a></li>
+        <li><a href="#52-读者-写者模型">5.2 读者-写者模型</a></li>
+        <li><a href="#53-哲学家进餐">5.3 哲学家进餐</a></li>
+        <li><a href="#54-吸烟者问题">5.4 吸烟者问题</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
@@ -160,12 +219,140 @@ https://github.com/alex-shpak/hugo-book
   同步与互斥
   <a class="anchor" href="#%e5%90%8c%e6%ad%a5%e4%b8%8e%e4%ba%92%e6%96%a5">#</a>
 </h1>
-<h2 id="信号量">
-  信号量
-  <a class="anchor" href="#%e4%bf%a1%e5%8f%b7%e9%87%8f">#</a>
+<p>再次强调：</p>
+<blockquote class="book-hint info">
+  <ul>
+<li>
+<p>并发：一个时间段内多个任务</p>
+<ul>
+<li>同步：一个任务一定要先于某个任务发生</li>
+<li>互斥：不能同时访问某些资源</li>
+</ul>
+</li>
+<li>
+<p>并行：同一时刻多个任务</p>
+</li>
+</ul>
+
+</blockquote>
+
+<p><code>临界资源</code>：一次只能一个进程访问的资源，包括设备、变量等等</p>
+<p>为了正确访问临界资源，将代码分区，访问临界资源的那部分为临界区，只有这部分是互斥执行的</p>
+<p>一个理想的临界区互斥机制应该是：</p>
+<ul>
+<li>空闲让进</li>
+<li>忙则等待</li>
+<li>有限等待：不能等待过错</li>
+<li>让权等待：等待不能占用CPU，即最好不要忙等待</li>
+</ul>
+<h2 id="1-实现临界区互斥的软硬件方法">
+  1 实现临界区互斥的软硬件方法
+  <a class="anchor" href="#1-%e5%ae%9e%e7%8e%b0%e4%b8%b4%e7%95%8c%e5%8c%ba%e4%ba%92%e6%96%a5%e7%9a%84%e8%bd%af%e7%a1%ac%e4%bb%b6%e6%96%b9%e6%b3%95">#</a>
 </h2>
-<p>P操作：阻塞式查询</p>
-<p>V操作：释放</p>
+<p>这个其实了解一下就够了，不是很重点</p>
+<h3 id="11-软件">
+  1.1 软件
+  <a class="anchor" href="#11-%e8%bd%af%e4%bb%b6">#</a>
+</h3>
+<p>通过设置标志，在进入临界区时检查标志，满足条件再往下执行</p>
+<h4 id="单标志法">
+  单标志法
+  <a class="anchor" href="#%e5%8d%95%e6%a0%87%e5%bf%97%e6%b3%95">#</a>
+</h4>
+<p>一个<code>flag</code></p>
+<p>一个标志看似足够，实则问题很大</p>
+<ul>
+<li>只能适合交替运行，一旦另一个不再进入，自己就无法再次进入了</li>
+</ul>
+<h4 id="双标志法">
+  双标志法
+  <a class="anchor" href="#%e5%8f%8c%e6%a0%87%e5%bf%97%e6%b3%95">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>flags <span style="color:#f92672">=</span> [flag_i, flag_j]
+</span></span></code></pre></div><p>先检查：检查放在修改前，有可能在条件满足进入到修改自己已进入的空挡另一个进程也进入了，即检查和修改不能同时执行</p>
+<p>后检查：检查放在修改后，这样又有可能两个几乎同时修改而使得都进入不了</p>
+<h4 id="petersons-algorithm">
+  Peterson&rsquo;s Algorithm
+  <a class="anchor" href="#petersons-algorithm">#</a>
+</h4>
+<p>在双标志后检查法的基础上再设置一个变量turn</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span>flag[i] <span style="color:#f92672">=</span> true;
+</span></span><span style="display:flex;"><span>turn <span style="color:#f92672">=</span> j;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> (flag[j] <span style="color:#f92672">&amp;&amp;</span> turn <span style="color:#f92672">==</span> j);
+</span></span></code></pre></div><p>这样就不会卡死了</p>
+<p>软件方法无论哪种都是忙等待，仍然不够好</p>
+<h3 id="12-硬件">
+  1.2 硬件
+  <a class="anchor" href="#12-%e7%a1%ac%e4%bb%b6">#</a>
+</h3>
+<p>又叫低级方法、元方法</p>
+<ul>
+<li>中断屏蔽：如果不能中断就不能进程切换，但这样就不能交替执行了，我们只是不希望两个同时在临界区而已</li>
+<li>硬件指令：有一个名叫<code>TestAndSet</code>的原子指令可供调用，感觉还是忙等待；<code>Swap</code>指令</li>
+</ul>
+<h2 id="2-互斥锁-mutex">
+  2 互斥锁 mutex
+  <a class="anchor" href="#2-%e4%ba%92%e6%96%a5%e9%94%81-mutex">#</a>
+</h2>
+<p>利用<u>原子语句</u>检查和修改</p>
+<p><code>aquire()</code>和<code>release()</code></p>
+<p>仍然是忙等待</p>
+<h2 id="3-信号量-semaphore">
+  3 信号量 Semaphore
+  <a class="anchor" href="#3-%e4%bf%a1%e5%8f%b7%e9%87%8f-semaphore">#</a>
+</h2>
+<p>也是有两个原语<code>wait(S)</code>和<code>signal(S)</code>，又可以简记为：P操作和V操作</p>
+<p>信号量选择可以是：</p>
+<ul>
+<li>整型变量：和布尔也差不多了</li>
+<li>记录型：通过自我阻塞和对方唤醒的方法，可以实现让权等待
+<ul>
+<li>具体来说就是发现条件不成了就主动把自己给阻塞了（不会再被调度），并且是队列的方式</li>
+<li>V操作将其移出等待队列，也就算是唤醒了</li>
+</ul>
+</li>
+</ul>
+<p>P一次一定会减一，不一定阻塞，所以如果S小于0则代表当前有几个进程在等待队列中</p>
+<h3 id="31-实现同步">
+  3.1 实现同步
+  <a class="anchor" href="#31-%e5%ae%9e%e7%8e%b0%e5%90%8c%e6%ad%a5">#</a>
+</h3>
+<p>A在最后V，B先P，S初值为0，这样就是B等A</p>
+<h3 id="32-实现互斥">
+  3.2 实现互斥
+  <a class="anchor" href="#32-%e5%ae%9e%e7%8e%b0%e4%ba%92%e6%96%a5">#</a>
+</h3>
+<p>每一个进入前P，离开后V，并且S初值为1，这样就会有一个抢到的</p>
+<h3 id="33-实现前驱">
+  3.3 实现前驱
+  <a class="anchor" href="#33-%e5%ae%9e%e7%8e%b0%e5%89%8d%e9%a9%b1">#</a>
+</h3>
+<h2 id="4-管程方法">
+  4 管程方法
+  <a class="anchor" href="#4-%e7%ae%a1%e7%a8%8b%e6%96%b9%e6%b3%95">#</a>
+</h2>
+<h2 id="5-经典同步问题">
+  5 经典同步问题
+  <a class="anchor" href="#5-%e7%bb%8f%e5%85%b8%e5%90%8c%e6%ad%a5%e9%97%ae%e9%a2%98">#</a>
+</h2>
+<h3 id="51-生产-消费模型">
+  5.1 生产-消费模型
+  <a class="anchor" href="#51-%e7%94%9f%e4%ba%a7-%e6%b6%88%e8%b4%b9%e6%a8%a1%e5%9e%8b">#</a>
+</h3>
+<p>只能一个写，只能一个读</p>
+<h3 id="52-读者-写者模型">
+  5.2 读者-写者模型
+  <a class="anchor" href="#52-%e8%af%bb%e8%80%85-%e5%86%99%e8%80%85%e6%a8%a1%e5%9e%8b">#</a>
+</h3>
+<p>只能一个写，可以多个读</p>
+<h3 id="53-哲学家进餐">
+  5.3 哲学家进餐
+  <a class="anchor" href="#53-%e5%93%b2%e5%ad%a6%e5%ae%b6%e8%bf%9b%e9%a4%90">#</a>
+</h3>
+<h3 id="54-吸烟者问题">
+  5.4 吸烟者问题
+  <a class="anchor" href="#54-%e5%90%b8%e7%83%9f%e8%80%85%e9%97%ae%e9%a2%98">#</a>
+</h3>
 </article>
  
       
@@ -207,7 +394,29 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#信号量">信号量</a></li>
+    <li><a href="#1-实现临界区互斥的软硬件方法">1 实现临界区互斥的软硬件方法</a>
+      <ul>
+        <li><a href="#11-软件">1.1 软件</a></li>
+        <li><a href="#12-硬件">1.2 硬件</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-互斥锁-mutex">2 互斥锁 mutex</a></li>
+    <li><a href="#3-信号量-semaphore">3 信号量 Semaphore</a>
+      <ul>
+        <li><a href="#31-实现同步">3.1 实现同步</a></li>
+        <li><a href="#32-实现互斥">3.2 实现互斥</a></li>
+        <li><a href="#33-实现前驱">3.3 实现前驱</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-管程方法">4 管程方法</a></li>
+    <li><a href="#5-经典同步问题">5 经典同步问题</a>
+      <ul>
+        <li><a href="#51-生产-消费模型">5.1 生产-消费模型</a></li>
+        <li><a href="#52-读者-写者模型">5.2 读者-写者模型</a></li>
+        <li><a href="#53-哲学家进餐">5.3 哲学家进餐</a></li>
+        <li><a href="#54-吸烟者问题">5.4 吸烟者问题</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>对操作系统的认识 on Operating System</title>
+    <link>https://zvictorliu.github.io/operating_system/pre/</link>
+    <description>Recent content in 对操作系统的认识 on Operating System</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://zvictorliu.github.io/operating_system/pre/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>操作系统的历史</title>
+      <link>https://zvictorliu.github.io/operating_system/pre/history-of-os-development/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/operating_system/pre/history-of-os-development/</guid>
+      <description>操作系统发展#从手工到批处理：批处理指不需要人工干预、能够自动进行
+从单道变多道：解决了高速CPU和低速IO之间的问题
+分时操作系统：基于时间轮转，轮流把处理器分给各个联机作业使用
+实时操作系统：在规定的时间内完成紧急任务，不需要排队
+网络操作系统：管理计算机网络连接起来的各台计算机的操作系统
+分布式计算机系统：每台计算机能互相交流也彼此独立，没有主从</description>
+    </item>
+    
+    <item>
+      <title>前置基础</title>
+      <link>https://zvictorliu.github.io/operating_system/pre/pre/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/operating_system/pre/pre/</guid>
+      <description>这部分与操作系统这个课本身并没有多大关系，但是又或许需要它以便于理解，先欠着</description>
+    </item>
+    
+    <item>
+      <title>扫盲</title>
+      <link>https://zvictorliu.github.io/operating_system/pre/blind/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/operating_system/pre/blind/</guid>
+      <description>这里介绍一下常见的一些概念却很少有深入解释的
+Linux和Unix#简单来说UNIX就是没有图形界面的那种，比较老
+Linux是基于其设计思想的，因此经常会说”在Linux/Unix系统中&amp;quot;，就是说它们在理念上很多是相似的，只是实现方式有些不同
+x86, win32, win64#POSIX#POSIX（Portable Operating System Interface，可移植操作系统接口）是一种接口标准，是IEEE指定的操作系统规范，它规定了操作系统中应该提供哪些基本功能和接口，以及如何使用这些功能和接口
+相当于一种法律法规吧！
+并发：同时间段 同步：依赖关系，必须有确定的先后 互斥：排斥使用临界自由 并行：同时刻 </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://zvictorliu.github.io/operating_system/pre/%E7%94%A8%E6%88%B7%E6%80%81%E4%B8%8E%E6%A0%B8%E5%BF%83%E6%80%81/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/operating_system/pre/%E7%94%A8%E6%88%B7%E6%80%81%E4%B8%8E%E6%A0%B8%E5%BF%83%E6%80%81/</guid>
+      <description>操作系统运行环境#1 处理器运行模式#CPU是执行指令的，现在要给指令加权限，如果任何程序的指令都可以被直接执行的话显然是危险的
+所以分了：
+特权指令：用户不能直接执行的指令 非特权指令：用户可以直接使用的指令 具体实现上是通过CPU的运行模式上分为了用户态和核心态
+但是，用户要完成任务必须要执行一些触及核心的指令，这就需要“委托”，注意并不是说用户指令是被编译为一条条特权指令的
+那么，什么样的指令一定是定为特权指令呢？
+I/O 指令、置中断指令、寄存器相关等等
+这样实际用户想做的一切都还是能被满足，意义何在？在于能够实现更安全的管理，这个挺抽象的
+用户至少不是可以随意更改系统资源了，就安全得多（如果一直裸奔，那么做出危险举动谁来踩刹车呢？说明操作系统虽然是打手但也起到了监控者和管理者的作用）
+本来操作系统不是必须的，只是后来把它抽象出来了
+2 系统调用#用户需要通过系统调用来委托操作系统，操作系统提供系统调用的API
+之前一直执行非特权指令的用户现在有系统调用了，现在对CPU的使用权应该给操作系统，操作系统的特权指令执行完后再把使用权还给用户
+这个过程，CPU的状态经历了 用户态-&amp;gt;核心态-&amp;gt;用户态的过程
+而具体来说是执行了陷阱指令，会掉入“陷阱”从而迫使操作系统不得不出马，以此实现切换
+除此之外，CPU的切换也需要堆栈的切换，用户的堆栈和系统的堆栈不可能是同一个，但是系统堆栈也是属于该进程
+3 中断和异常#内部叫异常，外部叫中断，而往往统称统称中断 😅
+外部中断通过硬件实现，所以都是硬件中断，分可屏蔽和不可屏蔽
+内部中断中也不都是软件中断，终止是硬件中断</description>
+    </item>
+    
+  </channel>
+</rss>
