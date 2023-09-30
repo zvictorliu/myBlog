@@ -46,8 +46,7 @@ CPU接收到设备发出的DMA请求，给DMA控制器发一条命令启动后�
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://zvictorliu.github.io/operating_system/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/</guid>
-      <description>磁盘和固态硬盘#磁盘，磁盘管理方式，调度算法
-固态硬盘简介</description>
+      <description>磁盘和固态硬盘#磁盘读写以扇区作为单位，而系统分配则以簇为单位</description>
     </item>
     
     <item>

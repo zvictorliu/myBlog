@@ -10,7 +10,7 @@
 进程控制块 (Process Control Block, PCB) ：多少感觉像哈希值一样，记录了进程的信息
 PCB是进程存在的唯一标志，创建了PCB，进程才算是”活的“
 在linux中，它就是一个C语言的结构体：
-linux PCBpid t pid; /* process identifier */ long state; /* state of the process */ unsigned int time slice /* scheduling information */ struct task_struct *parent; /* this process’s parent */ struct list_head children; /* this process’s children */ struct files_struct *files; /* list of open files */ struct mm_struct *mm; /* address space of this pro */ PCB具体记录了哪些信息这个太多了，主要是这些： PCB通常包含的内容这些信息会让每个进程自己认为自己独立使用CPU，看上去用于整个内存空间">
+linux PCBpid t pid; /* process identifier */ long state; /* state of the process */ unsigned int time slice /* scheduling information */ struct task_struct *parent; /* this process’s parent */ struct list_head children; /* this process’s children */ struct files_struct *files; /* list of open files */ struct mm_struct *mm; /* address space of this pro */ PCB具体记录了哪些信息这个太多了，主要是这些： PCB通常包含的内容其中有处理机相关信息，也就是这个程序运行的上下文，它是被保存在PCB中的，可见PCB的意义">
 <meta name="theme-color" content="#FFFFFF">
 <meta name="color-scheme" content="light dark"><meta property="og:title" content="进程概念" />
 <meta property="og:description" content="进程概念#1.1 进程的状态#进程具有多种运行状态
@@ -20,7 +20,7 @@ linux PCBpid t pid; /* process identifier */ long state; /* state of the proces
 进程控制块 (Process Control Block, PCB) ：多少感觉像哈希值一样，记录了进程的信息
 PCB是进程存在的唯一标志，创建了PCB，进程才算是”活的“
 在linux中，它就是一个C语言的结构体：
-linux PCBpid t pid; /* process identifier */ long state; /* state of the process */ unsigned int time slice /* scheduling information */ struct task_struct *parent; /* this process’s parent */ struct list_head children; /* this process’s children */ struct files_struct *files; /* list of open files */ struct mm_struct *mm; /* address space of this pro */ PCB具体记录了哪些信息这个太多了，主要是这些： PCB通常包含的内容这些信息会让每个进程自己认为自己独立使用CPU，看上去用于整个内存空间" />
+linux PCBpid t pid; /* process identifier */ long state; /* state of the process */ unsigned int time slice /* scheduling information */ struct task_struct *parent; /* this process’s parent */ struct list_head children; /* this process’s children */ struct files_struct *files; /* list of open files */ struct mm_struct *mm; /* address space of this pro */ PCB具体记录了哪些信息这个太多了，主要是这些： PCB通常包含的内容其中有处理机相关信息，也就是这个程序运行的上下文，它是被保存在PCB中的，可见PCB的意义" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://zvictorliu.github.io/operating_system/process/process_concept/" /><meta property="article:section" content="process" />
 
@@ -69,11 +69,12 @@ https://github.com/alex-shpak/hugo-book
 
 
   <ul>
-<li><a href="/operating_system/chapter01/">绪论</a>
+<li><a href="/operating_system/pre/">前置基础</a>
 <ul>
-<li><a href="/operating_system/chapter01/history-of-os-development/">操作系统历史发展</a></li>
-<li><a href="/operating_system/chapter01/pre/">前置知识</a></li>
-<li><a href="/operating_system/chapter01/blind/">扫盲</a></li>
+<li><a href="/operating_system/pre/history-of-os-development/">操作系统历史发展</a></li>
+<li><a href="/operating_system/pre/pre/">前置知识</a></li>
+<li><a href="/operating_system/pre/blind/">扫盲</a></li>
+<li><a href="/operating_system/pre/%E7%94%A8%E6%88%B7%E6%80%81%E4%B8%8E%E6%A0%B8%E5%BF%83%E6%80%81/">用户态与核心态</a></li>
 </ul>
 </li>
 <li><a href="/operating_system/process/">进程</a>
@@ -225,6 +226,8 @@ https://github.com/alex-shpak/hugo-book
   </div>
 </details>
 </p>
+<p>其中有处理机相关信息，也就是这个程序运行的上下文，它是被保存在PCB中的，可见PCB的意义</p>
+<p>并且，程序和数据的内存基地址也在PCB当中，也要靠PCB来找到</p>
 <p>这些信息会让每个进程自己认为自己独立使用CPU，看上去用于整个内存空间</p>
 <h2 id="13-进程控制">
   1.3 进程控制

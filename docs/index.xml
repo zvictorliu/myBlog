@@ -18,19 +18,24 @@
     
     <item>
       <title>操作系统的历史</title>
-      <link>https://zvictorliu.github.io/operating_system/chapter01/history-of-os-development/</link>
+      <link>https://zvictorliu.github.io/operating_system/pre/history-of-os-development/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/operating_system/chapter01/history-of-os-development/</guid>
-      <description>先欠着</description>
+      <guid>https://zvictorliu.github.io/operating_system/pre/history-of-os-development/</guid>
+      <description>操作系统发展#从手工到批处理：批处理指不需要人工干预、能够自动进行
+从单道变多道：解决了高速CPU和低速IO之间的问题
+分时操作系统：基于时间轮转，轮流把处理器分给各个联机作业使用
+实时操作系统：在规定的时间内完成紧急任务，不需要排队
+网络操作系统：管理计算机网络连接起来的各台计算机的操作系统
+分布式计算机系统：每台计算机能互相交流也彼此独立，没有主从</description>
     </item>
     
     <item>
       <title>前置基础</title>
-      <link>https://zvictorliu.github.io/operating_system/chapter01/pre/</link>
+      <link>https://zvictorliu.github.io/operating_system/pre/pre/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/operating_system/chapter01/pre/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/pre/pre/</guid>
       <description>这部分与操作系统这个课本身并没有多大关系，但是又或许需要它以便于理解，先欠着</description>
     </item>
     
@@ -46,10 +51,10 @@
     
     <item>
       <title>扫盲</title>
-      <link>https://zvictorliu.github.io/operating_system/chapter01/blind/</link>
+      <link>https://zvictorliu.github.io/operating_system/pre/blind/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://zvictorliu.github.io/operating_system/chapter01/blind/</guid>
+      <guid>https://zvictorliu.github.io/operating_system/pre/blind/</guid>
       <description>这里介绍一下常见的一些概念却很少有深入解释的
 Linux和Unix#简单来说UNIX就是没有图形界面的那种，比较老
 Linux是基于其设计思想的，因此经常会说”在Linux/Unix系统中&amp;quot;，就是说它们在理念上很多是相似的，只是实现方式有些不同
@@ -73,6 +78,8 @@ x86, win32, win64#POSIX#POSIX（Portable Operating System Interface，可移
 怎么排？设置了一个叫分区说明表的记录册
 1.3 动态分区#这里王道有说这个规划过程：刚开始一个个接着装，当放不下时，就要把前面空闲的进程给替换掉
 这里有外部碎片的概念：替换掉前面之后，分区和分区之间就可能有一段空白了（这里的分区就是程序所需的大小，这段空白在分区外面所以叫外部，而前面是在固定分区内放一个不那么大的程序，是在分区内部）
+当产生的碎片足够（多个）放入新的进程时，就需要选择哪个内存块
+首次适应：按地址递增顺序找到的第一个 邻近适应：从上次查找结束位置开始 最佳适应：按容量递增顺序找到第一个，即容量最小的那个（而且是能满足要求的那个） 最坏适应：容量最大的那个 如果放进去后内存块还有剩余，就会更新大小，实际整个都是在动态维护的
 2 基本分页式#2.1 基本概念#将内存和进程均分块，进程中叫页、页面、Page，内存中叫页框、页帧、Page Frame
 逻辑地址由页号+页内偏移量组成，一般是高位存页号，则共可以表示$2^{20}$个页，低12位为偏移地址，即一页有$2^{12}$个单元，通常是字节为单位，所以是4KB，不过这也不一定
 系统为每个进程建立一张页表，上面是逻辑地址到物理地址的转换，这个页表也是整个存在内存中以查找，先找到页表再去找相应的页框中存的页
@@ -84,10 +91,35 @@ x86, win32, win64#POSIX#POSIX（Portable Operating System Interface，可移
 所以有两次查找内存的过程：找页表项和找页框
 为了提高速度，可以设置一个高速缓冲存储器：快表，在其中找页表项比访问内存要快得多，没找到再去在内存中找
 因为页表也要存在连续的内存中，就比较占空间，于是设置多级页表，顶级页表只有一个页面，根据一级页号找到顶级页表，从中根据指引利用二级页号再找到块号
-3 基本分段式#分段式可以不需要段与段之间连续
-段表存的就不是 块号而是基地址
-注意分页式计算块的物理地址并没有基地址
-4 段页式#段号找到页表的基地址，跟二级有点类似</description>
+注意这是一种非连续的分配方式，页可以分散存在页框中，知道编号就行了，它是取消了内存分配继续性的要求
+表项的数量是逻辑地址空间有多少页决定的，但也收到存页表的空间大小（一般也是一个块）和块号的位数（内存可分多少个块）
+逻辑地址空间和页的大小决定逻辑地址位数
+3 基本分段式#分段式可以不需要段与段之间连续</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://zvictorliu.github.io/operating_system/pre/%E7%94%A8%E6%88%B7%E6%80%81%E4%B8%8E%E6%A0%B8%E5%BF%83%E6%80%81/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://zvictorliu.github.io/operating_system/pre/%E7%94%A8%E6%88%B7%E6%80%81%E4%B8%8E%E6%A0%B8%E5%BF%83%E6%80%81/</guid>
+      <description>操作系统运行环境#1 处理器运行模式#CPU是执行指令的，现在要给指令加权限，如果任何程序的指令都可以被直接执行的话显然是危险的
+所以分了：
+特权指令：用户不能直接执行的指令 非特权指令：用户可以直接使用的指令 具体实现上是通过CPU的运行模式上分为了用户态和核心态
+但是，用户要完成任务必须要执行一些触及核心的指令，这就需要“委托”，注意并不是说用户指令是被编译为一条条特权指令的
+那么，什么样的指令一定是定为特权指令呢？
+I/O 指令、置中断指令、寄存器相关等等
+这样实际用户想做的一切都还是能被满足，意义何在？在于能够实现更安全的管理，这个挺抽象的
+用户至少不是可以随意更改系统资源了，就安全得多（如果一直裸奔，那么做出危险举动谁来踩刹车呢？说明操作系统虽然是打手但也起到了监控者和管理者的作用）
+本来操作系统不是必须的，只是后来把它抽象出来了
+2 系统调用#用户需要通过系统调用来委托操作系统，操作系统提供系统调用的API
+之前一直执行非特权指令的用户现在有系统调用了，现在对CPU的使用权应该给操作系统，操作系统的特权指令执行完后再把使用权还给用户
+这个过程，CPU的状态经历了 用户态-&amp;gt;核心态-&amp;gt;用户态的过程
+而具体来说是执行了陷阱指令，会掉入“陷阱”从而迫使操作系统不得不出马，以此实现切换
+除此之外，CPU的切换也需要堆栈的切换，用户的堆栈和系统的堆栈不可能是同一个，但是系统堆栈也是属于该进程
+3 中断和异常#内部叫异常，外部叫中断，而往往统称统称中断 😅
+外部中断通过硬件实现，所以都是硬件中断，分可屏蔽和不可屏蔽
+内部中断中也不都是软件中断，终止是硬件中断</description>
     </item>
     
     <item>
@@ -96,8 +128,26 @@ x86, win32, win64#POSIX#POSIX（Portable Operating System Interface，可移
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://zvictorliu.github.io/operating_system/process/%E5%90%8C%E6%AD%A5%E4%BA%92%E6%96%A5/</guid>
-      <description>同步与互斥#信号量#P操作：阻塞式查询
-V操作：释放</description>
+      <description>同步与互斥#再次强调：
+并发：一个时间段内多个任务
+同步：一个任务一定要先于某个任务发生 互斥：不能同时访问某些资源 并行：同一时刻多个任务
+临界资源：一次只能一个进程访问的资源，包括设备、变量等等
+为了正确访问临界资源，将代码分区，访问临界资源的那部分为临界区，只有这部分是互斥执行的
+一个理想的临界区互斥机制应该是：
+空闲让进 忙则等待 有限等待：不能等待过错 让权等待：等待不能占用CPU，即最好不要忙等待 1 实现临界区互斥的软硬件方法#这个其实了解一下就够了，不是很重点
+1.1 软件#通过设置标志，在进入临界区时检查标志，满足条件再往下执行
+单标志法#一个flag
+一个标志看似足够，实则问题很大
+只能适合交替运行，一旦另一个不再进入，自己就无法再次进入了 双标志法#flags = [flag_i, flag_j] 先检查：检查放在修改前，有可能在条件满足进入到修改自己已进入的空挡另一个进程也进入了，即检查和修改不能同时执行
+后检查：检查放在修改后，这样又有可能两个几乎同时修改而使得都进入不了
+Peterson&amp;rsquo;s Algorithm#在双标志后检查法的基础上再设置一个变量turn
+flag[i] = true; turn = j; while (flag[j] &amp;amp;&amp;amp; turn == j); 这样就不会卡死了
+软件方法无论哪种都是忙等待，仍然不够好
+1.2 硬件#又叫低级方法、元方法
+中断屏蔽：如果不能中断就不能进程切换，但这样就不能交替执行了，我们只是不希望两个同时在临界区而已 硬件指令：有一个名叫TestAndSet的原子指令可供调用，感觉还是忙等待；Swap指令 2 互斥锁 mutex#利用原子语句检查和修改
+aquire()和release()
+仍然是忙等待
+3 信号量 Semaphore#也是有两个原语wait(S)和signal(S)，又可以简记为：P操作和V操作</description>
     </item>
     
     <item>
@@ -158,6 +208,7 @@ CPU接收到设备发出的DMA请求，给DMA控制器发一条命令启动后�
 内存运行计算时直接使用的也还是逻辑地址
 逻辑地址经过地址变换转为物理地址才能在内存种找到相应的位置，这叫地址重定位
 具体来说是有一种页表，它记录了对应关系，由操作系统维护，处理器使用它
+一般说逻辑地址空间大小单位是页
 3 内存映像#程序调入内存并运行，形成了进程在的内存种的实体，这个叫内存映像，实体=映像
 具体来说分成几段：
 代码段、数据段 PCB，没错之前说的PCB就是保存在内存中 堆：存放动态分配的变量 栈：用以实现函数调用，从高向低增长 比如第一个进程如果完整放入内存应该是这样子：
@@ -239,7 +290,7 @@ MBR: 主引导记录，引导计算机，BIOS读入MBR并执行，确定活动�
 死锁的必要条件
 互斥条件：某一资源只能互斥访问 不剥夺条件（非抢占）：只能主动释放 请求并保持条件：进程已经占了一个资源，并请求另一个被占的资源，此时进程被阻塞但是并没有释放资源 循环等待条件：循环等待链关系，占用的资源总被环上下一个所请求，并且只能是自己释放才能满足它，如果还有别的进程释放了、又或者不只一台设备，也不会构成死锁 ​	所以，对死锁的策略：
 预防：限制其出现必要条件中的几个 避免（其实也是一种预防了） 检测并解除 1 预防#破坏四个必要条件之一
-互斥：不太可行，因为有些资源是无法共享的，只能互斥 非抢占：实现起来比较麻烦 请求并保持：一次申请完并占用，之后不再请求，比较浪费 循环等待：按顺序分配 2 避免#并不是事先预防，是动态检测资源分配的状态
+互斥：不太可行，因为有些资源是无法共享的，只能互斥 非抢占：即允许被其它进程抢走资源，但实现起来比较麻烦 请求并保持：一次申请完并占用，之后不再请求，比较浪费 循环等待：按顺序分配 2 避免#并不是事先预防，而是在动态分配的过程中防止进入不安全状态（疑似可能死锁）
 2.1 安全检查#允许进程随时申请，但是系统在分配之前会先进行计算安全性，不安全就先让进程等待
 需要找到一种安全序列
 例题注意不安全不代表一定会死锁，只是有可能死锁
@@ -296,8 +347,7 @@ MBR: 主引导记录，引导计算机，BIOS读入MBR并执行，确定活动�
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://zvictorliu.github.io/operating_system/io_management/%E7%A3%81%E7%9B%98%E5%92%8C%E5%9B%BA%E6%80%81%E7%A1%AC%E7%9B%98/</guid>
-      <description>磁盘和固态硬盘#磁盘，磁盘管理方式，调度算法
-固态硬盘简介</description>
+      <description>磁盘和固态硬盘#磁盘读写以扇区作为单位，而系统分配则以簇为单位</description>
     </item>
     
     <item>
@@ -356,7 +406,8 @@ phread_join()函数</description>
 如果没有空闲块就需要进行淘汰换出了
 这种中断的特点是：
 是内部异常，在指令执行期间产生和处理
-类似于”找不到文件“的异常 一条指令可能有多次缺页中断
+类似于”找不到文件“的异常 它是可以在一条指令执行期间产生中断的，是一种内部异常
+一条指令可能有多次缺页中断
 1.3 地址变换#程序请求访问一页，需要经过地址变换得到在内存中的物理地址，这个过程其实经历了许许多多if else的判断
 基本分页方式都认为页就在内存当中，所以不会有请求调入和页面置换这两个步骤
 会先检索快表（这个忘了）
@@ -364,8 +415,7 @@ phread_join()函数</description>
 最佳置换OPT 先进先出FIFO 最近最久未使用LRU 时钟 2.1 OPT#2.2 FIFO#2.3 LRU#2.4 Clock#简单型和改进型
 3 页面分配策略#页框是内存的”页“，这节研究给特定的进程分配多少页框，很类似于内存的划分了
 太少了，虽然能放的进程多了，但每个进程缺页的概率很高（即使有局部性原理）
-太多了，由于局部性原理可能根本不需要很多，缺页率不会降低太多
-这部分感觉不是重点，但是也可能考，，，所以，，唉</description>
+太多了，由于局部性原理可能根本不需要很多，缺页率不会降低太多</description>
     </item>
     
     <item>
@@ -400,7 +450,7 @@ phread_join()函数</description>
 进程控制块 (Process Control Block, PCB) ：多少感觉像哈希值一样，记录了进程的信息
 PCB是进程存在的唯一标志，创建了PCB，进程才算是”活的“
 在linux中，它就是一个C语言的结构体：
-linux PCBpid t pid; /* process identifier */ long state; /* state of the process */ unsigned int time slice /* scheduling information */ struct task_struct *parent; /* this process’s parent */ struct list_head children; /* this process’s children */ struct files_struct *files; /* list of open files */ struct mm_struct *mm; /* address space of this pro */ PCB具体记录了哪些信息这个太多了，主要是这些： PCB通常包含的内容这些信息会让每个进程自己认为自己独立使用CPU，看上去用于整个内存空间</description>
+linux PCBpid t pid; /* process identifier */ long state; /* state of the process */ unsigned int time slice /* scheduling information */ struct task_struct *parent; /* this process’s parent */ struct list_head children; /* this process’s children */ struct files_struct *files; /* list of open files */ struct mm_struct *mm; /* address space of this pro */ PCB具体记录了哪些信息这个太多了，主要是这些： PCB通常包含的内容其中有处理机相关信息，也就是这个程序运行的上下文，它是被保存在PCB中的，可见PCB的意义</description>
     </item>
     
     <item>
